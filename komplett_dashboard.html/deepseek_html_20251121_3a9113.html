@@ -630,7 +630,7 @@ servers = {
             </div>
 
             <div style="margin-top: 2rem;">
-                <h3>📎 المرفقات - Bifogade Filer</h3>
+                <h3>📎 Bifogade Filer</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
                     <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
                         <h4>📄 Task 02 - Advances in Graph Algorithms</h4>
@@ -684,24 +684,24 @@ servers = {
         <!-- Team Collaboration Section -->
         <section id="team-collaboration" class="section collaboration-section">
             <div class="section-header">
-                <h2>📝 Team Collaboration - توثيق الفريق</h2>
+                <h2>📝 Team Collaboration - Grupp Dokumentation</h2>
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                <!-- نموذج إضافة واجب -->
+                <!-- Form for adding assignments -->
                 <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; backdrop-filter: blur(10px);">
-                    <h3>➕ إضافة واجب جديد</h3>
+                    <h3>➕ Lägg Till Uppgift</h3>
                     <form id="assignment-form">
                         <div class="form-group">
-                            <label>اسم الواجب:</label>
-                            <input type="text" id="task-name" placeholder="أدخل اسم الواجب" required>
+                            <label>Uppgiftsnamn:</label>
+                            <input type="text" id="task-name" placeholder="Ange uppgiftsnamn" required>
                         </div>
                         <div class="form-group">
-                            <label>وصف الواجب:</label>
-                            <textarea id="task-desc" placeholder="أدخل وصف الواجب" required rows="4"></textarea>
+                            <label>Beskrivning:</label>
+                            <textarea id="task-desc" placeholder="Ange beskrivning" required rows="4"></textarea>
                         </div>
                         <div class="form-group">
-                            <label>المسؤول:</label>
+                            <label>Ansvarig:</label>
                             <select id="task-assignee">
                                 <option value="Kaled Osman">Kaled Osman</option>
                                 <option value="Fahad Hussain">Fahad Hussain</option>
@@ -712,24 +712,24 @@ servers = {
                             </select>
                         </div>
                         <button type="submit" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem;">
-                            ➕ إضافة الواجب
+                            ➕ Lägg Till Uppgift
                         </button>
                     </form>
                 </div>
 
-                <!-- قائمة الواجبات -->
+                <!-- Assignment list -->
                 <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; backdrop-filter: blur(10px);">
-                    <h3>📋 الواجبات الحالية</h3>
+                    <h3>📋 Aktuella Uppgifter</h3>
                     <div id="assignments-list">
                         <div class="assignment-item">
-                            <strong>تحسين خوارزمية Dijkstra</strong>
-                            <p>إضافة تحسينات على أداء الخوارزمية وتحليل التعقيد</p>
-                            <small><strong>المسؤول:</strong> Kaled Osman</small>
+                            <strong>Förbättra Dijkstra Algorithm</strong>
+                            <p>Lägg till prestandaförbättringar och komplexitetsanalys</p>
+                            <small><strong>Ansvarig:</strong> Kaled Osman</small>
                         </div>
                         <div class="assignment-item">
-                            <strong>بحث OSPF Protocols</strong>
-                            <p>دراسة بروتوكولات OSPF وتطبيقاتها في الشبكات</p>
-                            <small><strong>المسؤول:</strong> Fahad Hussain</small>
+                            <strong>OSPF Protocols Research</strong>
+                            <p>Studera OSPF-protokoll och deras tillämpningar i nätverk</p>
+                            <small><strong>Ansvarig:</strong> Fahad Hussain</small>
                         </div>
                     </div>
                 </div>
@@ -793,7 +793,7 @@ servers = {
                     assignmentItem.innerHTML = `
                         <strong>${name}</strong>
                         <p>${desc}</p>
-                        <small><strong>المسؤول:</strong> ${assignee}</small>
+                        <small><strong>Ansvarig:</strong> ${assignee}</small>
                     `;
                     
                     document.getElementById('assignments-list').prepend(assignmentItem);
@@ -801,7 +801,7 @@ servers = {
                     // Reset form
                     assignmentForm.reset();
                     
-                    alert('✅ تم إضافة الواجب بنجاح!');
+                    alert('✅ Uppgift tillagd framgångsrikt!');
                 });
             }
         });
