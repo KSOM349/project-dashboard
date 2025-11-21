@@ -37,7 +37,6 @@
             padding: 20px;
         }
 
-        /* Header Styles */
         header {
             background: var(--gradient);
             color: white;
@@ -46,7 +45,6 @@
             margin-bottom: 2rem;
             box-shadow: var(--card-shadow);
             text-align: center;
-            position: relative;
         }
 
         header h1 {
@@ -59,7 +57,6 @@
             opacity: 0.9;
         }
 
-        /* Notification System */
         .notification-container {
             position: fixed;
             top: 20px;
@@ -99,7 +96,6 @@
             margin-left: 10px;
         }
 
-        /* Navigation */
         .nav-tabs {
             display: flex;
             background: white;
@@ -132,7 +128,6 @@
             color: white;
         }
 
-        /* Section Styles */
         .section {
             display: none;
             background: white;
@@ -166,7 +161,6 @@
             color: var(--primary);
         }
 
-        /* Stats Cards */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -199,7 +193,6 @@
             opacity: 0.9;
         }
 
-        /* Code Display */
         .code-container {
             background: #2d2d2d;
             color: #f8f8f2;
@@ -210,7 +203,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Team Table */
         .team-table {
             width: 100%;
             border-collapse: collapse;
@@ -257,7 +249,6 @@
             transform: translateY(-2px);
         }
 
-        /* AI Recommendations */
         .ai-recommendation {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -275,7 +266,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Forms */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -305,7 +295,6 @@
             border-color: var(--secondary);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-tabs {
                 flex-direction: column;
@@ -328,7 +317,6 @@
     </style>
 </head>
 <body>
-    <!-- Notification System -->
     <div class="notification-container" id="notificationContainer"></div>
 
     <div class="container">
@@ -388,7 +376,6 @@
                 </div>
             </div>
 
-            <!-- AI Recommendations -->
             <div class="ai-recommendation">
                 <h3><i class="fas fa-lightbulb"></i> AI Recommendations</h3>
                 <div class="recommendation-item">
@@ -430,7 +417,6 @@ function smartDijkstra(graph, start) {
     const previous = {};
     const nodes = new PriorityQueue();
     
-    // Initialize distances
     for (let node in graph) {
         distances[node] = node === start ? 0 : Infinity;
         nodes.enqueue(node, distances[node]);
@@ -475,7 +461,6 @@ function smartDijkstra(graph, start) {
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                <!-- Team Updates Form -->
                 <div>
                     <h3>➕ Add Team Update</h3>
                     <form id="team-update-form" style="background: var(--light); padding: 1.5rem; border-radius: 12px;">
@@ -512,7 +497,6 @@ function smartDijkstra(graph, start) {
                     </form>
                 </div>
 
-                <!-- Team Activity -->
                 <div>
                     <h3>📋 Team Activity</h3>
                     <div id="team-activity" style="max-height: 400px; overflow-y: auto;">
@@ -538,7 +522,6 @@ function smartDijkstra(graph, start) {
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                <!-- AI Chat -->
                 <div>
                     <h3>💬 Ask AI Assistant</h3>
                     <div style="background: var(--light); padding: 1.5rem; border-radius: 12px; height: 300px; overflow-y: auto; margin-bottom: 1rem;" id="ai-chat">
@@ -555,7 +538,6 @@ function smartDijkstra(graph, start) {
                     </div>
                 </div>
 
-                <!-- Smart Suggestions -->
                 <div>
                     <h3>💡 Smart Suggestions</h3>
                     <div class="ai-recommendation">
@@ -607,7 +589,6 @@ function smartDijkstra(graph, start) {
                 </div>
             </div>
 
-            <!-- Performance Metrics -->
             <div style="background: var(--light); padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
                 <h3>📊 Performance Metrics</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
@@ -631,7 +612,6 @@ function smartDijkstra(graph, start) {
     </div>
 
     <script>
-        // Notification System
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -652,7 +632,6 @@ function smartDijkstra(graph, start) {
             }, 5000);
         }
 
-        // Navigation System
         document.addEventListener('DOMContentLoaded', function() {
             const navTabs = document.querySelectorAll('.nav-tab');
             const sections = document.querySelectorAll('.section');
@@ -675,7 +654,6 @@ function smartDijkstra(graph, start) {
                 });
             });
 
-            // Team Updates Form
             const updateForm = document.getElementById('team-update-form');
             if (updateForm) {
                 updateForm.addEventListener('submit', function(event) {
@@ -705,12 +683,11 @@ function smartDijkstra(graph, start) {
                 });
             }
 
-            // Simulate loading animations
             const statNumbers = document.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
                 const finalValue = stat.textContent;
                 if (finalValue.includes('%') || finalValue.includes('ms')) {
-                    return; // Skip already formatted values
+                    return;
                 }
                 
                 let current = 0;
@@ -737,7 +714,6 @@ function smartDijkstra(graph, start) {
             return types[type] || 'Update';
         }
 
-        // AI Assistant Functionality
         function askAI() {
             const input = document.getElementById('ai-input');
             const question = input.value.trim();
@@ -746,7 +722,6 @@ function smartDijkstra(graph, start) {
             
             const chat = document.getElementById('ai-chat');
             
-            // Add user question
             const userMsg = document.createElement('div');
             userMsg.style.background = 'var(--secondary)';
             userMsg.style.color = 'white';
@@ -756,7 +731,6 @@ function smartDijkstra(graph, start) {
             userMsg.innerHTML = `<strong>You:</strong> ${question}`;
             chat.appendChild(userMsg);
             
-            // Simulate AI response
             setTimeout(() => {
                 const aiResponse = getAIResponse(question);
                 const aiMsg = document.createElement('div');
@@ -795,10 +769,8 @@ function smartDijkstra(graph, start) {
 
         function generateReport() {
             showNotification('Project report generated and downloaded!', 'success');
-            // In a real app, this would generate and download a PDF report
         }
 
-        // Show welcome notification
         setTimeout(() => {
             showNotification('Welcome to Smart Project Dashboard! AI assistant is ready to help.', 'info');
         }, 1000);
