@@ -266,6 +266,15 @@
             backdrop-filter: blur(10px);
         }
 
+        /* Team Updates Section */
+        .update-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #28a745;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-tabs {
@@ -318,6 +327,10 @@
             <div class="nav-tab" data-target="team-collaboration">
                 <i class="fas fa-tasks"></i>
                 📝 Team Collaboration
+            </div>
+            <div class="nav-tab" data-target="team-updates">
+                <i class="fas fa-comments"></i>
+                👥 Team Updates
             </div>
         </div>
 
@@ -735,6 +748,74 @@ servers = {
                 </div>
             </div>
         </section>
+
+        <!-- Team Updates Section -->
+        <section id="team-updates" class="section">
+            <div class="section-header">
+                <h2>👥 Team Updates & Uppgifter</h2>
+                <p>Varje teammedlem kan lägga till sina uppdateringar och uppgifter</p>
+            </div>
+
+            <!-- نموذج إضافة تحديث -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                <h3>➕ Lägg Till Din Uppdatering</h3>
+                <form id="team-update-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label>Ditt Namn:</label>
+                            <select id="update-author" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
+                                <option value="Kaled Osman">Kaled Osman</option>
+                                <option value="Fahad Hussain">Fahad Hussain</option>
+                                <option value="Stefan Österberg">Stefan Österberg</option>
+                                <option value="Marcus Tibell">Marcus Tibell</option>
+                                <option value="Jens Annell">Jens Annell</option>
+                                <option value="Luwam">Luwam</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Status:</label>
+                            <select id="update-status" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
+                                <option value="completed">✅ Avslutad</option>
+                                <option value="in-progress">🔄 Pågående</option>
+                                <option value="planned">📅 Planerad</option>
+                                <option value="blocked">❌ Blockerad</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label>Uppgiftsbeskrivning:</label>
+                        <input type="text" id="update-title" placeholder="Vad har du gjort?" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label>Detaljer:</label>
+                        <textarea id="update-details" placeholder="Beskriv ditt arbete..." style="width: 100%; padding: 10px; border-radius: 8px; border: none; height: 100px;"></textarea>
+                    </div>
+                    
+                    <button type="submit" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem;">
+                        ➕ Publicera Uppdatering
+                    </button>
+                </form>
+            </div>
+
+            <!-- عرض التحديثات -->
+            <div>
+                <h3>📋 Senaste Uppdateringar från Teamet</h3>
+                <div id="updates-container">
+                    <!-- التحديثات ستظهر هنا -->
+                    <div class="update-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>Kaled Osman</strong>
+                            <span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">✅ Avslutad</span>
+                        </div>
+                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">Implementerat Dijkstra Algorithm</h4>
+                        <p style="color: #666; margin-bottom: 0.5rem;">Har skapat en fullt fungerande Dijkstra implementation med visualisering för vår dashboard.</p>
+                        <small style="color: #999;">Idag 14:30</small>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -802,6 +883,61 @@ servers = {
                     assignmentForm.reset();
                     
                     alert('✅ Uppgift tillagd framgångsrikt!');
+                });
+            }
+
+            // Team Updates functionality
+            const updateForm = document.getElementById('team-update-form');
+            if (updateForm) {
+                updateForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    const author = document.getElementById('update-author').value;
+                    const status = document.getElementById('update-status').value;
+                    const title = document.getElementById('update-title').value;
+                    const details = document.getElementById('update-details').value;
+                    
+                    // Status colors and texts
+                    const statusColors = {
+                        'completed': '#28a745',
+                        'in-progress': '#ffc107', 
+                        'planned': '#17a2b8',
+                        'blocked': '#dc3545'
+                    };
+                    
+                    const statusTexts = {
+                        'completed': '✅ Avslutad',
+                        'in-progress': '🔄 Pågående',
+                        'planned': '📅 Planerad',
+                        'blocked': '❌ Blockerad'
+                    };
+                    
+                    const updateItem = document.createElement('div');
+                    updateItem.className = 'update-item';
+                    updateItem.style.background = '#f8f9fa';
+                    updateItem.style.padding = '1.5rem';
+                    updateItem.style.borderRadius = '12px';
+                    updateItem.style.marginBottom = '1rem';
+                    updateItem.style.borderLeft = `4px solid ${statusColors[status]}`;
+                    
+                    updateItem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>${author}</strong>
+                            <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
+                                ${statusTexts[status]}
+                            </span>
+                        </div>
+                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">${title}</h4>
+                        <p style="color: #666; margin-bottom: 0.5rem;">${details}</p>
+                        <small style="color: #999;">${new Date().toLocaleString('sv-SE')}</small>
+                    `;
+                    
+                    document.getElementById('updates-container').prepend(updateItem);
+                    
+                    // Reset form
+                    updateForm.reset();
+                    
+                    alert('Tack för din uppdatering! ✅');
                 });
             }
         });
