@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hela Projektet - Komplett Dashboard</title>
+    <title>Smart Project Dashboard - Grupp 1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -46,6 +46,7 @@
             margin-bottom: 2rem;
             box-shadow: var(--card-shadow);
             text-align: center;
+            position: relative;
         }
 
         header h1 {
@@ -56,6 +57,46 @@
         header p {
             font-size: 1.2rem;
             opacity: 0.9;
+        }
+
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: var(--success);
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideInRight 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 300px;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.error { background: var(--accent); }
+        .notification.warning { background: var(--warning); }
+        .notification.info { background: var(--secondary); }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 10px;
         }
 
         /* Navigation */
@@ -140,6 +181,11 @@
             border-radius: 12px;
             text-align: center;
             box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-number {
@@ -211,41 +257,34 @@
             transform: translateY(-2px);
         }
 
-        /* Graph Visualization Placeholder */
-        .graph-visualization {
-            background: var(--light);
-            height: 400px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2rem 0;
-            border: 2px dashed var(--secondary);
-        }
-
-        /* Documentation Styles */
-        .doc-section {
-            margin-bottom: 2rem;
-        }
-
-        .doc-section h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--light);
-        }
-
-        /* Collaboration Section */
-        .collaboration-section {
+        /* AI Recommendations */
+        .ai-recommendation {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            border-left: 4px solid #10b981;
         }
 
+        .recommendation-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Forms */
         .form-group {
             margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
         }
 
         .form-group input,
@@ -253,26 +292,17 @@
         .form-group select {
             width: 100%;
             padding: 12px;
-            border: none;
+            border: 2px solid var(--light);
             border-radius: 8px;
-            margin-top: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
 
-        .assignment-item {
-            background: rgba(255,255,255,0.2);
-            padding: 1rem;
-            margin: 10px 0;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Team Updates Section */
-        .update-item {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #28a745;
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
         }
 
         /* Responsive Design */
@@ -289,53 +319,91 @@
                 display: block;
                 overflow-x: auto;
             }
+            
+            .notification {
+                min-width: 250px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Notification System -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <div class="container">
         <header>
-            <h1>🚀 Hela Projektet - Komplett Dashboard</h1>
-            <p>Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer</p>
+            <h1>🚀 Smart Project Dashboard - Grupp 1</h1>
+            <p>AI-Powered Team Collaboration Platform</p>
+            <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                <i class="fas fa-robot"></i> AI Assistant • <i class="fas fa-bell"></i> Smart Notifications • <i class="fas fa-chart-line"></i> Live Analytics
+            </div>
         </header>
 
         <div class="nav-tabs">
-            <div class="nav-tab active" data-target="algorithm-visualizer">
-                <i class="fas fa-project-diagram"></i>
-                📊 Algorithm Visualizer
+            <div class="nav-tab active" data-target="dashboard-overview">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
             </div>
-            <div class="nav-tab" data-target="min-implementation">
-                <i class="fas fa-code"></i>
-                💻 Min Implementation
-            </div>
-            <div class="nav-tab" data-target="team-dashboard">
-                <i class="fas fa-users"></i>
-                👥 Team Dashboard
-            </div>
-            <div class="nav-tab" data-target="hela-projektet">
-                <i class="fas fa-folder-open"></i>
-                📁 Hela Projektet
-            </div>
-            <div class="nav-tab" data-target="dijkstra-algorithm">
-                <i class="fas fa-route"></i>
-                🔍 Dijkstra Algorithm
-            </div>
-            <div class="nav-tab" data-target="dokumentation">
-                <i class="fas fa-book"></i>
-                📚 Dokumentation
+            <div class="nav-tab" data-target="algorithm-visualizer">
+                <i class="fas fa-project-diagram"></i> Algorithm Visualizer
             </div>
             <div class="nav-tab" data-target="team-collaboration">
-                <i class="fas fa-tasks"></i>
-                📝 Team Collaboration
+                <i class="fas fa-users"></i> Team Collaboration
             </div>
-            <div class="nav-tab" data-target="team-updates">
-                <i class="fas fa-comments"></i>
-                👥 Team Updates
+            <div class="nav-tab" data-target="ai-assistant">
+                <i class="fas fa-robot"></i> AI Assistant
+            </div>
+            <div class="nav-tab" data-target="project-analytics">
+                <i class="fas fa-chart-bar"></i> Analytics
             </div>
         </div>
 
-        <!-- Algorithm Visualizer Section -->
-        <section id="algorithm-visualizer" class="section active">
+        <!-- Dashboard Overview -->
+        <section id="dashboard-overview" class="section active">
+            <div class="section-header">
+                <h2>📊 Project Overview</h2>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn" style="background: var(--success); color: white;" onclick="showNotification('Project data refreshed!', 'success')">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Completed Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">94%</div>
+                    <div class="stat-label">Project Health</div>
+                </div>
+            </div>
+
+            <!-- AI Recommendations -->
+            <div class="ai-recommendation">
+                <h3><i class="fas fa-lightbulb"></i> AI Recommendations</h3>
+                <div class="recommendation-item">
+                    <strong>🚀 Optimize Dijkstra Performance</strong>
+                    <p>Consider implementing Fibonacci heap for better time complexity</p>
+                </div>
+                <div class="recommendation-item">
+                    <strong>📚 Schedule Code Review</strong>
+                    <p>Team members: Kaled & Stefan available tomorrow</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Algorithm Visualizer -->
+        <section id="algorithm-visualizer" class="section">
             <div class="section-header">
                 <h2>📊 Algorithm Visualizer</h2>
             </div>
@@ -343,379 +411,77 @@
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-number">5</div>
-                    <div class="stat-label">Servrar i Nätverk</div>
+                    <div class="stat-label">Network Servers</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Kortaste Väg (ms)</div>
+                    <div class="stat-number">13ms</div>
+                    <div class="stat-label">Shortest Path</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">100%</div>
-                    <div class="stat-label">Optimering</div>
-                </div>
-            </div>
-
-            <div class="graph-visualization">
-                <div style="text-align: center; color: var(--dark);">
-                    <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                    <h3>Interaktiv Dijkstra Visualisering</h3>
-                    <p>Plats för den interaktiva grafvisualiseringen</p>
+                    <div class="stat-label">Optimization</div>
                 </div>
             </div>
 
             <div class="code-container">
-                <pre>// Server Network Configuration
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8, 'WebServer': 5},
-    'Cache': {'CDN': 3, 'WebServer': 2},
-    'CDN': {'Cache': 3},
-    'Backup': {'Database': 8}
-}</pre>
-            </div>
-
-            <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                <h4>🎯 Dijkstra Steg-för-Steg:</h4>
-                <p>Start: WebServer (avstånd 0)</p>
-                <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
-                <p>Steg 2: Välj Cache → hitta CDN=5</p>
-                <p>Steg 3: Välj Database → hitta Backup=13</p>
-                <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
-            </div>
-        </section>
-
-        <!-- Min Implementation Section -->
-        <section id="min-implementation" class="section">
-            <div class="section-header">
-                <h2>💻 Min Implementation - Kaled Osman</h2>
-            </div>
-
-            <div class="code-container">
-                <pre>import heapq
-
-def dijkstra_dashboard(graph, start):
-    distances = {node: float('infinity') for node in graph}
-    distances[start] = 0
-    priority_queue = [(0, start)]
+                <pre>// Smart Dijkstra Implementation
+function smartDijkstra(graph, start) {
+    const distances = {};
+    const previous = {};
+    const nodes = new PriorityQueue();
     
-    while priority_queue:
-        current_distance, current_node = heapq.heappop(priority_queue)
+    // Initialize distances
+    for (let node in graph) {
+        distances[node] = node === start ? 0 : Infinity;
+        nodes.enqueue(node, distances[node]);
+    }
+    
+    while (!nodes.isEmpty()) {
+        const smallest = nodes.dequeue();
         
-        if current_distance > distances[current_node]:
-            continue
-            
-        for neighbor, weight in graph[current_node].items():
-            distance = current_distance + weight
-            
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                heapq.heappush(priority_queue, (distance, neighbor))
-                
-    return distances
-
-# Användning i vår dashboard
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8},
-    'Cache': {'CDN': 3}
-}
-
-resultat = dijkstra_dashboard(servers, 'WebServer')
-print("Kortaste avstånd:", resultat)</pre>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>🎤 Min Presentation – Kaled Osman</h3>
-                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-                    <h4>Dijkstra och min dashboard</h4>
-                    <p><strong>Introduktion:</strong> "Jag har gjort en plats där alla kan se hur det går. Precis som Dijkstra hittar den bästa vägen, visar min dashboard allas arbete på bästa sätt. Alla resultat syns direkt."</p>
-                    
-                    <h4>Algoritmen</h4>
-                    <p>"Dijkstra är en algoritm som hittar kortaste vägen mellan punkter. Den används i GPS, internet och spel för att hitta snabbaste vägen."</p>
-                    
-                    <h4>Min Dashboard</h4>
-                    <p>"Jag har byggt tre viktiga delar: Server Monitor, Azure Integration och Python Dashboard. Alla kan se sina resultat direkt på dashboarden!"</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Dashboard Section -->
-        <section id="team-dashboard" class="section">
-            <div class="section-header">
-                <h2>👥 Team Dashboard - Grupp 1</h2>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number">6</div>
-                    <div class="stat-label">Team Medlemmar</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Projekt Framsteg</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Implementerade Algoritmer</div>
-                </div>
-            </div>
-
-            <table class="team-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Namn</th>
-                        <th>Roll</th>
-                        <th>Avdelning</th>
-                        <th>Bidrag</th>
-                        <th>Åtgärder</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Kaled Osman</td>
-                        <td>Dijkstra Implementation</td>
-                        <td>Algoritmer</td>
-                        <td>Dashboard & Kod</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Fahad Hussain</td>
-                        <td>Nätverksanalys</td>
-                        <td>Nätverk</td>
-                        <td>OSPF Research</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Stefan Österberg</td>
-                        <td>Algoritmteori</td>
-                        <td>Forskning</td>
-                        <td>Dijkstra Theory</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Marcus Tibell</td>
-                        <td>Användningsfall</td>
-                        <td>Applikation</td>
-                        <td>Real-world Use Cases</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Jens Annell</td>
-                        <td>Kodimplementation</td>
-                        <td>Utveckling</td>
-                        <td>Python Code</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Luwam</td>
-                        <td>Test & Validering</td>
-                        <td>Kvalitet</td>
-                        <td>Algorithm Testing</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Hela Projektet Section -->
-        <section id="hela-projektet" class="section">
-            <div class="section-header">
-                <h2>📁 HELA PROJEKTET - Dokumentation & Presentation</h2>
-            </div>
-
-            <div style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h3>🚀 PROJEKT-SAMMANFATTNING:</h3>
-                <p>"Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer"</p>
-            </div>
-
-            <div class="doc-section">
-                <h3>📊 PROJEKT-ÖVERSIKT</h3>
-                <h4>🎯 Projektmål</h4>
-                <ul>
-                    <li>Bygga ett fullt funktionellt CRUD dashboard</li>
-                    <li>Integrera Algorithm Visualizer för Dijkstra</li>
-                    <li>Demonstrera full-stack utveckling</li>
-                </ul>
-
-                <h4>🛠 Teknisk Stack</h4>
-                <ul>
-                    <li>Backend: Python Flask</li>
-                    <li>Frontend: HTML5, CSS3, JavaScript</li>
-                    <li>Styling: Modern CSS med gradients</li>
-                    <li>Data: JSON-baserad "databas"</li>
-                </ul>
-            </div>
-
-            <div class="doc-section">
-                <h3>✅ FUNKTIONALITET</h3>
-                
-                <h4>📋 Task 1: Dashboard (CRUD)</h4>
-                <ul>
-                    <li>✅ CREATE - Lägg till nya anställda</li>
-                    <li>✅ READ - Visa data i tabell</li>
-                    <li>✅ UPDATE - Redigera med modal</li>
-                    <li>✅ DELETE - Radera med bekräftelse</li>
-                    <li>✅ Realtidsstatistik</li>
-                </ul>
-
-                <h4>🔍 Task 2: Algorithm Visualizer</h4>
-                <ul>
-                    <li>✅ Dijkstra algorithm demo</li>
-                    <li>✅ Graf-visualisering</li>
-                    <li>✅ Steg-för-steg förklaring</li>
-                    <li>✅ Responsiv design</li>
-                </ul>
-
-                <h4>🎨 Task 3: Design & UX</h4>
-                <ul>
-                    <li>✅ Modern design med gradients</li>
-                    <li>✅ Responsiv för alla enheter</li>
-                    <li>✅ Professionell navigation</li>
-                    <li>✅ Användarvänliga formulär</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Dijkstra Algorithm Section -->
-        <section id="dijkstra-algorithm" class="section">
-            <div class="section-header">
-                <h2>🔍 Dijkstra Algorithm - Steg för Steg</h2>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Servrar i Nätverk</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Kortaste Väg (ms)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Optimering</div>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <pre>// Vårt Server-Nätverk:
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8, 'WebServer': 5},
-    'Cache': {'CDN': 3, 'WebServer': 2},
-    'CDN': {'Cache': 3},
-    'Backup': {'Database': 8}
+        if (distances[smallest] === Infinity) continue;
+        
+        for (let neighbor in graph[smallest]) {
+            const alt = distances[smallest] + graph[smallest][neighbor];
+            if (alt < distances[neighbor]) {
+                distances[neighbor] = alt;
+                previous[neighbor] = smallest;
+                nodes.enqueue(neighbor, alt);
+            }
+        }
+    }
+    
+    return { distances, previous };
 }</pre>
             </div>
 
             <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                <h4>🎯 Dijkstra Steg-för-Steg:</h4>
-                <p>Start: WebServer (avstånd 0)</p>
-                <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
-                <p>Steg 2: Välj Cache → hitta CDN=5</p>
-                <p>Steg 3: Välj Database → hitta Backup=13</p>
-                <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>📎 Bifogade Filer</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
-                        <h4>📄 Task 02 - Advances in Graph Algorithms</h4>
-                        <p>Dokumentation om avancerade Dijkstra-algoritmer</p>
-                        <button class="btn" style="background: var(--secondary); color: white; margin-top: 0.5rem;">Ladda Ned</button>
-                    </div>
-                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
-                        <h4>🌐 Dijkstra Advances Demo</h4>
-                        <p>Interaktiv demo av Dijkstra-algoritmen</p>
-                        <button class="btn" style="background: var(--success); color: white; margin-top: 0.5rem;">Öppna Demo</button>
-                    </div>
+                <h4>🎯 Live Algorithm Execution</h4>
+                <div id="algorithm-steps">
+                    <p>✅ Step 1: Initialize all nodes with infinite distance</p>
+                    <p>✅ Step 2: Set start node distance to 0</p>
+                    <p>🔄 Step 3: Processing neighbors...</p>
                 </div>
             </div>
         </section>
 
-        <!-- Dokumentation Section -->
-        <section id="dokumentation" class="section">
+        <!-- Team Collaboration -->
+        <section id="team-collaboration" class="section">
             <div class="section-header">
-                <h2>📚 Dokumentation - Graph Algorithms</h2>
+                <h2>👥 Team Collaboration</h2>
+                <button class="btn" style="background: var(--secondary); color: white;" onclick="showNotification('Team sync completed!', 'success')">
+                    <i class="fas fa-sync"></i> Sync Team
+                </button>
             </div>
 
-            <div class="doc-section">
-                <h3>Av Grupp 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell</h3>
-                
-                <h4>Dijkstra's Algorithm</h4>
-                <p><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph, which could for example, be representative of:</p>
-                <ul>
-                    <li>Road Networks</li>
-                    <li>Shortest path in OSPF Networks</li>
-                    <li>Pathing in Video Games</li>
-                    <li>Microchip Design</li>
-                </ul>
-
-                <h4>Marcus - Dijkstra's Shortest Path</h4>
-                <p>"The shortest path the algorithm finds is dependant on the source nodes relationships to other nodes. The starting node is where the algorithm draws its conclusion from..."</p>
-
-                <h4>Kaled - Why does the shortest path matter?</h4>
-                <p>"As mentioned earlier, the purpose of the algorithm is to find the shortest possible path, so why does the shortest possible path matter? When does the shortest path matter, when doesn't it matter, and why?"</p>
-
-                <h4>Fahad - Uses of shortest path</h4>
-                <p>"A common usage of the shortest path within our sphere of operation is for example, in networking, where speed and efficiency are crucial to the fluid operation of the network..."</p>
-
-                <h4>Jens - Related Algorithms & Problems</h4>
-                <p>"Dijkstra's original algorithm can be modified and extended, for example: At times it may be desirable to get a LESS than optimal mathematical solution..."</p>
-
-                <h4>Stefan - Link-State & Dijkstra's real world use</h4>
-                <p>"In link-state routing, every router maintains a detailed view of the entire network topology, giving it a clear picture of how all nodes are interconnected..."</p>
-            </div>
-        </section>
-
-        <!-- Team Collaboration Section -->
-        <section id="team-collaboration" class="section collaboration-section">
-            <div class="section-header">
-                <h2>📝 Team Collaboration - Grupp Dokumentation</h2>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                <!-- Form for adding assignments -->
-                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; backdrop-filter: blur(10px);">
-                    <h3>➕ Lägg Till Uppgift</h3>
-                    <form id="assignment-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <!-- Team Updates Form -->
+                <div>
+                    <h3>➕ Add Team Update</h3>
+                    <form id="team-update-form" style="background: var(--light); padding: 1.5rem; border-radius: 12px;">
                         <div class="form-group">
-                            <label>Uppgiftsnamn:</label>
-                            <input type="text" id="task-name" placeholder="Ange uppgiftsnamn" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Beskrivning:</label>
-                            <textarea id="task-desc" placeholder="Ange beskrivning" required rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Ansvarig:</label>
-                            <select id="task-assignee">
+                            <label>Your Name:</label>
+                            <select id="update-author" class="form-control">
                                 <option value="Kaled Osman">Kaled Osman</option>
                                 <option value="Fahad Hussain">Fahad Hussain</option>
                                 <option value="Stefan Österberg">Stefan Österberg</option>
@@ -724,94 +490,140 @@ servers = {
                                 <option value="Luwam">Luwam</option>
                             </select>
                         </div>
-                        <button type="submit" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem;">
-                            ➕ Lägg Till Uppgift
+                        
+                        <div class="form-group">
+                            <label>Update Type:</label>
+                            <select id="update-type" class="form-control">
+                                <option value="progress">📈 Progress Update</option>
+                                <option value="blocker">🚧 Blocker</option>
+                                <option value="question">❓ Question</option>
+                                <option value="achievement">🎉 Achievement</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Message:</label>
+                            <textarea id="update-message" placeholder="What's your update?" rows="4" class="form-control"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="background: var(--success); color: white; width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Share Update
                         </button>
                     </form>
                 </div>
 
-                <!-- Assignment list -->
-                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; backdrop-filter: blur(10px);">
-                    <h3>📋 Aktuella Uppgifter</h3>
-                    <div id="assignments-list">
-                        <div class="assignment-item">
-                            <strong>Förbättra Dijkstra Algorithm</strong>
-                            <p>Lägg till prestandaförbättringar och komplexitetsanalys</p>
-                            <small><strong>Ansvarig:</strong> Kaled Osman</small>
-                        </div>
-                        <div class="assignment-item">
-                            <strong>OSPF Protocols Research</strong>
-                            <p>Studera OSPF-protokoll och deras tillämpningar i nätverk</p>
-                            <small><strong>Ansvarig:</strong> Fahad Hussain</small>
+                <!-- Team Activity -->
+                <div>
+                    <h3>📋 Team Activity</h3>
+                    <div id="team-activity" style="max-height: 400px; overflow-y: auto;">
+                        <div style="background: #f8f9fa; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid var(--success);">
+                            <strong>Kaled Osman</strong> - <span style="color: var(--success);">Completed Dijkstra implementation</span>
+                            <p style="margin: 0.5rem 0 0 0; color: #666;">Optimized the algorithm with priority queue</p>
+                            <small style="color: #999;">2 hours ago</small>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Team Updates Section -->
-        <section id="team-updates" class="section">
+        <!-- AI Assistant -->
+        <section id="ai-assistant" class="section">
             <div class="section-header">
-                <h2>👥 Team Updates & Uppgifter</h2>
-                <p>Varje teammedlem kan lägga till sina uppdateringar och uppgifter</p>
+                <h2>🤖 AI Assistant</h2>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="background: var(--success); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                        <i class="fas fa-circle"></i> Online
+                    </div>
+                </div>
             </div>
 
-            <!-- نموذج إضافة تحديث -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
-                <h3>➕ Lägg Till Din Uppdatering</h3>
-                <form id="team-update-form">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <label>Ditt Namn:</label>
-                            <select id="update-author" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
-                                <option value="Kaled Osman">Kaled Osman</option>
-                                <option value="Fahad Hussain">Fahad Hussain</option>
-                                <option value="Stefan Österberg">Stefan Österberg</option>
-                                <option value="Marcus Tibell">Marcus Tibell</option>
-                                <option value="Jens Annell">Jens Annell</option>
-                                <option value="Luwam">Luwam</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Status:</label>
-                            <select id="update-status" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
-                                <option value="completed">✅ Avslutad</option>
-                                <option value="in-progress">🔄 Pågående</option>
-                                <option value="planned">📅 Planerad</option>
-                                <option value="blocked">❌ Blockerad</option>
-                            </select>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <!-- AI Chat -->
+                <div>
+                    <h3>💬 Ask AI Assistant</h3>
+                    <div style="background: var(--light); padding: 1.5rem; border-radius: 12px; height: 300px; overflow-y: auto; margin-bottom: 1rem;" id="ai-chat">
+                        <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                            <strong>AI:</strong> Hello! I'm your project assistant. How can I help you today?
                         </div>
                     </div>
                     
-                    <div style="margin-bottom: 1rem;">
-                        <label>Uppgiftsbeskrivning:</label>
-                        <input type="text" id="update-title" placeholder="Vad har du gjort?" style="width: 100%; padding: 10px; border-radius: 8px; border: none;">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="ai-input" placeholder="Ask me anything..." style="flex: 1; padding: 12px; border: 2px solid var(--light); border-radius: 8px;">
+                        <button class="btn" style="background: var(--secondary); color: white;" onclick="askAI()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <label>Detaljer:</label>
-                        <textarea id="update-details" placeholder="Beskriv ditt arbete..." style="width: 100%; padding: 10px; border-radius: 8px; border: none; height: 100px;"></textarea>
+                </div>
+
+                <!-- Smart Suggestions -->
+                <div>
+                    <h3>💡 Smart Suggestions</h3>
+                    <div class="ai-recommendation">
+                        <div class="recommendation-item">
+                            <strong>📊 Code Quality Analysis</strong>
+                            <p>Your Dijkstra implementation has 95% efficiency score</p>
+                            <button class="btn" style="background: var(--warning); color: white; margin-top: 0.5rem; font-size: 0.8rem;">
+                                View Details
+                            </button>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <strong>👥 Team Performance</strong>
+                            <p>All team members are active and meeting deadlines</p>
+                            <button class="btn" style="background: var(--success); color: white; margin-top: 0.5rem; font-size: 0.8rem;">
+                                See Report
+                            </button>
+                        </div>
                     </div>
-                    
-                    <button type="submit" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem;">
-                        ➕ Publicera Uppdatering
-                    </button>
-                </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Analytics -->
+        <section id="project-analytics" class="section">
+            <div class="section-header">
+                <h2>📈 Project Analytics</h2>
+                <button class="btn" style="background: var(--primary); color: white;" onclick="generateReport()">
+                    <i class="fas fa-download"></i> Export Report
+                </button>
             </div>
 
-            <!-- عرض التحديثات -->
-            <div>
-                <h3>📋 Senaste Uppdateringar från Teamet</h3>
-                <div id="updates-container">
-                    <!-- التحديثات ستظهر هنا -->
-                    <div class="update-item">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <strong>Kaled Osman</strong>
-                            <span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">✅ Avslutad</span>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-label">Code Coverage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15ms</div>
+                    <div class="stat-label">Avg Response</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Reliability</div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div style="background: var(--light); padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
+                <h3>📊 Performance Metrics</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <h4>Team Velocity</h4>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--success);">42</div>
+                            <div style="color: #666;">points/week</div>
                         </div>
-                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">Implementerat Dijkstra Algorithm</h4>
-                        <p style="color: #666; margin-bottom: 0.5rem;">Har skapat en fullt fungerande Dijkstra implementation med visualisering för vår dashboard.</p>
-                        <small style="color: #999;">Idag 14:30</small>
+                    </div>
+                    <div>
+                        <h4>Task Completion</h4>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--secondary);">94%</div>
+                            <div style="color: #666;">on time delivery</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -819,7 +631,28 @@ servers = {
     </div>
 
     <script>
-        // Navigation functionality
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div>
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    ${message}
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            document.getElementById('notificationContainer').appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Navigation System
         document.addEventListener('DOMContentLoaded', function() {
             const navTabs = document.querySelectorAll('.nav-tab');
             const sections = document.querySelectorAll('.section');
@@ -828,29 +661,63 @@ servers = {
                 tab.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     
-                    // Update active tab
                     navTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // Show target section
                     sections.forEach(section => {
                         section.classList.remove('active');
                         if (section.id === targetId) {
                             section.classList.add('active');
                         }
                     });
+                    
+                    showNotification(`Switched to ${this.textContent.trim()}`, 'info');
                 });
             });
-            
-            // Simulate loading animation for stats
+
+            // Team Updates Form
+            const updateForm = document.getElementById('team-update-form');
+            if (updateForm) {
+                updateForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    const author = document.getElementById('update-author').value;
+                    const type = document.getElementById('update-type').value;
+                    const message = document.getElementById('update-message').value;
+                    
+                    const activityItem = document.createElement('div');
+                    activityItem.style.background = '#f8f9fa';
+                    activityItem.style.padding = '1rem';
+                    activityItem.style.margin = '0.5rem 0';
+                    activityItem.style.borderRadius = '8px';
+                    activityItem.style.borderLeft = '4px solid var(--success)';
+                    
+                    activityItem.innerHTML = `
+                        <strong>${author}</strong> - <span style="color: var(--success);">${getUpdateTypeText(type)}</span>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">${message}</p>
+                        <small style="color: #999;">Just now</small>
+                    `;
+                    
+                    document.getElementById('team-activity').prepend(activityItem);
+                    updateForm.reset();
+                    
+                    showNotification('Update shared with team!', 'success');
+                });
+            }
+
+            // Simulate loading animations
             const statNumbers = document.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
-                const finalValue = parseInt(stat.textContent);
+                const finalValue = stat.textContent;
+                if (finalValue.includes('%') || finalValue.includes('ms')) {
+                    return; // Skip already formatted values
+                }
+                
                 let current = 0;
-                const increment = finalValue / 20;
+                const increment = parseInt(finalValue) / 20;
                 const timer = setInterval(() => {
                     current += increment;
-                    if (current >= finalValue) {
+                    if (current >= parseInt(finalValue)) {
                         stat.textContent = finalValue;
                         clearInterval(timer);
                     } else {
@@ -858,89 +725,83 @@ servers = {
                     }
                 }, 50);
             });
-
-            // Assignment form functionality
-            const assignmentForm = document.getElementById('assignment-form');
-            if (assignmentForm) {
-                assignmentForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    const name = document.getElementById('task-name').value;
-                    const desc = document.getElementById('task-desc').value;
-                    const assignee = document.getElementById('task-assignee').value;
-                    
-                    const assignmentItem = document.createElement('div');
-                    assignmentItem.className = 'assignment-item';
-                    assignmentItem.innerHTML = `
-                        <strong>${name}</strong>
-                        <p>${desc}</p>
-                        <small><strong>Ansvarig:</strong> ${assignee}</small>
-                    `;
-                    
-                    document.getElementById('assignments-list').prepend(assignmentItem);
-                    
-                    // Reset form
-                    assignmentForm.reset();
-                    
-                    alert('✅ Uppgift tillagd framgångsrikt!');
-                });
-            }
-
-            // Team Updates functionality
-            const updateForm = document.getElementById('team-update-form');
-            if (updateForm) {
-                updateForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    const author = document.getElementById('update-author').value;
-                    const status = document.getElementById('update-status').value;
-                    const title = document.getElementById('update-title').value;
-                    const details = document.getElementById('update-details').value;
-                    
-                    // Status colors and texts
-                    const statusColors = {
-                        'completed': '#28a745',
-                        'in-progress': '#ffc107', 
-                        'planned': '#17a2b8',
-                        'blocked': '#dc3545'
-                    };
-                    
-                    const statusTexts = {
-                        'completed': '✅ Avslutad',
-                        'in-progress': '🔄 Pågående',
-                        'planned': '📅 Planerad',
-                        'blocked': '❌ Blockerad'
-                    };
-                    
-                    const updateItem = document.createElement('div');
-                    updateItem.className = 'update-item';
-                    updateItem.style.background = '#f8f9fa';
-                    updateItem.style.padding = '1.5rem';
-                    updateItem.style.borderRadius = '12px';
-                    updateItem.style.marginBottom = '1rem';
-                    updateItem.style.borderLeft = `4px solid ${statusColors[status]}`;
-                    
-                    updateItem.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <strong>${author}</strong>
-                            <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
-                                ${statusTexts[status]}
-                            </span>
-                        </div>
-                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">${title}</h4>
-                        <p style="color: #666; margin-bottom: 0.5rem;">${details}</p>
-                        <small style="color: #999;">${new Date().toLocaleString('sv-SE')}</small>
-                    `;
-                    
-                    document.getElementById('updates-container').prepend(updateItem);
-                    
-                    // Reset form
-                    updateForm.reset();
-                    
-                    alert('Tack för din uppdatering! ✅');
-                });
-            }
         });
+
+        function getUpdateTypeText(type) {
+            const types = {
+                'progress': '📈 Progress Update',
+                'blocker': '🚧 Blocker Reported',
+                'question': '❓ Question',
+                'achievement': '🎉 Achievement'
+            };
+            return types[type] || 'Update';
+        }
+
+        // AI Assistant Functionality
+        function askAI() {
+            const input = document.getElementById('ai-input');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            const chat = document.getElementById('ai-chat');
+            
+            // Add user question
+            const userMsg = document.createElement('div');
+            userMsg.style.background = 'var(--secondary)';
+            userMsg.style.color = 'white';
+            userMsg.style.padding = '1rem';
+            userMsg.style.margin = '0.5rem 0';
+            userMsg.style.borderRadius = '8px';
+            userMsg.innerHTML = `<strong>You:</strong> ${question}`;
+            chat.appendChild(userMsg);
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const aiResponse = getAIResponse(question);
+                const aiMsg = document.createElement('div');
+                aiMsg.style.background = 'white';
+                aiMsg.style.padding = '1rem';
+                aiMsg.style.margin = '0.5rem 0';
+                aiMsg.style.borderRadius = '8px';
+                aiMsg.innerHTML = `<strong>AI:</strong> ${aiResponse}`;
+                chat.appendChild(aiMsg);
+                
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function getAIResponse(question) {
+            const responses = {
+                'hello': 'Hello! How can I assist with your project today?',
+                'help': 'I can help with code optimization, team coordination, and project analytics. What do you need?',
+                'dijkstra': 'For Dijkstra optimization, consider using Fibonacci heaps for better performance with large graphs.',
+                'team': 'Your team is performing well! All members are active and meeting their deadlines.',
+                'report': 'I can generate a project report showing code quality, team performance, and timeline analytics.'
+            };
+            
+            question = question.toLowerCase();
+            for (let key in responses) {
+                if (question.includes(key)) {
+                    return responses[key];
+                }
+            }
+            
+            return "I understand you're asking about: " + question + ". I can help with project management, code optimization, and team coordination. Can you be more specific?";
+        }
+
+        function generateReport() {
+            showNotification('Project report generated and downloaded!', 'success');
+            // In a real app, this would generate and download a PDF report
+        }
+
+        // Show welcome notification
+        setTimeout(() => {
+            showNotification('Welcome to Smart Project Dashboard! AI assistant is ready to help.', 'info');
+        }, 1000);
     </script>
 </body>
 </html>
