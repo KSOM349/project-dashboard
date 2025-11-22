@@ -14,6 +14,7 @@
             --warning: #f39c12;
             --light: #ecf0f1;
             --dark: #2c3e50;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         * {
@@ -36,17 +37,44 @@
         }
 
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient);
             color: white;
             padding: 2rem;
             border-radius: 15px;
             margin-bottom: 2rem;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
         header h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+        }
+
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: var(--success);
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideInRight 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 300px;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         .nav-tabs {
@@ -58,6 +86,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .nav-tab {
@@ -73,6 +102,7 @@
 
         .nav-tab:hover {
             background: var(--light);
+            transform: translateY(-2px);
         }
 
         .nav-tab.active {
@@ -86,6 +116,7 @@
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .section.active {
@@ -102,6 +133,9 @@
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .section-header h2 {
@@ -117,11 +151,17 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-number {
@@ -158,6 +198,10 @@
             color: white;
         }
 
+        .team-table tr:hover {
+            background: var(--light);
+        }
+
         .btn {
             padding: 8px 16px;
             border: none;
@@ -165,6 +209,11 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .btn-edit {
@@ -182,6 +231,8 @@
             border-radius: 12px;
             padding: 1.5rem;
             margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .ai-message {
@@ -211,6 +262,34 @@
             padding: 12px;
             border: 2px solid var(--light);
             border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--success);
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--success);
+            height: 100%;
+            transition: width 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -220,10 +299,20 @@
             .stats-container {
                 grid-template-columns: 1fr;
             }
+            .team-table {
+                display: block;
+                overflow-x: auto;
+            }
+            .notification {
+                min-width: 250px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="notification-container" id="notificationContainer"></div>
+
     <div class="container">
         <header>
             <h1>🚀 Hela Projektet - Komplett Dashboard</h1>
@@ -258,12 +347,18 @@
             <div class="nav-tab" data-target="ai-assistant">
                 <i class="fas fa-robot"></i> 🤖 AI Assistant
             </div>
+            <div class="nav-tab" data-target="practical-tasks">
+                <i class="fas fa-tasks"></i> 🎯 Practical Tasks
+            </div>
         </div>
 
         <!-- Algorithm Visualizer Section -->
         <section id="algorithm-visualizer" class="section active">
             <div class="section-header">
                 <h2>📊 Algorithm Visualizer</h2>
+                <button class="btn" style="background: var(--success); color: white;" onclick="showNotification('Visualization refreshed!', 'success')">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
             </div>
             
             <div class="stats-container">
@@ -278,6 +373,14 @@
                 <div class="stat-card">
                     <div class="stat-number">100%</div>
                     <div class="stat-label">Optimering</div>
+                </div>
+            </div>
+
+            <div style="background: var(--light); height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 2rem 0; border: 2px dashed var(--secondary);">
+                <div style="text-align: center; color: var(--dark);">
+                    <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h3>Interaktiv Dijkstra Visualisering</h3>
+                    <p>Plats för den interaktiva grafvisualiseringen</p>
                 </div>
             </div>
 
@@ -341,12 +444,29 @@ servers = {
 resultat = dijkstra_dashboard(servers, 'WebServer')
 print("Kortaste avstånd:", resultat)</pre>
             </div>
+
+            <div style="margin-top: 2rem;">
+                <h3>🎤 Min Presentation – Kaled Osman</h3>
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                    <h4>Dijkstra och min dashboard</h4>
+                    <p><strong>Introduktion:</strong> "Jag har gjort en plats där alla kan se hur det går. Precis som Dijkstra hittar den bästa vägen, visar min dashboard allas arbete på bästa sätt. Alla resultat syns direkt."</p>
+                    
+                    <h4>Algoritmen</h4>
+                    <p>"Dijkstra är en algoritm som hittar kortaste vägen mellan punkter. Den används i GPS, internet och spel för att hitta snabbaste vägen."</p>
+                    
+                    <h4>Min Dashboard</h4>
+                    <p>"Jag har byggt tre viktiga delar: Server Monitor, Azure Integration och Python Dashboard. Alla kan se sina resultat direkt på dashboarden!"</p>
+                </div>
+            </div>
         </section>
 
         <!-- Team Dashboard Section -->
         <section id="team-dashboard" class="section">
             <div class="section-header">
                 <h2>👥 Team Dashboard - Grupp 1</h2>
+                <button class="btn" style="background: var(--secondary); color: white;" onclick="showNotification('Team data synced!', 'success')">
+                    <i class="fas fa-sync"></i> Sync Team
+                </button>
             </div>
 
             <div class="stats-container">
@@ -450,8 +570,11 @@ print("Kortaste avstånd:", resultat)</pre>
         <section id="hela-projektet" class="section">
             <div class="section-header">
                 <h2>📁 HELA PROJEKTET - Dokumentation & Presentation</h2>
+                <button class="btn" style="background: var(--primary); color: white;" onclick="showNotification('Documentation exported!', 'success')">
+                    <i class="fas fa-download"></i> Export
+                </button>
             </div>
-            
+
             <div style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
                 <h3>🚀 PROJEKT-SAMMANFATTNING:</h3>
                 <p>"Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer"</p>
@@ -464,6 +587,43 @@ print("Kortaste avstånd:", resultat)</pre>
                     <li>Bygga ett fullt funktionellt CRUD dashboard</li>
                     <li>Integrera Algorithm Visualizer för Dijkstra</li>
                     <li>Demonstrera full-stack utveckling</li>
+                </ul>
+
+                <h4>🛠 Teknisk Stack</h4>
+                <ul>
+                    <li>Backend: Python Flask</li>
+                    <li>Frontend: HTML5, CSS3, JavaScript</li>
+                    <li>Styling: Modern CSS med gradients</li>
+                    <li>Data: JSON-baserad "databas"</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3>✅ FUNKTIONALITET</h3>
+                
+                <h4>📋 Task 1: Dashboard (CRUD)</h4>
+                <ul>
+                    <li>✅ CREATE - Lägg till nya anställda</li>
+                    <li>✅ READ - Visa data i tabell</li>
+                    <li>✅ UPDATE - Redigera med modal</li>
+                    <li>✅ DELETE - Radera med bekräftelse</li>
+                    <li>✅ Realtidsstatistik</li>
+                </ul>
+
+                <h4>🔍 Task 2: Algorithm Visualizer</h4>
+                <ul>
+                    <li>✅ Dijkstra algorithm demo</li>
+                    <li>✅ Graf-visualisering</li>
+                    <li>✅ Steg-för-steg förklaring</li>
+                    <li>✅ Responsiv design</li>
+                </ul>
+
+                <h4>🎨 Task 3: Design & UX</h4>
+                <ul>
+                    <li>✅ Modern design med gradients</li>
+                    <li>✅ Responsiv för alla enheter</li>
+                    <li>✅ Professionell navigation</li>
+                    <li>✅ Användarvänliga formulär</li>
                 </ul>
             </div>
         </section>
@@ -499,6 +659,31 @@ servers = {
     'Backup': {'Database': 8}
 }</pre>
             </div>
+
+            <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <h4>🎯 Dijkstra Steg-för-Steg:</h4>
+                <p>Start: WebServer (avstånd 0)</p>
+                <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
+                <p>Steg 2: Välj Cache → hitta CDN=5</p>
+                <p>Steg 3: Välj Database → hitta Backup=13</p>
+                <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h3>📎 Bifogade Filer</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
+                        <h4>📄 Task 02 - Advances in Graph Algorithms</h4>
+                        <p>Dokumentation om avancerade Dijkstra-algoritmer</p>
+                        <button class="btn" style="background: var(--secondary); color: white; margin-top: 0.5rem;">Ladda Ned</button>
+                    </div>
+                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
+                        <h4>🌐 Dijkstra Advances Demo</h4>
+                        <p>Interaktiv demo av Dijkstra-algoritmen</p>
+                        <button class="btn" style="background: var(--success); color: white; margin-top: 0.5rem;">Öppna Demo</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Dokumentation Section -->
@@ -508,10 +693,34 @@ servers = {
             </div>
 
             <div style="margin-bottom: 2rem;">
-                <h3>Av Grupp 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell</h3>
+                <h3>Av Grupp 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell, Luwam</h3>
                 
                 <h4>Dijkstra's Algorithm</h4>
-                <p><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph.</p>
+                <p><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph, which could for example, be representative of:</p>
+                <ul>
+                    <li>Road Networks</li>
+                    <li>Shortest path in OSPF Networks</li>
+                    <li>Pathing in Video Games</li>
+                    <li>Microchip Design</li>
+                </ul>
+
+                <h4>Marcus - Dijkstra's Shortest Path</h4>
+                <p>"The shortest path the algorithm finds is dependant on the source nodes relationships to other nodes. The starting node is where the algorithm draws its conclusion from..."</p>
+
+                <h4>Kaled - Why does the shortest path matter?</h4>
+                <p>"As mentioned earlier, the purpose of the algorithm is to find the shortest possible path, so why does the shortest possible path matter? When does the shortest path matter, when doesn't it matter, and why?"</p>
+
+                <h4>Fahad - Uses of shortest path</h4>
+                <p>"A common usage of the shortest path within our sphere of operation is for example, in networking, where speed and efficiency are crucial to the fluid operation of the network..."</p>
+
+                <h4>Jens - Related Algorithms & Problems</h4>
+                <p>"Dijkstra's original algorithm can be modified and extended, for example: At times it may be desirable to get a LESS than optimal mathematical solution..."</p>
+
+                <h4>Stefan - Link-State & Dijkstra's real world use</h4>
+                <p>"In link-state routing, every router maintains a detailed view of the entire network topology, giving it a clear picture of how all nodes are interconnected..."</p>
+
+                <h4>Luwam - Testing & Validation</h4>
+                <p>"Proper testing of Dijkstra's algorithm involves validating edge cases, performance with large graphs, and ensuring correctness across different network topologies..."</p>
             </div>
         </section>
 
@@ -527,11 +736,22 @@ servers = {
                     <form id="assignment-form">
                         <div style="margin-bottom: 1rem;">
                             <label>Uppgiftsnamn:</label>
-                            <input type="text" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                            <input type="text" id="task-name" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
                         </div>
                         <div style="margin-bottom: 1rem;">
                             <label>Beskrivning:</label>
-                            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; height: 100px;"></textarea>
+                            <textarea id="task-desc" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; height: 100px;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Ansvarig:</label>
+                            <select id="task-assignee" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                                <option value="Kaled Osman">Kaled Osman</option>
+                                <option value="Fahad Hussain">Fahad Hussain</option>
+                                <option value="Stefan Österberg">Stefan Österberg</option>
+                                <option value="Marcus Tibell">Marcus Tibell</option>
+                                <option value="Jens Annell">Jens Annell</option>
+                                <option value="Luwam">Luwam</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn" style="background: var(--success); color: white; width: 100%;">
                             ➕ Lägg Till Uppgift
@@ -541,11 +761,16 @@ servers = {
 
                 <div style="background: var(--light); padding: 1.5rem; border-radius: 12px;">
                     <h3>📋 Aktuella Uppgifter</h3>
-                    <div>
+                    <div id="assignments-list">
                         <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
                             <strong>Förbättra Dijkstra Algorithm</strong>
-                            <p>Lägg till prestandaförbättringar</p>
+                            <p>Lägg till prestandaförbättringar och komplexitetsanalys</p>
                             <small><strong>Ansvarig:</strong> Kaled Osman</small>
+                        </div>
+                        <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+                            <strong>OSPF Protocols Research</strong>
+                            <p>Studera OSPF-protokoll och deras tillämpningar i nätverk</p>
+                            <small><strong>Ansvarig:</strong> Fahad Hussain</small>
                         </div>
                     </div>
                 </div>
@@ -564,25 +789,34 @@ servers = {
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                         <div>
                             <label>Ditt Namn:</label>
-                            <select style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <option>Kaled Osman</option>
-                                <option>Fahad Hussain</option>
-                                <option>Stefan Österberg</option>
+                            <select id="update-author" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                                <option value="Kaled Osman">Kaled Osman</option>
+                                <option value="Fahad Hussain">Fahad Hussain</option>
+                                <option value="Stefan Österberg">Stefan Österberg</option>
+                                <option value="Marcus Tibell">Marcus Tibell</option>
+                                <option value="Jens Annell">Jens Annell</option>
+                                <option value="Luwam">Luwam</option>
                             </select>
                         </div>
                         <div>
                             <label>Status:</label>
-                            <select style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <option>✅ Avslutad</option>
-                                <option>🔄 Pågående</option>
-                                <option>📅 Planerad</option>
+                            <select id="update-status" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                                <option value="completed">✅ Avslutad</option>
+                                <option value="in-progress">🔄 Pågående</option>
+                                <option value="planned">📅 Planerad</option>
+                                <option value="blocked">❌ Blockerad</option>
                             </select>
                         </div>
                     </div>
                     
                     <div style="margin-bottom: 1rem;">
                         <label>Uppgiftsbeskrivning:</label>
-                        <input type="text" placeholder="Vad har du gjort?" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                        <input type="text" id="update-title" placeholder="Vad har du gjort?" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label>Detaljer:</label>
+                        <textarea id="update-details" placeholder="Beskriv ditt arbete..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; height: 100px;"></textarea>
                     </div>
                     
                     <button type="submit" class="btn" style="background: var(--success); color: white; width: 100%;">
@@ -592,12 +826,16 @@ servers = {
             </div>
 
             <div>
-                <h3>📋 Senaste Uppdateringar</h3>
-                <div>
+                <h3>📋 Senaste Uppdateringar från Teamet</h3>
+                <div id="updates-container">
                     <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid var(--success);">
-                        <strong>Kaled Osman</strong> - <span style="color: var(--success);">✅ Avslutad</span>
-                        <p style="margin: 0.5rem 0;">Implementerat Dijkstra Algorithm</p>
-                        <small style="color: #666;">Idag 14:30</small>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>Kaled Osman</strong>
+                            <span style="background: var(--success); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">✅ Avslutad</span>
+                        </div>
+                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">Implementerat Dijkstra Algorithm</h4>
+                        <p style="color: #666; margin-bottom: 0.5rem;">Har skapat en fullt fungerande Dijkstra implementation med visualisering för vår dashboard.</p>
+                        <small style="color: #999;">Idag 14:30</small>
                     </div>
                 </div>
             </div>
@@ -639,9 +877,115 @@ servers = {
                 </div>
             </div>
         </section>
+
+        <!-- Practical Tasks Section -->
+        <section id="practical-tasks" class="section">
+            <div class="section-header">
+                <h2>🎯 Practical Tasks - Real World Uppgifter</h2>
+            </div>
+
+            <div class="task-item">
+                <h3>🧰 Level 1: Debugging (Vecka 1)</h3>
+                <p><strong>Debug a Broken Feature</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Kaled</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Fahad</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Stefan</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Marcus</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item">
+                <h3>🛠️ Level 2: Mini Tool (Vecka 2)</h3>
+                <p><strong>Build a Mini Tool</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Kaled</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Fahad</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Stefan</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Marcus</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-item">
+                <h3>🧠 Level 3: Algorithm (Vecka 3)</h3>
+                <p><strong>Implement and Visualize Algorithm</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Kaled</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Fahad</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
+                        <div>Stefan</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
+                        <div>Marcus</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div>
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    ${message}
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            document.getElementById('notificationContainer').appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
         // Navigation System
         document.addEventListener('DOMContentLoaded', function() {
             const navTabs = document.querySelectorAll('.nav-tab');
@@ -662,6 +1006,8 @@ servers = {
                             section.classList.add('active');
                         }
                     });
+                    
+                    showNotification(`Öppnade ${this.textContent.trim()}`, 'info');
                 });
             });
 
@@ -670,8 +1016,49 @@ servers = {
             if (updateForm) {
                 updateForm.addEventListener('submit', function(event) {
                     event.preventDefault();
-                    alert('Tack för din uppdatering! Den har sparats.');
-                    this.reset();
+                    
+                    const author = document.getElementById('update-author').value;
+                    const status = document.getElementById('update-status').value;
+                    const title = document.getElementById('update-title').value;
+                    const details = document.getElementById('update-details').value;
+                    
+                    const statusColors = {
+                        'completed': '#28a745',
+                        'in-progress': '#ffc107', 
+                        'planned': '#17a2b8',
+                        'blocked': '#dc3545'
+                    };
+                    
+                    const statusTexts = {
+                        'completed': '✅ Avslutad',
+                        'in-progress': '🔄 Pågående',
+                        'planned': '📅 Planerad',
+                        'blocked': '❌ Blockerad'
+                    };
+                    
+                    const updateItem = document.createElement('div');
+                    updateItem.style.background = 'white';
+                    updateItem.style.padding = '1rem';
+                    updateItem.style.margin = '0.5rem 0';
+                    updateItem.style.borderRadius = '8px';
+                    updateItem.style.borderLeft = `4px solid ${statusColors[status]}`;
+                    
+                    updateItem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>${author}</strong>
+                            <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
+                                ${statusTexts[status]}
+                            </span>
+                        </div>
+                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">${title}</h4>
+                        <p style="color: #666; margin-bottom: 0.5rem;">${details}</p>
+                        <small style="color: #999;">${new Date().toLocaleString('sv-SE')}</small>
+                    `;
+                    
+                    document.getElementById('updates-container').prepend(updateItem);
+                    updateForm.reset();
+                    
+                    showNotification('Uppdatering sparad! ✅', 'success');
                 });
             }
 
@@ -680,10 +1067,48 @@ servers = {
             if (assignmentForm) {
                 assignmentForm.addEventListener('submit', function(event) {
                     event.preventDefault();
-                    alert('Uppgiften har lagts till!');
-                    this.reset();
+                    
+                    const name = document.getElementById('task-name').value;
+                    const desc = document.getElementById('task-desc').value;
+                    const assignee = document.getElementById('task-assignee').value;
+                    
+                    const assignmentItem = document.createElement('div');
+                    assignmentItem.style.background = 'white';
+                    assignmentItem.style.padding = '1rem';
+                    assignmentItem.style.margin = '0.5rem 0';
+                    assignmentItem.style.borderRadius = '8px';
+                    
+                    assignmentItem.innerHTML = `
+                        <strong>${name}</strong>
+                        <p>${desc}</p>
+                        <small><strong>Ansvarig:</strong> ${assignee}</small>
+                    `;
+                    
+                    document.getElementById('assignments-list').prepend(assignmentItem);
+                    assignmentForm.reset();
+                    
+                    showNotification('Uppgift tillagd! ✅', 'success');
                 });
             }
+
+            // Animate stats
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const finalValue = stat.textContent;
+                if (finalValue.includes('%') || finalValue.includes('ms')) return;
+                
+                let current = 0;
+                const increment = parseInt(finalValue) / 20;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= parseInt(finalValue)) {
+                        stat.textContent = finalValue;
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current);
+                    }
+                }, 50);
+            });
         });
 
         // AI Assistant Functions
@@ -696,7 +1121,6 @@ servers = {
             addMessage(question, 'user');
             input.value = '';
             
-            // Simulate AI thinking
             setTimeout(() => {
                 const response = generateAIResponse(question);
                 addMessage(response, 'ai');
@@ -730,6 +1154,7 @@ servers = {
                 'team': 'För att lägga till en ny teammedlem, gå till Team Dashboard och klicka på "Lägg till ny". Fyll i deras information och roll.',
                 'algorithm': 'Dijkstra hittar kortaste vägen från en startnod till alla andra, medan A* använder heuristik för att fokusera på mål noden.',
                 'performance': 'För bättre prestanda i din dashboard, överväg att använda virtual scrolling för stora datamängder och memoization för beräkningar.',
+                'debug': 'För debugging, använd console.log() för att spåra variabler och använd debugger; för att pausa körningen.',
                 'default': 'Jag kan hjälpa dig med Dijkstra algoritmer, team samarbete, kod optimering, och projekt management. Var mer specifik så ger jag bättre svar!'
             };
 
@@ -743,10 +1168,17 @@ servers = {
                 return responses.algorithm;
             } else if (question.includes('prestanda') || question.includes('snabb') || question.includes('optimera')) {
                 return responses.performance;
+            } else if (question.includes('debug') || question.includes('felsök') || question.includes('bugg')) {
+                return responses.debug;
             } else {
                 return responses.default;
             }
         }
+
+        // Welcome notification
+        setTimeout(() => {
+            showNotification('Välkommen till Hela Projektet Dashboard! 🚀', 'info');
+        }, 1000);
     </script>
 </body>
 </html>
