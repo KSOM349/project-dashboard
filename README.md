@@ -1,8 +1,3 @@
-# إكمال الكود المقطوع - Dashboard كامل
-
-سأكمل الكود وأجعله يعمل بنسبة 100%! 🚀
-
-```html
 <!DOCTYPE html>
 <html lang="sv" dir="ltr">
 <head>
@@ -1007,7 +1002,7 @@ servers = {
                 <div class="task-card">
                     <div class="task-header">
                         <div class="task-title">Implementera Dijkstra Dashboard</div>
-                        <span class="task-priority priority-high">Hög Priorit<span class="task-priority priority-high">Hög Prioritiet</span>
+                        <span class="task-priority priority-high">Hög Prioritiet</span>
                     </div>
                     <div class="task-meta">
                         <span><i class="fas fa-user"></i> Kaled Osman</span>
@@ -1054,7 +1049,119 @@ servers = {
 
         <!-- JavaScript الكامل -->
         <script>
-        // كود JavaScript هنا...
+        // وظائف التنقل بين التبويبات
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // إزالة النشاط من جميع التبويبات
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                // إضافة النشاط للتبويب المحدد
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.target).classList.add('active');
+            });
+        });
+
+        // وظيفة عرض الإشعارات
+        function showNotification(message, type = 'success') {
+            const notificationContainer = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            notificationContainer.appendChild(notification);
+            
+            // إزالة تلقائية بعد 5 ثواني
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // وظائف المساعد الذكي
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatContainer = document.getElementById('aiChatContainer');
+                
+                // إضافة رسالة المستخدم
+                const userMessage = document.createElement('div');
+                userMessage.className = 'user-message';
+                userMessage.innerHTML = `<strong>👤 Du:</strong> ${message}`;
+                chatContainer.appendChild(userMessage);
+                
+                // محاكاة رد الذكاء الاصطناعي
+                setTimeout(() => {
+                    const aiResponse = getAIResponse(message);
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'ai-message';
+                    aiMessage.innerHTML = `<strong>🤖 AI Assistant:</strong> ${aiResponse}`;
+                    chatContainer.appendChild(aiMessage);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('aiChatInput').value = question;
+            sendAIMessage();
+        }
+
+        function getAIResponse(question) {
+            const responses = {
+                'tidskomplexitet': 'Dijkstra har tidskomplexitet O(V^2) med array eller O(E + V log V) med prioritetskö!',
+                'nätverk': 'I nätverk används Dijkstra i OSPF-protokoll för att hitta kortaste vägar mellan routrar!',
+                'python': 'I Python kan du implementera Dijkstra med heapq-modulen för effektiv prioritetskö!',
+                'skillnad': 'Dijkstra hittar kortaste vägar, A* använder heuristik för att vara snabbare i sökning!'
+            };
+            
+            const lowerQuestion = question.toLowerCase();
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerQuestion.includes(key)) {
+                    return response;
+                }
+            }
+            
+            return 'Tack för din fråga om Dijkstra-algoritmen! Jag kan hjälpa dig med implementation, komplexitet eller praktiska användningsfall.';
+        }
+
+        // وظائف المهام
+        function addNewTask() {
+            showNotification('Ny uppgift skapad!', 'success');
+        }
+
+        // معالجة النماذج
+        document.getElementById('assignment-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Uppgift tillagd!', 'success');
+            this.reset();
+        });
+
+        document.getElementById('team-update-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            showNotification('Uppdatering publicerad!', 'success');
+            this.reset();
+        });
+
+        // جعل الإدخال يعمل بالزر Enter
+        document.getElementById('aiChatInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendAIMessage();
+            }
+        });
+
+        // تهيئة أولية
+        showNotification('Välkommen till Dashboard!', 'info');
         </script>
     </div>
 </body>
