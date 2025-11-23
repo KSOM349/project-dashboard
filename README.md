@@ -77,6 +77,19 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
+        .notification.error { background: var(--accent); }
+        .notification.warning { background: var(--warning); }
+        .notification.info { background: var(--secondary); }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
         .nav-tabs {
             display: flex;
             background: white;
@@ -292,6 +305,17 @@
             transition: width 0.3s ease;
         }
 
+        .attachment-item {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         @media (max-width: 768px) {
             .nav-tabs {
                 flex-direction: column;
@@ -402,6 +426,39 @@ servers = {
                 <p>Steg 2: Välj Cache → hitta CDN=5</p>
                 <p>Steg 3: Välj Database → hitta Backup=13</p>
                 <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
+            </div>
+
+            <!-- المرفقات المضافة -->
+            <div style="margin-top: 2rem;">
+                <h3>📎 المرفقات - Bifogade Filer</h3>
+                <div class="attachment-item">
+                    <div>
+                        <strong>📄 Task 02 - Advances in Graph Algorithms</strong>
+                        <p>Dokumentation om avancerade Dijkstra-algoritmer</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="background: var(--secondary); color: white;">
+                            <i class="fas fa-download"></i> Ladda Ned
+                        </button>
+                        <button class="btn" style="background: var(--success); color: white;">
+                            <i class="fas fa-external-link-alt"></i> Öppna
+                        </button>
+                    </div>
+                </div>
+                <div class="attachment-item">
+                    <div>
+                        <strong>🌐 Dijkstra Advances Demo</strong>
+                        <p>Interaktiv demo av Dijkstra-algoritmen</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="background: var(--secondary); color: white;">
+                            <i class="fas fa-download"></i> Ladda Ned
+                        </button>
+                        <button class="btn" style="background: var(--success); color: white;">
+                            <i class="fas fa-external-link-alt"></i> Öppna Demo
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -668,22 +725,6 @@ servers = {
                 <p>Steg 3: Välj Database → hitta Backup=13</p>
                 <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
             </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>📎 Bifogade Filer</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
-                        <h4>📄 Task 02 - Advances in Graph Algorithms</h4>
-                        <p>Dokumentation om avancerade Dijkstra-algoritmer</p>
-                        <button class="btn" style="background: var(--secondary); color: white; margin-top: 0.5rem;">Ladda Ned</button>
-                    </div>
-                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
-                        <h4>🌐 Dijkstra Advances Demo</h4>
-                        <p>Interaktiv demo av Dijkstra-algoritmen</p>
-                        <button class="btn" style="background: var(--success); color: white; margin-top: 0.5rem;">Öppna Demo</button>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- Dokumentation Section -->
@@ -828,357 +869,3 @@ servers = {
             <div>
                 <h3>📋 Senaste Uppdateringar från Teamet</h3>
                 <div id="updates-container">
-                    <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid var(--success);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <strong>Kaled Osman</strong>
-                            <span style="background: var(--success); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">✅ Avslutad</span>
-                        </div>
-                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">Implementerat Dijkstra Algorithm</h4>
-                        <p style="color: #666; margin-bottom: 0.5rem;">Har skapat en fullt fungerande Dijkstra implementation med visualisering för vår dashboard.</p>
-                        <small style="color: #999;">Idag 14:30</small>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Assistant Section -->
-        <section id="ai-assistant" class="section">
-            <div class="section-header">
-                <h2>🤖 AI Assistant - Smart Helper</h2>
-            </div>
-
-            <div class="ai-chat-container">
-                <div id="ai-chat-messages">
-                    <div class="ai-message">
-                        <strong>AI Assistant:</strong> Hej! Jag är här för att hjälpa dig med ditt projekt. Du kan fråga mig om Dijkstra algoritmer, team samarbete, eller något annat!
-                    </div>
-                </div>
-
-                <div class="chat-input">
-                    <input type="text" id="ai-input" placeholder="Ställ din fråga här...">
-                    <button class="btn" style="background: var(--secondary); color: white;" onclick="askAI()">
-                        <i class="fas fa-paper-plane"></i> Skicka
-                    </button>
-                </div>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>💡 Snabbhjälp</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Hur förbättrar jag Dijkstra prestanda?')">
-                        🚀 Dijkstra Optimering
-                    </button>
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Hur lägger jag till en ny teammedlem?')">
-                        👥 Team Management
-                    </button>
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Vad är skillnaden mellan Dijkstra och A*?')">
-                        🔍 Algorithm Jämförelse
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Practical Tasks Section -->
-        <section id="practical-tasks" class="section">
-            <div class="section-header">
-                <h2>🎯 Practical Tasks - Real World Uppgifter</h2>
-            </div>
-
-            <div class="task-item">
-                <h3>🧰 Level 1: Debugging (Vecka 1)</h3>
-                <p><strong>Debug a Broken Feature</strong></p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 80%"></div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Kaled</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Fahad</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Stefan</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Marcus</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="task-item">
-                <h3>🛠️ Level 2: Mini Tool (Vecka 2)</h3>
-                <p><strong>Build a Mini Tool</strong></p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 60%"></div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Kaled</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Fahad</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Stefan</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Marcus</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="task-item">
-                <h3>🧠 Level 3: Algorithm (Vecka 3)</h3>
-                <p><strong>Implement and Visualize Algorithm</strong></p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 40%"></div>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Kaled</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Fahad</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">✅</div>
-                        <div>Stefan</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">⏳</div>
-                        <div>Marcus</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <script>
-        // Notification System
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div>
-                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                    ${message}
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
-            `;
-            
-            document.getElementById('notificationContainer').appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
-        }
-
-        // Navigation System
-        document.addEventListener('DOMContentLoaded', function() {
-            const navTabs = document.querySelectorAll('.nav-tab');
-            const sections = document.querySelectorAll('.section');
-            
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-target');
-                    
-                    // Update active tab
-                    navTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show target section
-                    sections.forEach(section => {
-                        section.classList.remove('active');
-                        if (section.id === targetId) {
-                            section.classList.add('active');
-                        }
-                    });
-                    
-                    showNotification(`Öppnade ${this.textContent.trim()}`, 'info');
-                });
-            });
-
-            // Team Updates Form
-            const updateForm = document.getElementById('team-update-form');
-            if (updateForm) {
-                updateForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    const author = document.getElementById('update-author').value;
-                    const status = document.getElementById('update-status').value;
-                    const title = document.getElementById('update-title').value;
-                    const details = document.getElementById('update-details').value;
-                    
-                    const statusColors = {
-                        'completed': '#28a745',
-                        'in-progress': '#ffc107', 
-                        'planned': '#17a2b8',
-                        'blocked': '#dc3545'
-                    };
-                    
-                    const statusTexts = {
-                        'completed': '✅ Avslutad',
-                        'in-progress': '🔄 Pågående',
-                        'planned': '📅 Planerad',
-                        'blocked': '❌ Blockerad'
-                    };
-                    
-                    const updateItem = document.createElement('div');
-                    updateItem.style.background = 'white';
-                    updateItem.style.padding = '1rem';
-                    updateItem.style.margin = '0.5rem 0';
-                    updateItem.style.borderRadius = '8px';
-                    updateItem.style.borderLeft = `4px solid ${statusColors[status]}`;
-                    
-                    updateItem.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <strong>${author}</strong>
-                            <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
-                                ${statusTexts[status]}
-                            </span>
-                        </div>
-                        <h4 style="margin: 0.5rem 0; color: #2c3e50;">${title}</h4>
-                        <p style="color: #666; margin-bottom: 0.5rem;">${details}</p>
-                        <small style="color: #999;">${new Date().toLocaleString('sv-SE')}</small>
-                    `;
-                    
-                    document.getElementById('updates-container').prepend(updateItem);
-                    updateForm.reset();
-                    
-                    showNotification('Uppdatering sparad! ✅', 'success');
-                });
-            }
-
-            // Assignment Form
-            const assignmentForm = document.getElementById('assignment-form');
-            if (assignmentForm) {
-                assignmentForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    const name = document.getElementById('task-name').value;
-                    const desc = document.getElementById('task-desc').value;
-                    const assignee = document.getElementById('task-assignee').value;
-                    
-                    const assignmentItem = document.createElement('div');
-                    assignmentItem.style.background = 'white';
-                    assignmentItem.style.padding = '1rem';
-                    assignmentItem.style.margin = '0.5rem 0';
-                    assignmentItem.style.borderRadius = '8px';
-                    
-                    assignmentItem.innerHTML = `
-                        <strong>${name}</strong>
-                        <p>${desc}</p>
-                        <small><strong>Ansvarig:</strong> ${assignee}</small>
-                    `;
-                    
-                    document.getElementById('assignments-list').prepend(assignmentItem);
-                    assignmentForm.reset();
-                    
-                    showNotification('Uppgift tillagd! ✅', 'success');
-                });
-            }
-
-            // Animate stats
-            const statNumbers = document.querySelectorAll('.stat-number');
-            statNumbers.forEach(stat => {
-                const finalValue = stat.textContent;
-                if (finalValue.includes('%') || finalValue.includes('ms')) return;
-                
-                let current = 0;
-                const increment = parseInt(finalValue) / 20;
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= parseInt(finalValue)) {
-                        stat.textContent = finalValue;
-                        clearInterval(timer);
-                    } else {
-                        stat.textContent = Math.floor(current);
-                    }
-                }, 50);
-            });
-        });
-
-        // AI Assistant Functions
-        function askAI() {
-            const input = document.getElementById('ai-input');
-            const question = input.value.trim();
-            
-            if (!question) return;
-            
-            addMessage(question, 'user');
-            input.value = '';
-            
-            setTimeout(() => {
-                const response = generateAIResponse(question);
-                addMessage(response, 'ai');
-            }, 1000);
-        }
-
-        function quickQuestion(question) {
-            document.getElementById('ai-input').value = question;
-            askAI();
-        }
-
-        function addMessage(text, sender) {
-            const chatContainer = document.getElementById('ai-chat-messages');
-            const messageDiv = document.createElement('div');
-            
-            if (sender === 'user') {
-                messageDiv.className = 'user-message';
-                messageDiv.innerHTML = `<strong>Du:</strong> ${text}`;
-            } else {
-                messageDiv.className = 'ai-message';
-                messageDiv.innerHTML = `<strong>AI Assistant:</strong> ${text}`;
-            }
-            
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function generateAIResponse(question) {
-            const responses = {
-                'dijkstra': 'För att förbättra Dijkstra prestanda kan du använda en min-heap istället för en lista. Detta reducerar tidskomplexiteten från O(V^2) till O(E log V).',
-                'team': 'För att lägga till en ny teammedlem, gå till Team Dashboard och klicka på "Lägg till ny". Fyll i deras information och roll.',
-                'algorithm': 'Dijkstra hittar kortaste vägen från en startnod till alla andra, medan A* använder heuristik för att fokusera på mål noden.',
-                'performance': 'För bättre prestanda i din dashboard, överväg att använda virtual scrolling för stora datamängder och memoization för beräkningar.',
-                'debug': 'För debugging, använd console.log() för att spåra variabler och använd debugger; för att pausa körningen.',
-                'default': 'Jag kan hjälpa dig med Dijkstra algoritmer, team samarbete, kod optimering, och projekt management. Var mer specifik så ger jag bättre svar!'
-            };
-
-            question = question.toLowerCase();
-            
-            if (question.includes('dijkstra') || question.includes('prestanda') || question.includes('optimering')) {
-                return responses.dijkstra;
-            } else if (question.includes('team') || question.includes('medlem') || question.includes('lägg till')) {
-                return responses.team;
-            } else if (question.includes('algorithm') || question.includes('jämförelse') || question.includes('skillnad')) {
-                return responses.algorithm;
-            } else if (question.includes('prestanda') || question.includes('snabb') || question.includes('optimera')) {
-                return responses.performance;
-            } else if (question.includes('debug') || question.includes('felsök') || question.includes('bugg')) {
-                return responses.debug;
-            } else {
-                return responses.default;
-            }
-        }
-
-        // Welcome notification
-        setTimeout(() => {
-            showNotification('Välkommen till Hela Projektet Dashboard! 🚀', 'info');
-        }, 1000);
-    </script>
-</body>
-</html>
