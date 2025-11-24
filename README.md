@@ -1013,11 +1013,15 @@ servers = {
                         <div class="progress-fill" style="width: 100%"></div>
                     </div>
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn" style="background: var(--success); color: white;">
-                            <i class="fas fa-check"></i> Markera klar
-                        </button>
-                        <button class="btn" style="background: var(--warning); color: white;">
-                            <i class="fas fa-edit"></i> Redigera
+                        <button class="btn complete-btn" style="background: var(--success); color: white;">
+    <i class="fas fa-check"></i> Markera klar
+</button>
+<button class="btn edit-btn" style="background: var(--warning); color: white;">
+    <i class="fas fa-edit"></i> Redigera
+</button>
+<button class="btn delete-btn" style="background: var(--accent); color: white;">
+    <i class="fas fa-trash"></i> Radera
+</button>
                         </button>
                     </div>
                 </div>
@@ -1047,122 +1051,267 @@ servers = {
             </div>
         </section>
 
-        <!-- JavaScript الكامل -->
-        <script>
-        // وظائف التنقل بين التبويبات
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                // إزالة النشاط من جميع التبويبات
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                
-                // إضافة النشاط للتبويب المحدد
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.target).classList.add('active');
-            });
-        });
+      <script>
+// =============================================
+// 🚀 DIJKSTRA DASHBOARD - COMPLETE JAVASCRIPT
+// =============================================
 
-        // وظيفة عرض الإشعارات
-        function showNotification(message, type = 'success') {
-            const notificationContainer = document.getElementById('notificationContainer');
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <span>${message}</span>
-                <button class="notification-close" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
+// 🔧 الوظائف الأساسية
+function showNotification(message, type = 'success') {
+    const notificationContainer = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    notificationContainer.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
+}
+
+// 👥 فريق Dashboard
+function initializeTeamDashboard() {
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            editTeamMember(row);
+        });
+    });
+    
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const name = row.cells[1].textContent;
+            if (confirm(`حذف ${name}؟`)) {
+                row.remove();
+                updateTeamStats();
+                showNotification('تم الحذف!', 'success');
+            }
+        });
+    });
+}
+
+function editTeamMember(row) {
+    const name = prompt('الاسم:', row.cells[1].textContent);
+    const role = prompt('الدور:', row.cells[2].textContent);
+    const department = prompt('القسم:', row.cells[3].textContent);
+    const contribution = prompt('المساهمة:', row.cells[4].textContent);
+    
+    if (name && role) {
+        row.cells[1].textContent = name;
+        row.cells[2].textContent = role;
+        row.cells[3].textContent = department;
+        row.cells[4].textContent = contribution;
+        showNotification('تم التحديث!', 'success');
+    }
+}
+
+function updateTeamStats() {
+    const members = document.querySelectorAll('.team-table tbody tr').length;
+    document.querySelector('#team-dashboard .stat-card:nth-child(1) .stat-number').textContent = members;
+}
+
+// 📝 تحديثات الفريق
+function enableTeamUpdates() {
+    const form = document.getElementById('team-update-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const author = document.getElementById('update-author').value;
+            const status = document.getElementById('update-status').value;
+            const title = document.getElementById('update-title').value;
+            const details = document.getElementById('update-details').value;
+            
+            if (title && details) {
+                addTeamUpdate(author, status, title, details);
+                this.reset();
+            }
+        });
+    }
+}
+
+function addTeamUpdate(author, status, title, details) {
+    const updatesList = document.getElementById('team-updates-list');
+    const statusColors = {
+        'completed': '#27ae60', 'in-progress': '#f39c12', 
+        'planned': '#3498db', 'blocked': '#e74c3c'
+    };
+    
+    const updateHTML = `
+        <div style="background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; border-left: 4px solid ${statusColors[status]}">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0;">${title}</h4>
+                <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem;">
+                    ${status === 'completed' ? '✅' : status === 'in-progress' ? '🔄' : status === 'planned' ? '📅' : '❌'} 
+                    ${status}
+                </span>
+            </div>
+            <p><strong>${author}</strong> - ${details}</p>
+            <small style="color: #666;">${new Date().toLocaleDateString('sv-SE')}</small>
+        </div>
+    `;
+    
+    updatesList.insertAdjacentHTML('afterbegin', updateHTML);
+    showNotification('تم النشر!', 'success');
+}
+
+// 🎯 المهام العملية
+function addNewTask() {
+    const taskName = prompt('اسم المهمة:');
+    if (taskName) {
+        const tasksList = document.getElementById('tasks-list');
+        const newTask = document.createElement('div');
+        newTask.className = 'task-card';
+        newTask.innerHTML = `
+            <div class="task-header">
+                <div class="task-title">${taskName}</div>
+                <span class="task-priority priority-medium">متوسط</span>
+            </div>
+            <div class="task-meta">
+                <span><i class="fas fa-user"></i> Kaled Osman</span>
+                <span><i class="fas fa-calendar"></i> ${new Date().toISOString().split('T')[0]}</span>
+            </div>
+            <p>مهمة جديدة</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn complete-btn" style="background: #27ae60; color: white;">
+                    <i class="fas fa-check"></i> إكمال
                 </button>
-            `;
-            notificationContainer.appendChild(notification);
-            
-            // إزالة تلقائية بعد 5 ثواني
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
-        }
+                <button class="btn edit-btn" style="background: #f39c12; color: white;">
+                    <i class="fas fa-edit"></i> تعديل
+                </button>
+                <button class="btn delete-btn" style="background: #e74c3c; color: white;">
+                    <i class="fas fa-trash"></i> حذف
+                </button>
+            </div>
+        `;
+        tasksList.appendChild(newTask);
+        addTaskEventListeners(newTask);
+        updateTaskStats();
+    }
+}
 
-        // وظائف المساعد الذكي
-        function sendAIMessage() {
-            const input = document.getElementById('aiChatInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                const chatContainer = document.getElementById('aiChatContainer');
-                
-                // إضافة رسالة المستخدم
-                const userMessage = document.createElement('div');
-                userMessage.className = 'user-message';
-                userMessage.innerHTML = `<strong>👤 Du:</strong> ${message}`;
-                chatContainer.appendChild(userMessage);
-                
-                // محاكاة رد الذكاء الاصطناعي
-                setTimeout(() => {
-                    const aiResponse = getAIResponse(message);
-                    const aiMessage = document.createElement('div');
-                    aiMessage.className = 'ai-message';
-                    aiMessage.innerHTML = `<strong>🤖 AI Assistant:</strong> ${aiResponse}`;
-                    chatContainer.appendChild(aiMessage);
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                }, 1000);
-                
-                input.value = '';
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
+function addTaskEventListeners(taskElement) {
+    taskElement.querySelector('.complete-btn').addEventListener('click', function() {
+        taskElement.querySelector('.progress-fill').style.width = '100%';
+        taskElement.style.borderLeftColor = '#27ae60';
+        showNotification('تم الإكمال!', 'success');
+        updateTaskStats();
+    });
+    
+    taskElement.querySelector('.edit-btn').addEventListener('click', function() {
+        const newTitle = prompt('تعديل الاسم:', taskElement.querySelector('.task-title').textContent);
+        if (newTitle) taskElement.querySelector('.task-title').textContent = newTitle;
+    });
+    
+    taskElement.querySelector('.delete-btn').addEventListener('click', function() {
+        if (confirm('حذف المهمة؟')) {
+            taskElement.remove();
+            updateTaskStats();
         }
+    });
+}
 
-        function quickQuestion(question) {
-            document.getElementById('aiChatInput').value = question;
-            sendAIMessage();
-        }
+function updateTaskStats() {
+    const tasks = document.querySelectorAll('.task-card');
+    const total = tasks.length;
+    const completed = Array.from(tasks).filter(t => t.querySelector('.progress-fill').style.width === '100%').length;
+    const inProgress = Array.from(tasks).filter(t => {
+        const w = t.querySelector('.progress-fill').style.width;
+        return w !== '100%' && w !== '0%';
+    }).length;
+    const pending = total - completed - inProgress;
+    
+    document.getElementById('total-tasks').textContent = total;
+    document.getElementById('completed-tasks').textContent = completed;
+    document.getElementById('inprogress-tasks').textContent = inProgress;
+    document.getElementById('pending-tasks').textContent = pending;
+}
 
-        function getAIResponse(question) {
-            const responses = {
-                'tidskomplexitet': 'Dijkstra har tidskomplexitet O(V^2) med array eller O(E + V log V) med prioritetskö!',
-                'nätverk': 'I nätverk används Dijkstra i OSPF-protokoll för att hitta kortaste vägar mellan routrar!',
-                'python': 'I Python kan du implementera Dijkstra med heapq-modulen för effektiv prioritetskö!',
-                'skillnad': 'Dijkstra hittar kortaste vägar, A* använder heuristik för att vara snabbare i sökning!'
-            };
-            
-            const lowerQuestion = question.toLowerCase();
-            for (const [key, response] of Object.entries(responses)) {
-                if (lowerQuestion.includes(key)) {
-                    return response;
-                }
-            }
-            
-            return 'Tack för din fråga om Dijkstra-algoritmen! Jag kan hjälpa dig med implementation, komplexitet eller praktiska användningsfall.';
-        }
+// 🤖 المساعد الذكي
+function sendAIMessage() {
+    const input = document.getElementById('aiChatInput');
+    const message = input.value.trim();
+    if (message) {
+        const chatContainer = document.getElementById('aiChatContainer');
+        
+        const userMsg = document.createElement('div');
+        userMsg.className = 'user-message';
+        userMsg.innerHTML = `<strong>👤 أنت:</strong> ${message}`;
+        chatContainer.appendChild(userMsg);
+        
+        setTimeout(() => {
+            const aiResponse = getAIResponse(message);
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'ai-message';
+            aiMsg.innerHTML = `<strong>🤖 مساعد:</strong> ${aiResponse}`;
+            chatContainer.appendChild(aiMsg);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 1000);
+        
+        input.value = '';
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+}
 
-        // وظائف المهام
-        function addNewTask() {
-            showNotification('Ny uppgift skapad!', 'success');
-        }
+function quickQuestion(question) {
+    document.getElementById('aiChatInput').value = question;
+    sendAIMessage();
+}
 
-        // معالجة النماذج
-        document.getElementById('assignment-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotification('Uppgift tillagd!', 'success');
-            this.reset();
+function getAIResponse(question) {
+    const responses = {
+        'tidskomplexitet': 'Dijkstra: O(V²) مع مصفوفة أو O(E + V log V) مع قائمة أولوية!',
+        'nätverk': 'يستخدم Dijkstra في OSPF لإيجاد أقصر المسارات بين الموجهات!',
+        'python': 'في Python، استخدم heapq لتنفيذ فعال لـ Dijkstra!',
+        'skillnad': 'Dijkstra لأقصر المسارات، A* يستخدم الاستدلال للبحث الأسرع!'
+    };
+    
+    const q = question.toLowerCase();
+    for (const [key, response] of Object.entries(responses)) {
+        if (q.includes(key)) return response;
+    }
+    
+    return 'شكراً لسؤالك عن Dijkstra! يمكنني المساعدة في التنفيذ والتعقيد والتطبيقات العملية.';
+}
+
+// 🚀 التهيئة
+document.addEventListener('DOMContentLoaded', function() {
+    // التنقل
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.nav-tab, .section').forEach(el => el.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.target).classList.add('active');
         });
-
-        document.getElementById('team-update-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotification('Uppdatering publicerad!', 'success');
-            this.reset();
-        });
-
-        // جعل الإدخال يعمل بالزر Enter
-        document.getElementById('aiChatInput')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendAIMessage();
-            }
-        });
-
-        // تهيئة أولية
-        showNotification('Välkommen till Dashboard!', 'info');
-        </script>
-    </div>
+    });
+    
+    // تهيئة المكونات
+    initializeTeamDashboard();
+    enableTeamUpdates();
+    
+    // المهام الحالية
+    document.querySelectorAll('.task-card').forEach(addTaskEventListeners);
+    updateTaskStats();
+    
+    // Enter في الدردشة
+    document.getElementById('aiChatInput')?.addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendAIMessage();
+    });
+    
+    // Sync Team
+    document.querySelector('#team-dashboard .btn')?.addEventListener('click', () => {
+        showNotification('تم المزامنة!', 'success');
+    });
+    
+    showNotification('مرحباً في Dashboard!', 'info');
+});
+</script>
+</body>
+</html>  
 </body>
 </html>
