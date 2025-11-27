@@ -1,730 +1,671 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grupp 1 - Enhanced Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>نظام Security Chaos Engineering - المجموعة 1</title>
     <style>
-        .theme-transition {
-            transition: all 0.3s ease;
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --success-color: #34C759;
+            --warning-color: #FF9500;
+            --danger-color: #FF3B30;
+            --bg-color: #FFFFFF;
+            --sidebar-bg: #F2F2F7;
+            --text-color: #000000;
+            --text-secondary: #8E8E93;
+            --border-color: #C6C6C8;
+            --card-bg: #FFFFFF;
         }
-        
+
         [data-theme="dark"] {
-            color-scheme: dark;
+            --bg-color: #000000;
+            --sidebar-bg: #1C1C1E;
+            --text-color: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --border-color: #38383A;
+            --card-bg: #1C1C1E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            border-left: 1px solid var(--border-color);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-section h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 122, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-item i {
+            margin-left: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h2 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--sidebar-bg);
+        }
+
+        /* الأقسام */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* المساعد الذكي */
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-right: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .assistant-message {
+            background-color: var(--sidebar-bg);
+            color: var(--text-color);
+            margin-left: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #0056CC;
+        }
+
+        /* التوثيق */
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .doc-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s ease;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .doc-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* التقنيات */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .tech-item h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* دراسات الحالة */
+        .case-study {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .case-study h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* التوثيق الكامل */
+        .full-docs {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .doc-section {
+            margin-bottom: 40px;
+        }
+
+        .doc-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .main-content {
+                margin-right: 0;
+            }
+
+            .nav-items {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-item {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
-<body class="theme-transition bg-gray-50 text-gray-900" data-theme="light">
-    
-<div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
-
-<header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-b-2xl">
-    <div class="container mx-auto flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold">🚀 Grupp 1 - Enhanced Dashboard</h1>
-            <p class="mt-2 text-lg opacity-90">Full-Stack Dashboard med Realtidsdata</p>
-        </div>
-        <button onclick="toggleTheme()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all theme-transition">
-            <i class="fas fa-moon"></i> Tema
-        </button>
-    </div>
-</header>
-
-<div class="container mx-auto mt-8 px-4">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6 theme-transition">
-            <h2 class="text-2xl font-bold text-blue-700 mb-4">📊 System Status</h2>
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="text-center p-4 bg-blue-50 rounded-lg theme-transition">
-                    <div class="text-2xl font-bold" id="cpu-percent">--%</div>
-                    <div class="text-sm text-gray-600">CPU</div>
-                </div>
-                <div class="text-center p-4 bg-green-50 rounded-lg theme-transition">
-                    <div class="text-2xl font-bold" id="memory-percent">--%</div>
-                    <div class="text-sm text-gray-600">Memory</div>
-                </div>
-                <div class="text-center p-4 bg-yellow-50 rounded-lg theme-transition">
-                    <div class="text-2xl font-bold" id="disk-percent">--%</div>
-                    <div class="text-sm text-gray-600">Disk</div>
-                </div>
-                <div class="text-center p-4 bg-purple-50 rounded-lg theme-transition">
-                    <div class="text-2xl font-bold" id="uptime">--</div>
-                    <div class="text-sm text-gray-600">Uptime</div>
-                </div>
-            </div>
-            <button onclick="fetchSystemData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all theme-transition">
-                <i class="fas fa-sync"></i> Uppdatera Data
-            </button>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 theme-transition">
-            <h2 class="text-2xl font-bold text-orange-600 mb-4">🔔 System Alerts</h2>
-            <div id="alerts-container" class="mb-4">
-                <div class="p-3 bg-green-100 text-green-800 rounded-lg theme-transition">
-                    <i class="fas fa-check-circle"></i> Alla system fungerar normalt
-                </div>
-            </div>
-            <button onclick="checkAlerts()" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg transition-all theme-transition">
-                <i class="fas fa-bell"></i> Kolla Varningar
-            </button>
-        </div>
-    </div>
-
-    <nav class="flex flex-wrap gap-2 mb-6 bg-white p-4 rounded-xl shadow-lg theme-transition">
-        <button class="nav-btn px-4 py-2 rounded-lg bg-blue-100 text-blue-700 theme-transition" data-section="hela-projektet">Hela Projektet</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="dokumentation">Dokumentation</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="team-collaboration">Team Collaboration</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="team-updates">Team Updates</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="ai-assistant">AI Assistant</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="practical-tasks">Practical Tasks</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="algorithm-visualizer">Algorithm Visualizer</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="min-implementation">Min Implementation</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="team-dashboard">Team Dashboard</button>
-        <button class="nav-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 theme-transition" data-section="dijkstra-algorithm">Dijkstra Algorithm</button>
-    </nav>
-
-    <div id="content-container">
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition" id="hela-projektet">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">📁 HELA PROJEKTET - Dokumentation & Presentation</h2>
-            <button class="export-btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all theme-transition mb-4">
-                <i class="fas fa-download"></i> Export
-            </button>
-            
-            <div class="p-4 bg-blue-50 rounded-lg theme-transition mb-6">
-                <h3 class="text-xl font-semibold mb-2">🚀 PROJEKT-SAMMANFATTNING</h3>
-                <p>"Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer"</p>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Security Chaos Engineering</h1>
+                <p>نظام متكامل للهندسة الفوضوية الآمنة</p>
             </div>
 
-            <div class="mb-6">
-                <h3 class="text-xl font-semibold mb-3">📊 PROJEKT-ÖVERSIKT</h3>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="p-4 border rounded-lg theme-transition">
-                        <h4 class="font-semibold mb-2">🎯 Projektmål</h4>
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Bygga ett fullt funktionellt CRUD dashboard</li>
-                            <li>Integrera Algorithm Visualizer för Dijkstra</li>
-                            <li>Demonstrera full-stack utveckling</li>
-                        </ul>
-                    </div>
-                    <div class="p-4 border rounded-lg theme-transition">
-                        <h4 class="font-semibold mb-2">🛠 Teknisk Stack</h4>
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Backend: Python Flask</li>
-                            <li>Frontend: HTML5, CSS3, JavaScript</li>
-                            <li>Styling: Modern CSS med gradients</li>
-                            <li>Data: JSON-baserad "databas"</li>
-                        </ul>
-                    </div>
+            <div class="nav-section">
+                <h3>التنقل الرئيسي</h3>
+                <div class="nav-item active" data-section="dashboard">
+                    <i>📊</i> لوحة التحكم
+                </div>
+                <div class="nav-item" data-section="assistant">
+                    <i>🤖</i> المساعد الذكي
+                </div>
+                <div class="nav-item" data-section="documentation">
+                    <i>📚</i> التوثيق
                 </div>
             </div>
 
-            <div>
-                <h3 class="text-xl font-semibold mb-3">✅ FUNKTIONALITET</h3>
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="p-4 border rounded-lg theme-transition">
-                        <h4 class="font-semibold">📋 Task 1: Dashboard (CRUD)</h4>
-                        <ul class="list-disc list-inside space-y-1 mt-2">
-                            <li>CREATE - Lägg till nya anställda</li>
-                            <li>READ - Visa data i tabell</li>
-                            <li>UPDATE - Redigera med modal</li>
-                            <li>DELETE - Radera med bekräftelse</li>
-                            <li>Realtidsstatistik</li>
-                        </ul>
-                    </div>
-                    <div class="p-4 border rounded-lg theme-transition">
-                        <h4 class="font-semibold">🔍 Task 2: Algorithm Visualizer</h4>
-                        <ul class="list-disc list-inside space-y-1 mt-2">
-                            <li>Dijkstra algorithm demo</li>
-                            <li>Graf-visualisering</li>
-                            <li>Steg-för-steg förklaring</li>
-                            <li>Responsiv design</li>
-                        </ul>
-                    </div>
-                    <div class="p-4 border rounded-lg theme-transition">
-                        <h4 class="font-semibold">🎨 Task 3: Design & UX</h4>
-                        <ul class="list-disc list-inside space-y-1 mt-2">
-                            <li>Modern design med gradients</li>
-                            <li>Responsiv för alla enheter</li>
-                            <li>Professionell navigation</li>
-                            <li>Användarvänliga formulär</li>
-                        </ul>
-                    </div>
+            <div class="nav-section">
+                <h3>التقنيات والأدوات</h3>
+                <div class="nav-item" data-section="technologies">
+                    <i>⚙️</i> التقنيات المستخدمة
+                </div>
+                <div class="nav-item" data-section="case-studies">
+                    <i>🔬</i> دراسات الحالة
                 </div>
             </div>
-        </div>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="dokumentation">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">📚 Dokumentation - Graph Algorithms</h2>
-            <div class="space-y-4">
-                <h3 class="text-xl font-semibold">Av Grupp 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell, Luwam</h3>
-                
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h4 class="font-semibold mb-2">Dijkstra's Algorithm</h4>
-                    <p><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph.</p>
-                </div>
-
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h4 class="font-semibold mb-2">Kaled - Why does the shortest path matter?</h4>
-                    <p>"As mentioned earlier, the purpose of the algorithm is to find the shortest possible path, so why does the shortest possible path matter?"</p>
-                </div>
-
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h4 class="font-semibold mb-2">Fahad - Uses of shortest path</h4>
-                    <p>"A common usage of the shortest path within our sphere of operation is for example, in networking, where speed and efficiency are crucial..."</p>
+            <div class="nav-section">
+                <h3>المشروع الكامل</h3>
+                <div class="nav-item" data-section="full-project">
+                    <i>📁</i> المشروع الكامل - التوثيق
                 </div>
             </div>
-        </div>
+        </nav>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="team-collaboration">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">📝 Team Collaboration - Grupp Dokumentation</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-3">➕ Lägg Till Uppgift</h3>
-                    <form id="assignment-form" class="space-y-3">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Uppgiftsnamn:</label>
-                            <input type="text" id="task-name" class="w-full p-2 border rounded theme-transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Beskrivning:</label>
-                            <textarea id="task-desc" class="w-full p-2 border rounded theme-transition h-24"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Ansvarig:</label>
-                            <select id="task-assignee" class="w-full p-2 border rounded theme-transition">
-                                <option value="Kaled Osman">Kaled Osman</option>
-                                <option value="Fahad Hussain">Fahad Hussain</option>
-                                <option value="Stefan Österberg">Stefan Österberg</option>
-                                <option value="Marcus Tibell">Marcus Tibell</option>
-                                <option value="Jens Annell">Jens Annell</option>
-                                <option value="Luwam">Luwam</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
-                            ➕ Lägg Till Uppgift
-                        </button>
-                    </form>
-                </div>
-
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-3">📋 Aktuella Uppgifter</h3>
-                    <div id="assignments-list" class="space-y-3">
-                        <div class="p-3 bg-gray-50 rounded theme-transition">
-                            <strong>Förbättra Dijkstra Algorithm</strong>
-                            <p class="text-sm text-gray-600">Lägg till prestandaförbättringar och komplexitetsanalys</p>
-                            <small><strong>Ansvarig:</strong> Kaled Osman</small>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded theme-transition">
-                            <strong>OSPF Protocols Research</strong>
-                            <p class="text-sm text-gray-600">Studera OSPF-protokoll och deras tillämpningar i nätverk</p>
-                            <small><strong>Ansvarig:</strong> Fahad Hussain</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="team-updates">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">👥 Team Updates & Uppgifter</h2>
-            <div class="space-y-6">
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-3">➕ Lägg Till Din Uppdatering</h3>
-                    <form id="team-update-form" class="space-y-3">
-                        <div class="grid md:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Ditt Namn:</label>
-                                <select id="update-author" class="w-full p-2 border rounded theme-transition">
-                                    <option value="Kaled Osman">Kaled Osman</option>
-                                    <option value="Fahad Hussain">Fahad Hussain</option>
-                                    <option value="Stefan Österberg">Stefan Österberg</option>
-                                    <option value="Marcus Tibell">Marcus Tibell</option>
-                                    <option value="Jens Annell">Jens Annell</option>
-                                    <option value="Luwam">Luwam</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Status:</label>
-                                <select id="update-status" class="w-full p-2 border rounded theme-transition">
-                                    <option value="completed">✅ Avslutad</option>
-                                    <option value="in-progress">🔄 Pågående</option>
-                                    <option value="planned">📅 Planerad</option>
-                                    <option value="blocked">❌ Blockerad</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Uppgiftsbeskrivning:</label>
-                            <input type="text" id="update-title" class="w-full p-2 border rounded theme-transition" placeholder="Vad har du gjort?">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Detaljer:</label>
-                            <textarea id="update-details" class="w-full p-2 border rounded theme-transition h-24" placeholder="Beskriv ditt arbete..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
-                            ➕ Publicera Uppdatering
-                        </button>
-                    </form>
-                </div>
-
-                <div id="team-updates-list" class="space-y-4">
-                </div>
-            </div>
-        </div>
-
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="ai-assistant">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">🤖 AI Assistant - Dijkstra Helper</h2>
-            <div class="space-y-4">
-                <div class="ai-chat-container border rounded-lg p-4 h-64 overflow-y-auto theme-transition" id="aiChatContainer">
-                    <div class="p-3 bg-blue-50 rounded-lg theme-transition mb-2">
-                        <strong>🤖 AI Assistant:</strong> Hej! Jag är här för att hjälpa dig med Dijkstra-algoritmen och ditt projekt. Ställ vilken fråga som helst!
-                    </div>
-                </div>
-
-                <div class="flex gap-2">
-                    <input type="text" id="aiChatInput" class="flex-1 p-2 border rounded theme-transition" placeholder="Skriv din fråga om Dijkstra eller projektet...">
-                    <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
-                        <i class="fas fa-paper-plane"></i> Skicka
-                    </button>
-                </div>
-
-                <div>
-                    <h3 class="font-semibold mb-2">🚀 Snabbkommandon</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="quickQuestion('Vad är tidskomplexiteten för Dijkstra?')" class="bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded theme-transition">
-                            ⏱️ Tidskomplexitet
-                        </button>
-                        <button onclick="quickQuestion('Ge exempel på Dijkstra i nätverk')" class="bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded theme-transition">
-                            🌐 Nätverksanvändning
-                        </button>
-                        <button onclick="quickQuestion('Hur implementerar jag Dijkstra i Python?')" class="bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded theme-transition">
-                            🐍 Python Implementation
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="practical-tasks">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">🎯 Practical Tasks - Projektuppgifter</h2>
-            <div class="flex justify-between items-center mb-6">
-                <div class="grid grid-cols-4 gap-4 flex-1">
-                    <div class="text-center p-4 bg-blue-50 rounded-lg theme-transition">
-                        <div class="text-2xl font-bold" id="total-tasks">0</div>
-                        <div class="text-sm text-gray-600">Totalt Uppgifter</div>
-                    </div>
-                    <div class="text-center p-4 bg-green-50 rounded-lg theme-transition">
-                        <div class="text-2xl font-bold" id="completed-tasks">0</div>
-                        <div class="text-sm text-gray-600">Avslutade</div>
-                    </div>
-                    <div class="text-center p-4 bg-yellow-50 rounded-lg theme-transition">
-                        <div class="text-2xl font-bold" id="inprogress-tasks">0</div>
-                        <div class="text-sm text-gray-600">Pågående</div>
-                    </div>
-                    <div class="text-center p-4 bg-purple-50 rounded-lg theme-transition">
-                        <div class="text-2xl font-bold" id="pending-tasks">0</div>
-                        <div class="text-sm text-gray-600">Väntande</div>
-                    </div>
-                </div>
-                <button onclick="addNewTask()" class="ml-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
-                    <i class="fas fa-plus"></i> Ny Uppgift
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <div class="header">
+                <h2>لوحة تحكم Security Chaos Engineering</h2>
+                <button class="theme-toggle" id="themeToggle">
+                    تبديل الوضع
                 </button>
             </div>
 
-            <div id="tasks-list" class="space-y-3">
-            </div>
-        </div>
+            <!-- قسم لوحة التحكم -->
+            <section id="dashboard" class="section active">
+                <div class="card">
+                    <h3>مرحباً بك في نظام Security Chaos Engineering</h3>
+                    <p>هذا النظام يقدم حلولاً متكاملة للهندسة الفوضوية الآمنة في بيئات السحابة الإلكترونية.</p>
+                </div>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="algorithm-visualizer">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Algorithm Visualizer</h2>
-            <div class="space-y-4">
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
-                        <div class="text-2xl font-bold">5</div>
-                        <div>Servrar i Nätverk</div>
+                <div class="card">
+                    <h3>نظرة عامة</h3>
+                    <p>Security Chaos Engineering هو تخصص يهدف إلى بناء أنظمة مرنة وقادرة على تحمل الهجمات من خلال محاكاة الظروف الفوضوية في بيئات الإنتاج.</p>
+                </div>
+
+                <div class="docs-grid">
+                    <div class="doc-card">
+                        <h4>المساعد الذكي</h4>
+                        <p>مساعد متخصص في Security Chaos Engineering والشبكات السحابية</p>
                     </div>
-                    <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
-                        <div class="text-2xl font-bold">13 ms</div>
-                        <div>Kortaste Väg</div>
+                    <div class="doc-card">
+                        <h4>التوثيق الشامل</h4>
+                        <p>جميع الوثائق والمصادر المتعلقة بالمشروع</p>
                     </div>
-                    <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
-                        <div class="text-2xl font-bold">100%</div>
-                        <div>Optimering</div>
+                    <div class="doc-card">
+                        <h4>التقنيات المستخدمة</h4>
+                        <p>أدوات ومنهجيات Security Chaos Engineering</p>
                     </div>
                 </div>
-                
-                <div class="p-4 bg-gray-100 rounded-lg">
-                    <pre class="whitespace-pre-wrap">// Server Network Configuration
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8, 'WebServer': 5},
-    'Cache': {'CDN': 3, 'WebServer': 2},
-    'CDN': {'Cache': 3},
-    'Backup': {'Database': 8}
-}</pre>
-                </div>
-                
-                <div class="p-4 bg-green-500 text-white rounded-lg">
-                    <h4 class="font-bold">🎯 Dijkstra Steg-för-Steg:</h4>
-                    <p>Start: WebServer (0)</p>
-                    <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
-                    <p>Steg 2: Välj Cache → hitta CDN=5</p>
-                    <p>Steg 3: Välj Database → hitta Backup=13</p>
-                    <p class="font-bold">Resultat: Alla kortaste vägar funna! ✅</p>
-                </div>
-            </div>
-        </div>
+            </section>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="min-implementation">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">💻 Min Implementation</h2>
-            <div class="space-y-4">
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-2">Backend Implementation</h3>
-                    <p>Python Flask server med REST API endpoints för systemövervakning.</p>
+            <!-- قسم المساعد الذكي -->
+            <section id="assistant" class="section">
+                <div class="card">
+                    <h3>المساعد الذكي المتخصص</h3>
+                    <p>مساعد ذكي متخصص في Security Chaos Engineering والشبكات السحابية. يمكنه الإجابة على أسئلتك في هذه المجالات.</p>
                 </div>
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-2">Frontend Implementation</h3>
-                    <p>Modern React/Vue.js implementation med realtidsdata uppdatering.</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="team-dashboard">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">👥 Team Dashboard</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="text-center p-4 border rounded-lg theme-transition">
-                    <div class="text-2xl font-bold">6</div>
-                    <div>Team Members</div>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant-message">
+                            مرحباً! أنا مساعدك المتخصص في Security Chaos Engineering والشبكات السحابية. كيف يمكنني مساعدتك؟
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userInput" placeholder="اكتب سؤالك هنا عن Security Chaos Engineering أو الشبكات السحابية...">
+                        <button onclick="sendMessage()">إرسال</button>
+                    </div>
                 </div>
-                <div class="text-center p-4 border rounded-lg theme-transition">
-                    <div class="text-2xl font-bold">12</div>
-                    <div>Completed Tasks</div>
-                </div>
-                <div class="text-center p-4 border rounded-lg theme-transition">
-                    <div class="text-2xl font-bold">85%</div>
-                    <div>Project Progress</div>
-                </div>
-            </div>
-        </div>
+            </section>
 
-        <div class="section-content bg-white rounded-xl shadow-lg p-6 theme-transition hidden" id="dijkstra-algorithm">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">🔍 Dijkstra Algorithm</h2>
-            <div class="space-y-4">
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-2">Algorithm Explanation</h3>
-                    <p>Dijkstra's algorithm finds the shortest path between nodes in a graph.</p>
+            <!-- قسم التوثيق -->
+            <section id="documentation" class="section">
+                <div class="card">
+                    <h3>توثيق Security Chaos Engineering</h3>
+                    <p>الوثائق والمصادر التعليمية المتعلقة بالهندسة الفوضوية الآمنة.</p>
                 </div>
-                <div class="p-4 border rounded-lg theme-transition">
-                    <h3 class="font-semibold mb-2">Implementation Steps</h3>
-                    <ol class="list-decimal list-inside space-y-1">
-                        <li>Initialize distances and visited nodes</li>
-                        <li>Select node with smallest distance</li>
-                        <li>Update neighbor distances</li>
-                        <li>Repeat until all nodes visited</li>
-                    </ol>
+
+                <div class="docs-grid">
+                    <div class="doc-card">
+                        <h4>المفاهيم الأساسية</h4>
+                        <p>تعريف Security Chaos Engineering ومبادئه الأساسية</p>
+                    </div>
+                    <div class="doc-card">
+                        <h4>أدوات التنفيذ</h4>
+                        <p>Chaos Monkey, Gremlin, وأدوات أخرى</p>
+                    </div>
+                    <div class="doc-card">
+                        <h4>أفضل الممارسات</h4>
+                        <p>كيفية تطبيق SEC بشكل فعال</p>
+                    </div>
+                    <div class="doc-card">
+                        <h4>دراسات الحالة</h4>
+                        <p>تطبيقات عملية من شركات رائدة</p>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
+
+            <!-- قسم التقنيات -->
+            <section id="technologies" class="section">
+                <div class="card">
+                    <h3>التقنيات والأدوات</h3>
+                    <p>أهم التقنيات والأدوات المستخدمة في Security Chaos Engineering.</p>
+                </div>
+
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>Chaos Monkey</h4>
+                        <p>أداة Netflix لاختبار مرونة الأنظمة</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Gremlin</h4>
+                        <p>منصة متكاملة لاختبار الفوضى</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AWS Fault Injection</h4>
+                        <p>خدمة AWS لمحاكاة الأعطال</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Chaos Toolkit</h4>
+                        <p>إطار عمل مفتوح المصدر</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم دراسات الحالة -->
+            <section id="case-studies" class="section">
+                <div class="card">
+                    <h3>دراسات الحالة</h3>
+                    <p>تطبيقات عملية لـ Security Chaos Engineering في شركات عالمية.</p>
+                </div>
+
+                <div class="case-study">
+                    <h4>Netflix - Chaos Engineering</h4>
+                    <p>كيف تستخدم Netflix الهندسة الفوضوية لضمان مرونة أنظمتها</p>
+                </div>
+
+                <div class="case-study">
+                    <h4>Amazon AWS</h4>
+                    <p>تطبيق مفاهيم SEC في خدمات AWS</p>
+                </div>
+
+                <div class="case-study">
+                    <h4>Microsoft Azure</h4>
+                    <p>استراتيجيات SEC في بيئة Azure السحابية</p>
+                </div>
+            </section>
+
+            <!-- قسم المشروع الكامل -->
+            <section id="full-project" class="section">
+                <div class="full-docs">
+                    <div class="card">
+                        <h3>المشروع الكامل - التوثيق الشامل</h3>
+                        <p>جميع أقسام المشروع في مكان واحد.</p>
+                    </div>
+
+                    <div class="doc-section">
+                        <h3>مقدمة في Security Chaos Engineering</h3>
+                        <p>Security Chaos Engineering هو نهج استباقي لبناء أنظمة قادرة على تحمل الهجمات والظروف غير المتوقعة.</p>
+                    </div>
+
+                    <div class="doc-section">
+                        <h3>الأدوات والتقنيات</h3>
+                        <p>تشمل الأدوات الرئيسية: Chaos Monkey, Gremlin, AWS Fault Injection Service, Chaos Toolkit.</p>
+                    </div>
+
+                    <div class="doc-section">
+                        <h3>أفضل الممارسات</h3>
+                        <p>ابدأ في بيئات غير إنتاجية، استخدم حوادث سابقة كمصدر للتجارب، وثق النتائج.</p>
+                    </div>
+
+                    <div class="doc-section">
+                        <h3>التكامل مع السحابة</h3>
+                        <p>كيفية تطبيق SEC في بيئات AWS, Azure, Google Cloud.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-</div>
 
-<script>
-    function toggleTheme() {
-        const body = document.body;
-        const currentTheme = body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        body.setAttribute('data-theme', newTheme);
-        if (newTheme === 'dark') {
-            body.classList.remove('bg-gray-50', 'text-gray-900');
-            body.classList.add('bg-gray-900', 'text-white');
-        } else {
-            body.classList.remove('bg-gray-900', 'text-white');
-            body.classList.add('bg-gray-50', 'text-gray-900');
-        }
-        
-        localStorage.setItem('theme', newTheme);
-        showNotification('Tema ändrat till ' + (newTheme === 'dark' ? 'mörkt' : 'ljust') + ' läge', 'success');
-    }
-
-    function showNotification(message, type = 'info') {
-        const container = document.getElementById('notificationContainer');
-        const notification = document.createElement('div');
-        
-        const colors = {
-            success: 'bg-green-500',
-            error: 'bg-red-500',
-            warning: 'bg-yellow-500',
-            info: 'bg-blue-500'
-        };
-
-        notification.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg transition-all`;
-        notification.innerHTML = `
-            <div class="flex justify-between items-center">
-                <span>${message}</span>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-
-        container.appendChild(notification);
-        setTimeout(() => notification.remove(), 5000);
-    }
-
-    async function fetchSystemData() {
-        showNotification('Hämtar systemdata...', 'info');
-        
-        try {
-            const response = await fetch('http://localhost:8100/enhanced-data');
-            const data = await response.json();
-            
-            document.getElementById('cpu-percent').textContent = data.cpu_load ? data.cpu_load[0] + '%' : '--%';
-            document.getElementById('memory-percent').textContent = data.memory_percent ? data.memory_percent + '%' : '--%';
-            document.getElementById('disk-percent').textContent = data.disk_percent ? data.disk_percent + '%' : '--%';
-            document.getElementById('uptime').textContent = data.uptime || '--';
-            
-            showNotification('Systemdata uppdaterad!', 'success');
-        } catch (error) {
-            document.getElementById('cpu-percent').textContent = '12%';
-            document.getElementById('memory-percent').textContent = '45%';
-            document.getElementById('disk-percent').textContent = '23%';
-            document.getElementById('uptime').textContent = '2h 15m';
-            
-            showNotification('Använder exempeldata - Server ej tillgänglig', 'warning');
-        }
-    }
-
-    function checkAlerts() {
-        showNotification('Kontrollerar systemvarningar...', 'info');
-        
-        const alertsContainer = document.getElementById('alerts-container');
-        alertsContainer.innerHTML = `
-            <div class="p-3 bg-green-100 text-green-800 rounded-lg theme-transition">
-                <i class="fas fa-check-circle"></i> Inga kritiska varningar funna
-            </div>
-        `;
-        
-        showNotification('Varningskontroll slutförd', 'success');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        if (savedTheme === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-            document.body.classList.add('bg-gray-900', 'text-white');
-            document.body.classList.remove('bg-gray-50', 'text-gray-900');
-        }
-
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.nav-btn').forEach(b => {
-                    b.classList.remove('bg-blue-100', 'text-blue-700');
-                    b.classList.add('bg-gray-100', 'text-gray-700');
+    <script>
+        // إدارة التنقل بين الأقسام
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // إزالة النشاط من جميع العناصر
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
                 });
-                this.classList.remove('bg-gray-100', 'text-gray-700');
-                this.classList.add('bg-blue-100', 'text-blue-700');
+                // إخفاء جميع الأقسام
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
                 
-                const sectionId = this.dataset.section;
-                document.querySelectorAll('.section-content').forEach(section => {
-                    section.classList.add('hidden');
-                });
-                document.getElementById(sectionId).classList.remove('hidden');
+                // تفعيل العنصر الحالي
+                this.classList.add('active');
+                // إظهار القسم المحدد
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
             });
         });
 
-        document.querySelector('.export-btn').addEventListener('click', function() {
-            showNotification('Dokumentation exporterad!', 'success');
+        // تبديل الوضع الداكن
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.textContent = 'تبديل الوضع';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = 'تبديل الوضع';
+            }
         });
 
-        document.getElementById('assignment-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('task-name').value;
-            const desc = document.getElementById('task-desc').value;
-            const assignee = document.getElementById('task-assignee').value;
+        // المساعد الذكي
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const message = userInput.value.trim();
+
+            if (message === '') return;
+
+            // إضافة رسالة المستخدم
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            chatMessages.appendChild(userMessage);
+
+            // مسح حقل الإدخال
+            userInput.value = '';
+
+            // إضافة رسالة المساعد (محاكاة)
+            setTimeout(() => {
+                const assistantMessage = document.createElement('div');
+                assistantMessage.className = 'message assistant-message';
+                assistantMessage.textContent = generateResponse(message);
+                chatMessages.appendChild(assistantMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateResponse(message) {
+            const lowerMessage = message.toLowerCase();
             
-            if (name && desc) {
-                const assignmentsList = document.getElementById('assignments-list');
-                const newAssignment = document.createElement('div');
-                newAssignment.className = 'p-3 bg-gray-50 rounded theme-transition';
-                newAssignment.innerHTML = `
-                    <strong>${name}</strong>
-                    <p class="text-sm text-gray-600">${desc}</p>
-                    <small><strong>Ansvarig:</strong> ${assignee}</small>
-                `;
-                assignmentsList.appendChild(newAssignment);
-                
-                this.reset();
-                showNotification('Uppgift tillagd!', 'success');
+            // الردود المتعلقة بـ Security Chaos Engineering
+            if (lowerMessage.includes('chaos') || lowerMessage.includes('فوض')) {
+                return 'Security Chaos Engineering هو منهجية لبناء أنظمة مرنة من خلال محاكاة الظروف الفوضوية في بيئات الإنتاج. يساعد في اكتشاف نقاط الضعف قبل أن يستغلها المهاجمون.';
+            }
+            
+            if (lowerMessage.includes('netflix') || lowerMessage.includes('نيتفليكس')) {
+                return 'Netflix هي الرائدة في هذا المجال مع أدوات مثل Chaos Monkey التي تقوم بإيقاف خوادم الإنتاج عشوائياً لاختبار مرونة النظام.';
+            }
+            
+            if (lowerMessage.includes('aws') || lowerMessage.includes('سحابة')) {
+                return 'في AWS، يمكن استخدام خدمات مثل Fault Injection Simulator لمحاكاة الأعطال واختبار مرونة التطبيقات السحابية.';
+            }
+            
+            if (lowerMessage.includes('أدوات') || lowerMessage.includes('tools')) {
+                return 'أهم أدوات Security Chaos Engineering تشمل: Chaos Monkey, Gremlin, Chaos Toolkit, AWS FIS, Azure Chaos Studio.';
+            }
+            
+            if (lowerMessage.includes('ممارسات') || lowerMessage.includes('best practices')) {
+                return 'أفضل الممارسات: ابدأ في بيئات غير إنتاجية، خطط للتجارب بعناية، وثق النتائج، واجعل التجارب قابلة للتكرار.';
+            }
+
+            // الردود العامة
+            return 'أنا متخصص في Security Chaos Engineering والشبكات السحابية. يمكنني مساعدتك في مواضيع مثل أدوات SEC، التطبيق في السحابة، ودراسات الحالة العملية.';
+        }
+
+        // السماح بالإرسال بالزر Enter
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
 
-        document.getElementById('team-update-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const author = document.getElementById('update-author').value;
-            const status = document.getElementById('update-status').value;
-            const title = document.getElementById('update-title').value;
-            const details = document.getElementById('update-details').value;
-
-            if (title && details) {
-                addTeamUpdate(author, status, title, details);
-                this.reset();
-            }
-        });
-
-        fetchSystemData();
-        showNotification('Välkommen till Grupp 1 Dashboard!', 'info');
-        
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
-            });
-        });
-    });
-
-    function addTeamUpdate(author, status, title, details) {
-        const updatesList = document.getElementById('team-updates-list');
-        const statusColors = {
-            'completed': '#10B981',
-            'in-progress': '#F59E0B', 
-            'planned': '#3B82F6',
-            'blocked': '#EF4444'
-        };
-
-        const updateHTML = `
-            <div class="p-4 border rounded-lg theme-transition" style="border-left: 4px solid ${statusColors[status]}">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="font-semibold">${title}</h4>
-                    <span class="px-2 py-1 rounded text-white text-sm" style="background: ${statusColors[status]}">
-                        ${status === 'completed' ? '✅' : status === 'in-progress' ? '🔄' : status === 'planned' ? '📅' : '❌'} 
-                        ${status}
-                    </span>
-                </div>
-                <p><strong>${author}</strong> - ${details}</p>
-                <small class="text-gray-500">${new Date().toLocaleDateString('sv-SE')}</small>
-            </div>
-        `;
-
-        updatesList.insertAdjacentHTML('afterbegin', updateHTML);
-        showNotification('Uppdatering publicerad!', 'success');
-    }
-
-    function sendAIMessage() {
-        const input = document.getElementById('aiChatInput');
-        const message = input.value.trim();
-        if (!message) return;
-
-        const chatContainer = document.getElementById('aiChatContainer');
-        const userMsg = document.createElement('div');
-        userMsg.className = 'p-3 bg-gray-100 rounded-lg theme-transition mb-2';
-        userMsg.innerHTML = `<strong>👤 Du:</strong> ${message}`;
-        chatContainer.appendChild(userMsg);
-
-        setTimeout(() => {
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'p-3 bg-blue-50 rounded-lg theme-transition mb-2';
-            aiMsg.innerHTML = `<strong>🤖 AI Assistant:</strong> ${getAIResponse(message)}`;
-            chatContainer.appendChild(aiMsg);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }, 1000);
-
-        input.value = '';
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function quickQuestion(question) {
-        document.getElementById('aiChatInput').value = question;
-        sendAIMessage();
-    }
-
-    function getAIResponse(question) {
-        const responses = {
-            'tidskomplexitet': 'Dijkstra: O(V²) med matris eller O(E + V log V) med prioritetsköslista.',
-            'nätverk': 'Dijkstra används i OSPF för att hitta kortaste vägar mellan routrar.',
-            'python': 'I Python kan du använda heapq för effektiv Dijkstra implementation.',
-            'skillnad': 'Dijkstra hittar kortaste vägen, A* använder heuristik för snabbare sök.'
-        };
-
-        const q = question.toLowerCase();
-        for (const [key, response] of Object.entries(responses)) {
-            if (q.includes(key)) return response;
+        // الكشف التلقائي عن وضع النظام
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
         }
-        return 'Jag kan hjälpa dig med Dijkstra-algoritmen, dess implementation och användning!';
-    }
-
-    function addNewTask() {
-        const taskName = prompt('Namn på uppgift:');
-        if (!taskName) return;
-
-        const tasksList = document.getElementById('tasks-list');
-        const taskId = Date.now();
-        
-        const taskHTML = `
-            <div class="p-4 border rounded-lg theme-transition" id="task-${taskId}">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-semibold">${taskName}</h4>
-                    <button onclick="removeTask(${taskId})" class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <p class="text-gray-600 mb-2">Ny uppgift</p>
-                <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                    <div class="bg-green-500 h-2 rounded-full" style="width: 0%" id="progress-${taskId}"></div>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Ansvarig: Kaled Osman</span>
-                    <button onclick="completeTask(${taskId})" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
-                        Markera som klar
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        tasksList.insertAdjacentHTML('beforeend', taskHTML);
-        updateTaskStats();
-        showNotification('Ny uppgift tillagd!', 'success');
-    }
-
-    function removeTask(taskId) {
-        const taskElement = document.getElementById(`task-${taskId}`);
-        if (taskElement && confirm('Vill du ta bort uppgiften?')) {
-            taskElement.remove();
-            updateTaskStats();
-            showNotification('Uppgift borttagen', 'info');
-        }
-    }
-
-    function completeTask(taskId) {
-        const taskElement = document.getElementById(`task-${taskId}`);
-        const progressElement = document.getElementById(`progress-${taskId}`);
-        if (taskElement && progressElement) {
-            progressElement.style.width = '100%';
-            taskElement.querySelector('button').disabled = true;
-            taskElement.querySelector('button').textContent = 'Klar ✓';
-            taskElement.querySelector('button').classList.remove('bg-green-500', 'hover:bg-green-600');
-            taskElement.querySelector('button').classList.add('bg-gray-400');
-            updateTaskStats();
-            showNotification('Uppgift markerad som klar!', 'success');
-        }
-    }
-
-    function updateTaskStats() {
-        const tasks = document.querySelectorAll('#tasks-list > div');
-        const total = tasks.length;
-        const completed = Array.from(tasks).filter(t => 
-            t.querySelector('button').textContent === 'Klar ✓'
-        ).length;
-        const pending = total - completed;
-
-        document.getElementById('total-tasks').textContent = total;
-        document.getElementById('completed-tasks').textContent = completed;
-        document.getElementById('pending-tasks').textContent = pending;
-        document.getElementById('inprogress-tasks').textContent = 0;
-    }
-</script>
+    </script>
 </body>
 </html>
