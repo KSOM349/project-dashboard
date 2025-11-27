@@ -256,4 +256,3 @@ document.addEventListener('DOMContentLoaded',()=>{showNotification('Välkommen!'
 </script>
 </body>
 </html>
-// ===================== Mohammed Feedback =====================
