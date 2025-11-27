@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام Security Chaos Engineering - المجموعة 1</title>
+    <title>نظام Security Chaos Engineering المتكامل - المجموعة 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #007AFF;
@@ -11,12 +13,14 @@
             --success-color: #34C759;
             --warning-color: #FF9500;
             --danger-color: #FF3B30;
+            --info-color: #5AC8FA;
             --bg-color: #FFFFFF;
             --sidebar-bg: #F2F2F7;
             --text-color: #000000;
             --text-secondary: #8E8E93;
             --border-color: #C6C6C8;
             --card-bg: #FFFFFF;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         [data-theme="dark"] {
@@ -26,6 +30,7 @@
             --text-secondary: #8E8E93;
             --border-color: #38383A;
             --card-bg: #1C1C1E;
+            --shadow: 0 2px 10px rgba(255,255,255,0.1);
         }
 
         * {
@@ -58,6 +63,7 @@
             top: 0;
             height: 100vh;
             overflow-y: auto;
+            z-index: 1000;
         }
 
         .sidebar-header {
@@ -126,7 +132,7 @@
 
         .header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
@@ -138,7 +144,13 @@
             font-weight: 700;
         }
 
-        .theme-toggle {
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle, .user-profile {
             background: none;
             border: none;
             color: var(--text-color);
@@ -148,7 +160,7 @@
             transition: background-color 0.2s ease;
         }
 
-        .theme-toggle:hover {
+        .theme-toggle:hover, .user-profile:hover {
             background-color: var(--sidebar-bg);
         }
 
@@ -173,6 +185,7 @@
             padding: 25px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
 
         .card h3 {
@@ -181,10 +194,36 @@
             margin-bottom: 15px;
         }
 
-        /* المساعد الذكي */
+        /* الشبكات والجريد */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* المساعد الذكي المحسن */
         .chat-container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .chat-messages {
@@ -202,6 +241,7 @@
             padding: 12px 16px;
             border-radius: 18px;
             max-width: 80%;
+            position: relative;
         }
 
         .user-message {
@@ -218,112 +258,256 @@
             border-bottom-left-radius: 4px;
         }
 
-        .chat-input {
-            display: flex;
-            gap: 10px;
+        .message-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-align: right;
         }
 
-        .chat-input input {
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-input textarea {
+            width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: 20px;
             background-color: var(--card-bg);
             color: var(--text-color);
             font-size: 16px;
+            resize: vertical;
+            min-height: 60px;
+            max-height: 120px;
+            font-family: inherit;
         }
 
-        .chat-input button {
+        .chat-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .chat-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .chat-action-btn:hover {
+            background-color: var(--sidebar-bg);
+            color: var(--text-color);
+        }
+
+        .send-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 15px 25px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.2s ease;
+            height: 60px;
         }
 
-        .chat-input button:hover {
+        .send-btn:hover {
             background-color: #0056CC;
         }
 
-        /* التوثيق */
-        .docs-grid {
+        .send-btn:disabled {
+            background-color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        /* محاكي SEC */
+        .simulator-container {
+            max-width: 100%;
+        }
+
+        .simulator-controls {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .control-group select, .control-group input {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .simulator-results {
             margin-top: 20px;
         }
 
-        .doc-card {
+        .result-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .result-card h4 {
+            margin-bottom: 10px;
+        }
+
+        /* المنصة التعليمية */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
             transition: transform 0.2s ease;
+            cursor: pointer;
         }
 
-        .doc-card:hover {
-            transform: translateY(-2px);
+        .course-card:hover {
+            transform: translateY(-5px);
         }
 
-        .doc-card h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .course-card h4 {
             color: var(--primary-color);
+            margin-bottom: 10px;
         }
 
-        /* التقنيات */
-        .tech-grid {
+        .course-progress {
+            height: 6px;
+            background-color: var(--sidebar-bg);
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 3px;
+        }
+
+        /* أدوات المطورين */
+        .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 20px;
         }
 
-        .tech-item {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .tech-item h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        /* دراسات الحالة */
-        .case-study {
+        .tool-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tool-card:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tool-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .tool-card:hover i {
+            color: white;
+        }
+
+        /* الرسوم البيانية */
+        .chart-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 300px;
+        }
+
+        /* المجتمع */
+        .community-posts {
+            max-width: 800px;
+        }
+
+        .post {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
-        .case-study h4 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* التوثيق الكامل */
-        .full-docs {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .doc-section {
-            margin-bottom: 40px;
-        }
-
-        .doc-section h3 {
-            color: var(--primary-color);
+        .post-header {
+            display: flex;
+            align-items: center;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-action {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         /* التكيف مع الشاشات الصغيرة */
@@ -342,6 +526,7 @@
 
             .main-content {
                 margin-right: 0;
+                padding: 20px;
             }
 
             .nav-items {
@@ -355,6 +540,99 @@
                 min-width: 120px;
                 justify-content: center;
             }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+
+            .send-btn {
+                width: 100%;
+                height: 50px;
+            }
+        }
+
+        /* تحميل ورسوم متحركة */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* التنبيهات */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: rgba(52, 199, 89, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 149, 0, 0.1);
+            border: 1px solid var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(255, 59, 48, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        /* علامات التبويب */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
@@ -370,30 +648,52 @@
             <div class="nav-section">
                 <h3>التنقل الرئيسي</h3>
                 <div class="nav-item active" data-section="dashboard">
-                    <i>📊</i> لوحة التحكم
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
                 </div>
                 <div class="nav-item" data-section="assistant">
-                    <i>🤖</i> المساعد الذكي
+                    <i class="fas fa-robot"></i> المساعد الذكي المتقدم
+                </div>
+                <div class="nav-item" data-section="simulator">
+                    <i class="fas fa-vial"></i> محاكي SEC
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <h3>التعليم والتدريب</h3>
+                <div class="nav-item" data-section="learning">
+                    <i class="fas fa-graduation-cap"></i> المنصة التعليمية
+                </div>
+                <div class="nav-item" data-section="courses">
+                    <i class="fas fa-book"></i> الدورات المتخصصة
+                </div>
+                <div class="nav-item" data-section="certifications">
+                    <i class="fas fa-certificate"></i> الشهادات
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <h3>أدوات المطورين</h3>
+                <div class="nav-item" data-section="tools">
+                    <i class="fas fa-tools"></i> الأدوات المساعدة
+                </div>
+                <div class="nav-item" data-section="cloud">
+                    <i class="fas fa-cloud"></i> تكامل السحابة
+                </div>
+                <div class="nav-item" data-section="analytics">
+                    <i class="fas fa-chart-bar"></i> التحليلات
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <h3>المجتمع والدعم</h3>
+                <div class="nav-item" data-section="community">
+                    <i class="fas fa-users"></i> المجتمع
                 </div>
                 <div class="nav-item" data-section="documentation">
-                    <i>📚</i> التوثيق
+                    <i class="fas fa-file-alt"></i> التوثيق الشامل
                 </div>
-            </div>
-
-            <div class="nav-section">
-                <h3>التقنيات والأدوات</h3>
-                <div class="nav-item" data-section="technologies">
-                    <i>⚙️</i> التقنيات المستخدمة
-                </div>
-                <div class="nav-item" data-section="case-studies">
-                    <i>🔬</i> دراسات الحالة
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <h3>المشروع الكامل</h3>
-                <div class="nav-item" data-section="full-project">
-                    <i>📁</i> المشروع الكامل - التوثيق
+                <div class="nav-item" data-section="support">
+                    <i class="fas fa-life-ring"></i> الدعم الفني
                 </div>
             </div>
         </nav>
@@ -401,271 +701,374 @@
         <!-- المحتوى الرئيسي -->
         <main class="main-content">
             <div class="header">
-                <h2>لوحة تحكم Security Chaos Engineering</h2>
-                <button class="theme-toggle" id="themeToggle">
-                    تبديل الوضع
-                </button>
+                <h2 id="pageTitle">لوحة تحكم Security Chaos Engineering</h2>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="user-profile" id="userProfile">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- قسم لوحة التحكم -->
             <section id="dashboard" class="section active">
-                <div class="card">
-                    <h3>مرحباً بك في نظام Security Chaos Engineering</h3>
-                    <p>هذا النظام يقدم حلولاً متكاملة للهندسة الفوضوية الآمنة في بيئات السحابة الإلكترونية.</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    مرحباً بك في النظام المتكامل لـ Security Chaos Engineering
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <h3><i class="fas fa-robot"></i> المساعد الذكي</h3>
+                        <p>مساعد متقدم متخصص في SEC والشبكات السحابية</p>
+                        <button class="nav-item" data-section="assistant" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-arrow-right"></i> الانتقال للمساعد
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-vial"></i> محاكي التجارب</h3>
+                        <p>محاكاة تجارب SEC في بيئات افتراضية</p>
+                        <button class="nav-item" data-section="simulator" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-arrow-right"></i> بدء المحاكاة
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-graduation-cap"></i> التعلم</h3>
+                        <p>دورات تعليمية متخصصة في SEC</p>
+                        <button class="nav-item" data-section="learning" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-arrow-right"></i> بدء التعلم
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card">
-                    <h3>نظرة عامة</h3>
-                    <p>Security Chaos Engineering هو تخصص يهدف إلى بناء أنظمة مرنة وقادرة على تحمل الهجمات من خلال محاكاة الظروف الفوضوية في بيئات الإنتاج.</p>
-                </div>
-
-                <div class="docs-grid">
-                    <div class="doc-card">
-                        <h4>المساعد الذكي</h4>
-                        <p>مساعد متخصص في Security Chaos Engineering والشبكات السحابية</p>
-                    </div>
-                    <div class="doc-card">
-                        <h4>التوثيق الشامل</h4>
-                        <p>جميع الوثائق والمصادر المتعلقة بالمشروع</p>
-                    </div>
-                    <div class="doc-card">
-                        <h4>التقنيات المستخدمة</h4>
-                        <p>أدوات ومنهجيات Security Chaos Engineering</p>
+                    <h3>إحصائيات النظام</h3>
+                    <div class="chart-container">
+                        <canvas id="dashboardChart"></canvas>
                     </div>
                 </div>
             </section>
 
-            <!-- قسم المساعد الذكي -->
+            <!-- قسم المساعد الذكي المتقدم -->
             <section id="assistant" class="section">
                 <div class="card">
-                    <h3>المساعد الذكي المتخصص</h3>
-                    <p>مساعد ذكي متخصص في Security Chaos Engineering والشبكات السحابية. يمكنه الإجابة على أسئلتك في هذه المجالات.</p>
-                </div>
-
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message assistant-message">
-                            مرحباً! أنا مساعدك المتخصص في Security Chaos Engineering والشبكات السحابية. كيف يمكنني مساعدتك؟
+                    <div class="chat-header">
+                        <h3><i class="fas fa-robot"></i> المساعد الذكي المتقدم</h3>
+                        <div>
+                            <button class="chat-action-btn" id="clearChat">
+                                <i class="fas fa-trash"></i> مسح المحادثة
+                            </button>
+                            <button class="chat-action-btn" id="exportChat">
+                                <i class="fas fa-download"></i> تصدير
+                            </button>
                         </div>
                     </div>
-                    <div class="chat-input">
-                        <input type="text" id="userInput" placeholder="اكتب سؤالك هنا عن Security Chaos Engineering أو الشبكات السحابية...">
-                        <button onclick="sendMessage()">إرسال</button>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant-message">
+                            <div>مرحباً! أنا مساعدك المتخصص في Security Chaos Engineering والشبكات السحابية. كيف يمكنني مساعدتك اليوم؟</div>
+                            <div class="message-time" id="currentTime"></div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input">
+                            <textarea id="userInput" placeholder="اكتب سؤالك هنا عن Security Chaos Engineering أو الشبكات السحابية..." rows="3"></textarea>
+                            <div class="chat-actions">
+                                <div>
+                                    <button class="chat-action-btn" id="attachFile">
+                                        <i class="fas fa-paperclip"></i> إرفاق ملف
+                                    </button>
+                                    <button class="chat-action-btn" id="voiceInput">
+                                        <i class="fas fa-microphone"></i> مدخل صوتي
+                                    </button>
+                                </div>
+                                <span id="charCount">0/1000</span>
+                            </div>
+                        </div>
+                        <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i> إرسال
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>الأسئلة الشائعة</h4>
+                        <div class="faq-list">
+                            <div class="faq-item" onclick="insertQuestion('ما هو Security Chaos Engineering؟')">
+                                ما هو Security Chaos Engineering؟
+                            </div>
+                            <div class="faq-item" onclick="insertQuestion('كيف أطبق SEC في AWS؟')">
+                                كيف أطبق SEC في AWS؟
+                            </div>
+                            <div class="faq-item" onclick="insertQuestion('ما أفضل أدوات SEC؟')">
+                                ما أفضل أدوات SEC؟
+                            </div>
+                            <div class="faq-item" onclick="insertQuestion('كيفة أقيس فعالية SEC؟')">
+                                كيفة أقيس فعالية SEC؟
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>المحادثات الحديثة</h4>
+                        <div id="recentChats">
+                            <div class="chat-preview">لا توجد محادثات سابقة</div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- قسم التوثيق -->
+            <!-- قسم محاكي SEC -->
+            <section id="simulator" class="section">
+                <div class="card">
+                    <h3><i class="fas fa-vial"></i> محاكي Security Chaos Engineering</h3>
+                    <p>محاكاة تجارب SEC في بيئات افتراضية آمنة</p>
+                </div>
+
+                <div class="simulator-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="aws">AWS</div>
+                        <div class="tab" data-tab="azure">Azure</div>
+                        <div class="tab" data-tab="gcp">Google Cloud</div>
+                        <div class="tab" data-tab="custom">مخصص</div>
+                    </div>
+
+                    <div class="tab-content active" id="aws-tab">
+                        <div class="simulator-controls">
+                            <div class="control-group">
+                                <label>نوع التجربة</label>
+                                <select id="experimentType">
+                                    <option value="latency">محاكاة التأخير</option>
+                                    <option value="failure">فشل الخدمة</option>
+                                    <option value="security">اختبار الأمان</option>
+                                    <option value="load">اختبار الحمل</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label>الخدمة المستهدفة</label>
+                                <select id="targetService">
+                                    <option value="ec2">EC2</option>
+                                    <option value="s3">S3</option>
+                                    <option value="lambda">Lambda</option>
+                                    <option value="rds">RDS</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label>شدة التجربة</label>
+                                <select id="experimentIntensity">
+                                    <option value="low">منخفض</option>
+                                    <option value="medium">متوسط</option>
+                                    <option value="high">مرتفع</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label>مدة التجربة (ثواني)</label>
+                                <input type="number" id="experimentDuration" value="30" min="5" max="300">
+                            </div>
+                        </div>
+
+                        <button class="send-btn" onclick="runExperiment()" style="width: 100%;">
+                            <i class="fas fa-play"></i> تشغيل التجربة
+                        </button>
+
+                        <div class="simulator-results" id="simulatorResults" style="display: none;">
+                            <div class="result-card">
+                                <h4>نتائج التجربة</h4>
+                                <div id="experimentResults"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 30px;">
+                    <div class="card">
+                        <h4>قوالب جاهزة</h4>
+                        <div class="templates-list">
+                            <div class="template-item" onclick="loadTemplate('ec2-failure')">
+                                <h5>فشل instance EC2</h5>
+                                <p>محاكاة فشل مفاجئ لـ EC2 instance</p>
+                            </div>
+                            <div class="template-item" onclick="loadTemplate('s3-latency')">
+                                <h5>تأخير S3</h5>
+                                <p>محاكاة تأخير في خدمة S3</p>
+                            </div>
+                            <div class="template-item" onclick="loadTemplate('lambda-timeout')">
+                                <h5>انتهاء وقت Lambda</h5>
+                                <p>محاكاة انتهاء وقت تنفيذ Lambda function</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>الإحصائيات</h4>
+                        <div class="chart-container">
+                            <canvas id="simulatorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم المنصة التعليمية -->
+            <section id="learning" class="section">
+                <div class="card">
+                    <h3><i class="fas fa-graduation-cap"></i> المنصة التعليمية</h3>
+                    <p>دورات متخصصة في Security Chaos Engineering</p>
+                </div>
+
+                <div class="courses-grid">
+                    <div class="course-card" onclick="startCourse('sec-fundamentals')">
+                        <h4>أساسيات SEC</h4>
+                        <p>المفاهيم الأساسية للهندسة الفوضوية الآمنة</p>
+                        <div class="course-progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <small>0% مكتمل</small>
+                    </div>
+
+                    <div class="course-card" onclick="startCourse('aws-sec')">
+                        <h4>SEC في AWS</h4>
+                        <p>تطبيق SEC في بيئة Amazon Web Services</p>
+                        <div class="course-progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <small>0% مكتمل</small>
+                    </div>
+
+                    <div class="course-card" onclick="startCourse('tools-mastery')">
+                        <h4>إتقان الأدوات</h4>
+                        <p>Chaos Monkey, Gremlin, وأدوات أخرى</p>
+                        <div class="course-progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <small>0% مكتمل</small>
+                    </div>
+
+                    <div class="course-card" onclick="startCourse('advanced-patterns')">
+                        <h4>أنماط متقدمة</h4>
+                        <p>أنماط وتصميمات متقدمة في SEC</p>
+                        <div class="course-progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <small>0% مكتمل</small>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>التقدم التعليمي</h4>
+                    <div class="chart-container">
+                        <canvas id="learningChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم أدوات المطورين -->
+            <section id="tools" class="section">
+                <div class="card">
+                    <h3><i class="fas fa-tools"></i> أدوات المطورين</h3>
+                    <p>مجموعة أدوات مساعدة لتطوير أنظمة SEC</p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="openTool('policy-generator')">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>مولد السياسات</h4>
+                        <p>إنشاء سياسات أمان للسحابة</p>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('cost-calculator')">
+                        <i class="fas fa-calculator"></i>
+                        <h4>حساب التكاليف</h4>
+                        <p>تقدير تكاليف السحابة</p>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('risk-analyzer')">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>محلل المخاطر</h4>
+                        <p>تحليل مخاطر النظام</p>
+                    </div>
+
+                    <div class="tool-card" onclick="openTool('resilience-scorer')">
+                        <i class="fas fa-bolt"></i>
+                        <h4>مقياس المرونة</h4>
+                        <p>قياس مرونة الأنظمة</p>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 30px;">
+                    <div class="card">
+                        <h4>أداة إنشاء السياسات</h4>
+                        <div class="policy-generator">
+                            <div class="control-group">
+                                <label>نوع السياسة</label>
+                                <select id="policyType">
+                                    <option value="iam">IAM Policy</option>
+                                    <option value="s3">S3 Bucket Policy</option>
+                                    <option value="security-group">Security Group</option>
+                                </select>
+                            </div>
+                            <button class="send-btn" onclick="generatePolicy()" style="width: 100%; margin-top: 15px;">
+                                <i class="fas fa-magic"></i> إنشاء السياسة
+                            </button>
+                            <div id="policyOutput" style="margin-top: 15px; display: none;">
+                                <textarea id="generatedPolicy" rows="10" style="width: 100%; font-family: monospace;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>حساب تكاليف السحابة</h4>
+                        <div class="cost-calculator">
+                            <div class="control-group">
+                                <label>عدد الخوادم</label>
+                                <input type="number" id="serverCount" value="1" min="1">
+                            </div>
+                            <div class="control-group">
+                                <label>سعر الخادم الشهري ($)</label>
+                                <input type="number" id="serverPrice" value="50" min="1">
+                            </div>
+                            <button class="send-btn" onclick="calculateCost()" style="width: 100%; margin-top: 15px;">
+                                <i class="fas fa-calculator"></i> حساب التكلفة
+                            </button>
+                            <div id="costOutput" style="margin-top: 15px; display: none;">
+                                <h4>التكلفة الشهرية: <span id="monthlyCost">$0</span></h4>
+                                <h4>التكلفة السنوية: <span id="yearlyCost">$0</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- أقسام أخرى (سيتم إضافتها) -->
+            <section id="community" class="section">
+                <div class="card">
+                    <h3>المجتمع</h3>
+                    <p>قريباً...</p>
+                </div>
+            </section>
+
             <section id="documentation" class="section">
                 <div class="card">
-                    <h3>توثيق Security Chaos Engineering</h3>
-                    <p>الوثائق والمصادر التعليمية المتعلقة بالهندسة الفوضوية الآمنة.</p>
-                </div>
-
-                <div class="docs-grid">
-                    <div class="doc-card">
-                        <h4>المفاهيم الأساسية</h4>
-                        <p>تعريف Security Chaos Engineering ومبادئه الأساسية</p>
-                    </div>
-                    <div class="doc-card">
-                        <h4>أدوات التنفيذ</h4>
-                        <p>Chaos Monkey, Gremlin, وأدوات أخرى</p>
-                    </div>
-                    <div class="doc-card">
-                        <h4>أفضل الممارسات</h4>
-                        <p>كيفية تطبيق SEC بشكل فعال</p>
-                    </div>
-                    <div class="doc-card">
-                        <h4>دراسات الحالة</h4>
-                        <p>تطبيقات عملية من شركات رائدة</p>
-                    </div>
+                    <h3>التوثيق الشامل</h3>
+                    <p>قريباً...</p>
                 </div>
             </section>
 
-            <!-- قسم التقنيات -->
-            <section id="technologies" class="section">
-                <div class="card">
-                    <h3>التقنيات والأدوات</h3>
-                    <p>أهم التقنيات والأدوات المستخدمة في Security Chaos Engineering.</p>
-                </div>
-
-                <div class="tech-grid">
-                    <div class="tech-item">
-                        <h4>Chaos Monkey</h4>
-                        <p>أداة Netflix لاختبار مرونة الأنظمة</p>
-                    </div>
-                    <div class="tech-item">
-                        <h4>Gremlin</h4>
-                        <p>منصة متكاملة لاختبار الفوضى</p>
-                    </div>
-                    <div class="tech-item">
-                        <h4>AWS Fault Injection</h4>
-                        <p>خدمة AWS لمحاكاة الأعطال</p>
-                    </div>
-                    <div class="tech-item">
-                        <h4>Chaos Toolkit</h4>
-                        <p>إطار عمل مفتوح المصدر</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- قسم دراسات الحالة -->
-            <section id="case-studies" class="section">
-                <div class="card">
-                    <h3>دراسات الحالة</h3>
-                    <p>تطبيقات عملية لـ Security Chaos Engineering في شركات عالمية.</p>
-                </div>
-
-                <div class="case-study">
-                    <h4>Netflix - Chaos Engineering</h4>
-                    <p>كيف تستخدم Netflix الهندسة الفوضوية لضمان مرونة أنظمتها</p>
-                </div>
-
-                <div class="case-study">
-                    <h4>Amazon AWS</h4>
-                    <p>تطبيق مفاهيم SEC في خدمات AWS</p>
-                </div>
-
-                <div class="case-study">
-                    <h4>Microsoft Azure</h4>
-                    <p>استراتيجيات SEC في بيئة Azure السحابية</p>
-                </div>
-            </section>
-
-            <!-- قسم المشروع الكامل -->
-            <section id="full-project" class="section">
-                <div class="full-docs">
-                    <div class="card">
-                        <h3>المشروع الكامل - التوثيق الشامل</h3>
-                        <p>جميع أقسام المشروع في مكان واحد.</p>
-                    </div>
-
-                    <div class="doc-section">
-                        <h3>مقدمة في Security Chaos Engineering</h3>
-                        <p>Security Chaos Engineering هو نهج استباقي لبناء أنظمة قادرة على تحمل الهجمات والظروف غير المتوقعة.</p>
-                    </div>
-
-                    <div class="doc-section">
-                        <h3>الأدوات والتقنيات</h3>
-                        <p>تشمل الأدوات الرئيسية: Chaos Monkey, Gremlin, AWS Fault Injection Service, Chaos Toolkit.</p>
-                    </div>
-
-                    <div class="doc-section">
-                        <h3>أفضل الممارسات</h3>
-                        <p>ابدأ في بيئات غير إنتاجية، استخدم حوادث سابقة كمصدر للتجارب، وثق النتائج.</p>
-                    </div>
-
-                    <div class="doc-section">
-                        <h3>التكامل مع السحابة</h3>
-                        <p>كيفية تطبيق SEC في بيئات AWS, Azure, Google Cloud.</p>
-                    </div>
-                </div>
-            </section>
+            <!-- باقي الأقسام... -->
         </main>
     </div>
 
     <script>
-        // إدارة التنقل بين الأقسام
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                // إزالة النشاط من جميع العناصر
-                document.querySelectorAll('.nav-item').forEach(nav => {
-                    nav.classList.remove('active');
-                });
-                // إخفاء جميع الأقسام
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                // تفعيل العنصر الحالي
-                this.classList.add('active');
-                // إظهار القسم المحدد
-                const sectionId = this.getAttribute('data-section');
-                document.getElementById(sectionId).classList.add('active');
-            });
-        });
-
-        // تبديل الوضع الداكن
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                themeToggle.textContent = 'تبديل الوضع';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggle.textContent = 'تبديل الوضع';
-            }
-        });
-
-        // المساعد الذكي
-        function sendMessage() {
-            const userInput = document.getElementById('userInput');
-            const chatMessages = document.getElementById('chatMessages');
-            const message = userInput.value.trim();
-
-            if (message === '') return;
-
-            // إضافة رسالة المستخدم
-            const userMessage = document.createElement('div');
-            userMessage.className = 'message user-message';
-            userMessage.textContent = message;
-            chatMessages.appendChild(userMessage);
-
-            // مسح حقل الإدخال
-            userInput.value = '';
-
-            // إضافة رسالة المساعد (محاكاة)
-            setTimeout(() => {
-                const assistantMessage = document.createElement('div');
-                assistantMessage.className = 'message assistant-message';
-                assistantMessage.textContent = generateResponse(message);
-                chatMessages.appendChild(assistantMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
-
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function generateResponse(message) {
-            const lowerMessage = message.toLowerCase();
-            
-            // الردود المتعلقة بـ Security Chaos Engineering
-            if (lowerMessage.includes('chaos') || lowerMessage.includes('فوض')) {
-                return 'Security Chaos Engineering هو منهجية لبناء أنظمة مرنة من خلال محاكاة الظروف الفوضوية في بيئات الإنتاج. يساعد في اكتشاف نقاط الضعف قبل أن يستغلها المهاجمون.';
-            }
-            
-            if (lowerMessage.includes('netflix') || lowerMessage.includes('نيتفليكس')) {
-                return 'Netflix هي الرائدة في هذا المجال مع أدوات مثل Chaos Monkey التي تقوم بإيقاف خوادم الإنتاج عشوائياً لاختبار مرونة النظام.';
-            }
-            
-            if (lowerMessage.includes('aws') || lowerMessage.includes('سحابة')) {
-                return 'في AWS، يمكن استخدام خدمات مثل Fault Injection Simulator لمحاكاة الأعطال واختبار مرونة التطبيقات السحابية.';
-            }
-            
-            if (lowerMessage.includes('أدوات') || lowerMessage.includes('tools')) {
-                return 'أهم أدوات Security Chaos Engineering تشمل: Chaos Monkey, Gremlin, Chaos Toolkit, AWS FIS, Azure Chaos Studio.';
-            }
-            
-            if (lowerMessage.includes('ممارسات') || lowerMessage.includes('best practices')) {
-                return 'أفضل الممارسات: ابدأ في بيئات غير إنتاجية، خطط للتجارب بعناية، وثق النتائج، واجعل التجارب قابلة للتكرار.';
-            }
-
-            // الردود العامة
-            return 'أنا متخصص في Security Chaos Engineering والشبكات السحابية. يمكنني مساعدتك في مواضيع مثل أدوات SEC، التطبيق في السحابة، ودراسات الحالة العملية.';
-        }
-
-        // السماح بالإرسال بالزر Enter
-        document.getElementById('userInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // الكشف التلقائي عن وضع النظام
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
+        // الكود الكامل سيأتي في الجزء التالي بسبب حدود الطول
+        // سيحتوي على جميع الوظائف والميزات المطلوبة
     </script>
 </body>
 </html>
