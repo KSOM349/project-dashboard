@@ -386,4 +386,217 @@
         <h2>🎯 Practical Tasks - Projektuppgifter</h2>
         <button class="btn" style="background: var(--success); color: white;" onclick="addNewTask()">
             <i class="fas fa-plus"></i> Ny Uppgift
-       
+        </button>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-number" id="total-tasks">0</div>
+            <div class="stat-label">Totalt Uppgifter</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="completed-tasks">0</div>
+            <div class="stat-label">Avslutade</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="inprogress-tasks">0</div>
+            <div class="stat-label">Pågående</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="pending-tasks">0</div>
+            <div class="stat-label">Väntande</div>
+        </div>
+    </div>
+
+    <div class="task-list" id="tasks-list">
+        <!-- Dynamiska tasks -->
+    </div>
+</section>
+
+<script>
+    // =============================
+    // 🚀 Notifications
+    function showNotification(message, type = 'success') {
+        const notificationContainer = document.getElementById('notificationContainer');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <span>${message}</span>
+            <button class="notification-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        notificationContainer.appendChild(notification);
+        setTimeout(() => notification.remove(), 5000);
+    }
+
+    // 📝 Team Updates
+    function enableTeamUpdates() {
+        const form = document.getElementById('team-update-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const author = document.getElementById('update-author').value;
+            const status = document.getElementById('update-status').value;
+            const title = document.getElementById('update-title').value;
+            const details = document.getElementById('update-details').value;
+
+            if (title && details) {
+                addTeamUpdate(author, status, title, details);
+                this.reset();
+            }
+        });
+    }
+
+    function addTeamUpdate(author, status, title, details) {
+        const updatesList = document.getElementById('team-updates-list');
+        const statusColors = {
+            'completed': '#27ae60', 'in-progress': '#f39c12', 
+            'planned': '#3498db', 'blocked': '#e74c3c'
+        };
+
+        const updateHTML = `
+            <div style="background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; border-left: 4px solid ${statusColors[status]}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h4 style="margin: 0;">${title}</h4>
+                    <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem;">
+                        ${status === 'completed' ? '✅' : status === 'in-progress' ? '🔄' : status === 'planned' ? '📅' : '❌'} 
+                        ${status}
+                    </span>
+                </div>
+                <p><strong>${author}</strong> - ${details}</p>
+                <small style="color: #666;">${new Date().toLocaleDateString('sv-SE')}</small>
+            </div>
+        `;
+
+        updatesList.insertAdjacentHTML('afterbegin', updateHTML);
+        showNotification('Uppdatering publicerad!', 'success');
+    }
+
+    // 🎯 Practical Tasks
+    function addNewTask() {
+        const taskName = prompt('Namn på uppgift:');
+        if (!taskName) return;
+
+        const tasksList = document.getElementById('tasks-list');
+        const newTask = document.createElement('div');
+        newTask.className = 'task-card';
+        newTask.innerHTML = `
+            <div class="task-header">
+                <div class="task-title">${taskName}</div>
+                <span class="task-priority priority-medium">Medel</span>
+            </div>
+            <div class="task-meta">
+                <span><i class="fas fa-user"></i> Kaled Osman</span>
+                <span><i class="fas fa-calendar"></i> ${new Date().toISOString().split('T')[0]}</span>
+            </div>
+            <p>Ny uppgift</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button class="btn complete-btn" style="background: #27ae60; color:white;"><i class="fas fa-check"></i> Klar</button>
+                <button class="btn edit-btn" style="background: #f39c12; color:white;"><i class="fas fa-edit"></i> Redigera</button>
+                <button class="btn delete-btn" style="background: #e74c3c; color:white;"><i class="fas fa-trash"></i> Ta bort</button>
+            </div>
+        `;
+        tasksList.appendChild(newTask);
+        addTaskEventListeners(newTask);
+        updateTaskStats();
+    }
+
+    function addTaskEventListeners(taskElement) {
+        taskElement.querySelector('.complete-btn').addEventListener('click', () => {
+            taskElement.querySelector('.progress-fill').style.width = '100%';
+            showNotification('Uppgift klar!', 'success');
+            updateTaskStats();
+        });
+
+        taskElement.querySelector('.edit-btn').addEventListener('click', () => {
+            const newTitle = prompt('Redigera namn:', taskElement.querySelector('.task-title').textContent);
+            if (newTitle) taskElement.querySelector('.task-title').textContent = newTitle;
+        });
+
+        taskElement.querySelector('.delete-btn').addEventListener('click', () => {
+            if (confirm('Vill du ta bort uppgiften?')) {
+                taskElement.remove();
+                updateTaskStats();
+            }
+        });
+    }
+
+    function updateTaskStats() {
+        const tasks = document.querySelectorAll('.task-card');
+        const total = tasks.length;
+        const completed = Array.from(tasks).filter(t => t.querySelector('.progress-fill').style.width === '100%').length;
+        const inProgress = Array.from(tasks).filter(t => {
+            const w = t.querySelector('.progress-fill').style.width;
+            return w !== '100%' && w !== '0%';
+        }).length;
+        const pending = total - completed - inProgress;
+
+        document.getElementById('total-tasks').textContent = total;
+        document.getElementById('completed-tasks').textContent = completed;
+        document.getElementById('inprogress-tasks').textContent = inProgress;
+        document.getElementById('pending-tasks').textContent = pending;
+    }
+
+    // 🤖 AI Assistant
+    function sendAIMessage() {
+        const input = document.getElementById('aiChatInput');
+        const message = input.value.trim();
+        if (!message) return;
+
+        const chatContainer = document.getElementById('aiChatContainer');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'user-message';
+        userMsg.innerHTML = `<strong>👤 Du:</strong> ${message}`;
+        chatContainer.appendChild(userMsg);
+
+        setTimeout(() => {
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'ai-message';
+            aiMsg.innerHTML = `<strong>🤖 AI Assistant:</strong> ${getAIResponse(message)}`;
+            chatContainer.appendChild(aiMsg);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 1000);
+
+        input.value = '';
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function quickQuestion(question) {
+        document.getElementById('aiChatInput').value = question;
+        sendAIMessage();
+    }
+
+    function getAIResponse(question) {
+        const responses = {
+            'tidskomplexitet': 'Dijkstra: O(V²) med matris eller O(E + V log V) med prioritetsköslista.',
+            'nätverk': 'Dijkstra används i OSPF för att hitta kortaste vägar mellan routrar.',
+            'python': 'I Python kan du använda heapq för effektiv Dijkstra implementation.',
+            'skillnad': 'Dijkstra hittar kortaste vägen, A* använder heuristik för snabbare sök.'
+        };
+
+        const q = question.toLowerCase();
+        for (const [key, response] of Object.entries(responses)) {
+            if (q.includes(key)) return response;
+        }
+        return 'Jag kan hjälpa dig med Dijkstra-algoritmen, dess implementation och användning!';
+    }
+
+    // 🚀 Init
+    document.addEventListener('DOMContentLoaded', () => {
+        // Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.target).classList.add('active');
+            });
+        });
+
+        enableTeamUpdates();
+        showNotification('Välkommen till Dashboard!', 'info');
+    });
+</script>
+</body>
+</html>
