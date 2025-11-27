@@ -1,1317 +1,330 @@
 <!DOCTYPE html>
-<html lang="sv" dir="ltr">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hela Projektet - Komplett Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full-Stack Dashboard - Förbättrad</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+    --primary: #3498db;
+    --secondary: #2ecc71;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --accent: #e74c3c;
+    --light: #f5f5f5;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: #f8f9fa;
-            min-height: 100vh;
-            color: var(--dark);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: var(--gradient);
-            color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .notification {
-            background: var(--success);
-            color: white;
-            padding: 15px 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            animation: slideInRight 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-width: 300px;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .notification.error { background: var(--accent); }
-        .notification.warning { background: var(--warning); }
-        .notification.info { background: var(--secondary); }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: white;
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .nav-tab {
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-tab:hover {
-            background: var(--light);
-            transform: translateY(-2px);
-        }
-
-        .nav-tab.active {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .section {
-            display: none;
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-header h2 {
-            font-size: 1.8rem;
-            color: var(--primary);
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--gradient);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .code-container {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-        }
-
-        .team-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .team-table th,
-        .team-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--light);
-        }
-
-        .team-table th {
-            background: var(--primary);
-            color: white;
-        }
-
-        .team-table tr:hover {
-            background: var(--light);
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .btn-edit {
-            background: var(--warning);
-            color: white;
-        }
-
-        .btn-delete {
-            background: var(--accent);
-            color: white;
-        }
-
-        .ai-chat-container {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .ai-message {
-            background: white;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .user-message {
-            background: var(--secondary);
-            color: white;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-            margin-top: 1rem;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid var(--light);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .chat-input input:focus {
-            outline: none;
-            border-color: var(--secondary);
-        }
-
-        .task-item {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-radius: 10px;
-            border-left: 4px solid var(--success);
-        }
-
-        .progress-bar {
-            background: #e9ecef;
-            border-radius: 10px;
-            height: 10px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: var(--success);
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .attachment-item {
-            background: white;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .task-list {
-            margin-top: 1.5rem;
-        }
-
-        .task-card {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--secondary);
-        }
-
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .task-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .task-priority {
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .priority-high { background: var(--accent); color: white; }
-        .priority-medium { background: var(--warning); color: white; }
-        .priority-low { background: var(--success); color: white; }
-
-        .task-meta {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .nav-tabs {
-                flex-direction: column;
-            }
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-            .team-table {
-                display: block;
-                overflow-x: auto;
-            }
-            .notification {
-                min-width: 250px;
-                right: 10px;
-            }
-        }
-    </style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fafafa; }
+.section { padding:2rem; display:none; }
+.section.active { display:block; }
+.section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.section-header h2 { margin:0; }
+.btn { cursor:pointer; padding:0.5rem 1rem; border:none; border-radius:5px; font-size:0.9rem; }
+.stats-container { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+.stat-card { background:white; padding:1rem; border-radius:8px; flex:1; min-width:120px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+.stat-number { font-size:1.5rem; font-weight:bold; }
+.task-card { background:white; padding:1rem; border-radius:10px; margin-bottom:1rem; border-left:4px solid var(--accent); box-shadow:0 2px 5px rgba(0,0,0,0.05); }
+.task-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+.task-title { font-weight:bold; }
+.progress-bar { background:#ddd; height:10px; border-radius:5px; overflow:hidden; margin-top:0.5rem; }
+.progress-fill { background:var(--success); width:0%; height:100%; transition:0.5s; }
+.notification { position:fixed; top:10px; right:10px; padding:1rem; background:var(--success); color:white; border-radius:6px; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center; min-width:200px; box-shadow:0 2px 5px rgba(0,0,0,0.2); }
+.notification.info { background:#3498db; }
+.notification.warning { background:#f39c12; }
+.notification .notification-close { background:none; border:none; color:white; font-size:1rem; cursor:pointer; margin-left:0.5rem; }
+.ai-chat-container { max-height:300px; overflow-y:auto; background:#f0f0f0; padding:1rem; border-radius:8px; margin-bottom:1rem; }
+.ai-message, .user-message { margin-bottom:0.5rem; padding:0.5rem 1rem; border-radius:8px; }
+.ai-message { background:#3498db; color:white; }
+.user-message { background:#ecf0f1; color:#333; text-align:right; }
+.chat-input { display:flex; gap:0.5rem; }
+.nav-tab { cursor:pointer; padding:0.5rem 1rem; border-radius:5px; background:#ddd; margin-right:0.5rem; display:inline-block; }
+.nav-tab.active { background:var(--primary); color:white; }
+</style>
 </head>
 <body>
-    <div class="notification-container" id="notificationContainer"></div>
 
-    <div class="container">
-        <header>
-            <h1>🚀 Hela Projektet - Komplett Dashboard</h1>
-            <p>Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer</p>
-        </header>
+<div id="notificationContainer"></div>
 
-        <div class="nav-tabs">
-            <div class="nav-tab active" data-target="algorithm-visualizer">
-                <i class="fas fa-project-diagram"></i> 📊 Algorithm Visualizer
-            </div>
-            <div class="nav-tab" data-target="min-implementation">
-                <i class="fas fa-code"></i> 💻 Min Implementation
-            </div>
-            <div class="nav-tab" data-target="team-dashboard">
-                <i class="fas fa-users"></i> 👥 Team Dashboard
-            </div>
-            <div class="nav-tab" data-target="hela-projektet">
-                <i class="fas fa-folder-open"></i> 📁 Hela Projektet
-            </div>
-            <div class="nav-tab" data-target="dijkstra-algorithm">
-                <i class="fas fa-route"></i> 🔍 Dijkstra Algorithm
-            </div>
-            <div class="nav-tab" data-target="dokumentation">
-                <i class="fas fa-book"></i> 📚 Dokumentation
-            </div>
-            <div class="nav-tab" data-target="team-collaboration">
-                <i class="fas fa-tasks"></i> 📝 Team Collaboration
-            </div>
-            <div class="nav-tab" data-target="team-updates">
-                <i class="fas fa-comments"></i> 👥 Team Updates
-            </div>
-            <div class="nav-tab" data-target="ai-assistant">
-                <i class="fas fa-robot"></i> 🤖 AI Assistant
-            </div>
-            <div class="nav-tab" data-target="practical-tasks">
-                <i class="fas fa-tasks"></i> 🎯 Practical Tasks
-            </div>
-        </div>
+<!-- Navigation -->
+<div style="padding:1rem; background:#eee;">
+    <span class="nav-tab active" data-target="hela-projektet">Hela Projektet</span>
+    <span class="nav-tab" data-target="dijkstra-algorithm">Dijkstra</span>
+    <span class="nav-tab" data-target="dokumentation">Dokumentation</span>
+    <span class="nav-tab" data-target="team-collaboration">Team</span>
+    <span class="nav-tab" data-target="team-updates">Updates</span>
+    <span class="nav-tab" data-target="practical-tasks">Tasks</span>
+    <span class="nav-tab" data-target="ai-assistant">AI</span>
+</div>
 
-        <!-- Algorithm Visualizer Section -->
-        <section id="algorithm-visualizer" class="section active">
-            <div class="section-header">
-                <h2>📊 Algorithm Visualizer</h2>
-                <button class="btn" style="background: var(--success); color: white;" onclick="showNotification('Visualization refreshed!', 'success')">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Servrar i Nätverk</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Kortaste Väg (ms)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Optimering</div>
-                </div>
-            </div>
-
-            <div style="background: var(--light); height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 2rem 0; border: 2px dashed var(--secondary);">
-                <div style="text-align: center; color: var(--dark);">
-                    <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                    <h3>Interaktiv Dijkstra Visualisering</h3>
-                    <p>Plats för den interaktiva grafvisualiseringen</p>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <pre>// Server Network Configuration
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8, 'WebServer': 5},
-    'Cache': {'CDN': 3, 'WebServer': 2},
-    'CDN': {'Cache': 3},
-    'Backup': {'Database': 8}
-}</pre>
-            </div>
-
-            <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                <h4>🎯 Dijkstra Steg-för-Steg:</h4>
-                <p>Start: WebServer (avstånd 0)</p>
-                <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
-                <p>Steg 2: Välj Cache → hitta CDN=5</p>
-                <p>Steg 3: Välj Database → hitta Backup=13</p>
-                <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
-            </div>
-        </section>
-
-        <!-- Min Implementation Section -->
-        <section id="min-implementation" class="section">
-            <div class="section-header">
-                <h2>💻 Min Implementation - Kaled Osman</h2>
-            </div>
-
-            <div class="code-container">
-                <pre>import heapq
-
-def dijkstra_dashboard(graph, start):
-    distances = {node: float('infinity') for node in graph}
-    distances[start] = 0
-    priority_queue = [(0, start)]
-    
-    while priority_queue:
-        current_distance, current_node = heapq.heappop(priority_queue)
-        
-        if current_distance > distances[current_node]:
-            continue
-            
-        for neighbor, weight in graph[current_node].items():
-            distance = current_distance + weight
-            
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                heapq.heappush(priority_queue, (distance, neighbor))
-                
-    return distances
-
-# Användning i vår dashboard
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8},
-    'Cache': {'CDN': 3}
-}
-
-resultat = dijkstra_dashboard(servers, 'WebServer')
-print("Kortaste avstånd:", resultat)</pre>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>🎤 Min Presentation – Kaled Osman</h3>
-                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-                    <h4>Dijkstra och min dashboard</h4>
-                    <p><strong>Introduktion:</strong> "Jag har gjort en plats där alla kan se hur det går. Precis som Dijkstra hittar den bästa vägen, visar min dashboard allas arbete på bästa sätt. Alla resultat syns direkt."</p>
-                    
-                    <h4>Algoritmen</h4>
-                    <p>"Dijkstra är en algoritm som hittar kortaste vägen mellan punkter. Den används i GPS, internet och spel för att hitta snabbaste vägen."</p>
-                    
-                    <h4>Min Dashboard</h4>
-                    <p>"Jag har byggt tre viktiga delar: Server Monitor, Azure Integration och Python Dashboard. Alla kan se sina resultat direkt på dashboarden!"</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Dashboard Section -->
-        <section id="team-dashboard" class="section">
-            <div class="section-header">
-                <h2>👥 Team Dashboard - Grupp 1</h2>
-                <button class="btn" style="background: var(--secondary); color: white;" onclick="showNotification('Team data synced!', 'success')">
-                    <i class="fas fa-sync"></i> Sync Team
-                </button>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number">6</div>
-                    <div class="stat-label">Team Medlemmar</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Projekt Framsteg</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Implementerade Algoritmer</div>
-                </div>
-            </div>
-
-            <table class="team-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Namn</th>
-                        <th>Roll</th>
-                        <th>Avdelning</th>
-                        <th>Bidrag</th>
-                        <th>Åtgärder</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Kaled Osman</td>
-                        <td>Dijkstra Implementation</td>
-                        <td>Algoritmer</td>
-                        <td>Dashboard & Kod</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Fahad Hussain</td>
-                        <td>Nätverksanalys</td>
-                        <td>Nätverk</td>
-                        <td>OSPF Research</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Stefan Österberg</td>
-                        <td>Algoritmteori</td>
-                        <td>Forskning</td>
-                        <td>Dijkstra Theory</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Marcus Tibell</td>
-                        <td>Användningsfall</td>
-                        <td>Applikation</td>
-                        <td>Real-world Use Cases</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Jens Annell</td>
-                        <td>Kodimplementation</td>
-                        <td>Utveckling</td>
-                        <td>Python Code</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Luwam</td>
-                        <td>Test & Validering</td>
-                        <td>Kvalitet</td>
-                        <td>Algorithm Testing</td>
-                        <td>
-                            <button class="btn btn-edit">Redigera</button>
-                            <button class="btn btn-delete">Radera</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Hela Projektet Section -->
-        <section id="hela-projektet" class="section">
-            <div class="section-header">
-                <h2>📁 HELA PROJEKTET - Dokumentation & Presentation</h2>
-                <button class="btn" style="background: var(--primary); color: white;" onclick="showNotification('Documentation exported!', 'success')">
-                    <i class="fas fa-download"></i> Export
-                </button>
-            </div>
-
-            <div style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                <h3>🚀 PROJEKT-SAMMANFATTNING:</h3>
-                <p>"Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer"</p>
-            </div>
-
-            <div style="margin-bottom: 2rem;">
-                <h3>📊 PROJEKT-ÖVERSIKT</h3>
-                <h4>🎯 Projektmål</h4>
-                <ul>
-                    <li>Bygga ett fullt funktionellt CRUD dashboard</li>
-                    <li>Integrera Algorithm Visualizer för Dijkstra</li>
-                    <li>Demonstrera full-stack utveckling</li>
-                </ul>
-
-                <h4>🛠 Teknisk Stack</h4>
-                <ul>
-                    <li>Backend: Python Flask</li>
-                    <li>Frontend: HTML5, CSS3, JavaScript</li>
-                    <li>Styling: Modern CSS med gradients</li>
-                    <li>Data: JSON-baserad "databas"</li>
-                </ul>
-            </div>
-
-            <div style="margin-bottom: 2rem;">
-                <h3>✅ FUNKTIONALITET</h3>
-                
-                <h4>📋 Task 1: Dashboard (CRUD)</h4>
-                <ul>
-                    <li>✅ CREATE - Lägg till nya anställda</li>
-                    <li>✅ READ - Visa data i tabell</li>
-                    <li>✅ UPDATE - Redigera med modal</li>
-                    <li>✅ DELETE - Radera med bekräftelse</li>
-                    <li>✅ Realtidsstatistik</li>
-                </ul>
-
-                <h4>🔍 Task 2: Algorithm Visualizer</h4>
-                <ul>
-                    <li>✅ Dijkstra algorithm demo</li>
-                    <li>✅ Graf-visualisering</li>
-                    <li>✅ Steg-för-steg förklaring</li>
-                    <li>✅ Responsiv design</li>
-                </ul>
-
-                <h4>🎨 Task 3: Design & UX</h4>
-                <ul>
-                    <li>✅ Modern design med gradients</li>
-                    <li>✅ Responsiv för alla enheter</li>
-                    <li>✅ Professionell navigation</li>
-                    <li>✅ Användarvänliga formulär</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Dijkstra Algorithm Section -->
-        <section id="dijkstra-algorithm" class="section">
-            <div class="section-header">
-                <h2>🔍 Dijkstra Algorithm - Steg för Steg</h2>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Servrar i Nätverk</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Kortaste Väg (ms)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Optimering</div>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <pre>// Vårt Server-Nätverk:
-servers = {
-    'WebServer': {'Database': 5, 'Cache': 2},
-    'Database': {'Backup': 8, 'WebServer': 5},
-    'Cache': {'CDN': 3, 'WebServer': 2},
-    'CDN': {'Cache': 3},
-    'Backup': {'Database': 8}
-}</pre>
-            </div>
-
-            <div style="background: var(--success); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                <h4>🎯 Dijkstra Steg-för-Steg:</h4>
-                <p>Start: WebServer (avstånd 0)</p>
-                <p>Steg 1: Hitta grannar → Database=5, Cache=2</p>
-                <p>Steg 2: Välj Cache → hitta CDN=5</p>
-                <p>Steg 3: Välj Database → hitta Backup=13</p>
-                <p><strong>Resultat: Alla kortaste vägar funna! ✅</strong></p>
-            </div>
-
-            <!-- المرفقات المحسنة -->
-            <div style="margin-top: 2rem;">
-                <h3>📎 المرفقات - Bifogade Filer</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div class="attachment-item">
-                        <h4>📄 Task 02 - Advances in Graph Algorithms</h4>
-                        <p>Dokumentation om avancerade Dijkstra-algoritmer</p>
-                        <div style="display: flex; gap: 10px; margin-top: 10px;">
-                            <button class="btn" style="background: var(--secondary); color: white;">
-                                <i class="fas fa-download"></i> Ladda Ned
-                            </button>
-                            <button class="btn" style="background: var(--success); color: white;">
-                                <i class="fas fa-external-link-alt"></i> Öppna
-                            </button>
-                        </div>
-                    </div>
-                    <div class="attachment-item">
-                        <h4>🌐 Dijkstra Advances Demo</h4>
-                        <p>Interaktiv demo av Dijkstra-algoritmen</p>
-                        <div style="display: flex; gap: 10px; margin-top: 10px;">
-                            <button class="btn" style="background: var(--secondary); color: white;">
-                                <i class="fas fa-download"></i> Ladda Ned
-                            </button>
-                            <button class="btn" style="background: var(--success); color: white;">
-                                <i class="fas fa-external-link-alt"></i> Öppna Demo
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dokumentation Section -->
-        <section id="dokumentation" class="section">
-            <div class="section-header">
-                <h2>📚 Dokumentation - Graph Algorithms</h2>
-            </div>
-
-            <div style="margin-bottom: 2rem;">
-                <h3>Av Grupp 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell, Luwam</h3>
-                
-                <h4>Dijkstra's Algorithm</h4>
-                <p><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph, which could for example, be representative of:</p>
-                <ul>
-                    <li>Road Networks</li>
-                    <li>Shortest path in OSPF Networks</li>
-                    <li>Pathing in Video Games</li>
-                    <li>Microchip Design</li>
-                </ul>
-
-                <h4>Marcus - Dijkstra's Shortest Path</h4>
-                <p>"The shortest path the algorithm finds is dependant on the source nodes relationships to other nodes. The starting node is where the algorithm draws its conclusion from..."</p>
-
-                <h4>Kaled - Why does the shortest path matter?</h4>
-                <p>"As mentioned earlier, the purpose of the algorithm is to find the shortest possible path, so why does the shortest possible path matter? When does the shortest path matter, when doesn't it matter, and why?"</p>
-
-                <h4>Fahad - Uses of shortest path</h4>
-                <p>"A common usage of the shortest path within our sphere of operation is for example, in networking, where speed and efficiency are crucial to the fluid operation of the network..."</p>
-
-                <h4>Jens - Related Algorithms & Problems</h4>
-                <p>"Dijkstra's original algorithm can be modified and extended, for example: At times it may be desirable to get a LESS than optimal mathematical solution..."</p>
-
-                <h4>Stefan - Link-State & Dijkstra's real world use</h4>
-                <p>"In link-state routing, every router maintains a detailed view of the entire network topology, giving it a clear picture of how all nodes are interconnected..."</p>
-
-                <h4>Luwam - Testing & Validation</h4>
-                <p>"Proper testing of Dijkstra's algorithm involves validating edge cases, performance with large graphs, and ensuring correctness across different network topologies..."</p>
-            </div>
-        </section>
-
-        <!-- Team Collaboration Section -->
-        <section id="team-collaboration" class="section">
-            <div class="section-header">
-                <h2>📝 Team Collaboration - Grupp Dokumentation</h2>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
-                <div style="background: var(--light); padding: 1.5rem; border-radius: 12px;">
-                    <h3>➕ Lägg Till Uppgift</h3>
-                    <form id="assignment-form">
-                        <div style="margin-bottom: 1rem;">
-                            <label>Uppgiftsnamn:</label>
-                            <input type="text" id="task-name" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <label>Beskrivning:</label>
-                            <textarea id="task-desc" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; height: 100px;"></textarea>
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <label>Ansvarig:</label>
-                            <select id="task-assignee" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <option value="Kaled Osman">Kaled Osman</option>
-                                <option value="Fahad Hussain">Fahad Hussain</option>
-                                <option value="Stefan Österberg">Stefan Österberg</option>
-                                <option value="Marcus Tibell">Marcus Tibell</option>
-                                <option value="Jens Annell">Jens Annell</option>
-                                <option value="Luwam">Luwam</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn" style="background: var(--success); color: white; width: 100%;">
-                            ➕ Lägg Till Uppgift
-                        </button>
-                    </form>
-                </div>
-
-                <div style="background: var(--light); padding: 1.5rem; border-radius: 12px;">
-                    <h3>📋 Aktuella Uppgifter</h3>
-                    <div id="assignments-list">
-                        <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
-                            <strong>Förbättra Dijkstra Algorithm</strong>
-                            <p>Lägg till prestandaförbättringar och komplexitetsanalys</p>
-                            <small><strong>Ansvarig:</strong> Kaled Osman</small>
-                        </div>
-                        <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
-                            <strong>OSPF Protocols Research</strong>
-                            <p>Studera OSPF-protokoll och deras tillämpningar i nätverk</p>
-                            <small><strong>Ansvarig:</strong> Fahad Hussain</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Updates Section -->
-        <section id="team-updates" class="section">
-            <div class="section-header">
-                <h2>👥 Team Updates & Uppgifter</h2>
-            </div>
-
-            <div style="background: var(--light); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-                <h3>➕ Lägg Till Din Uppdatering</h3>
-                <form id="team-update-form">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <label>Ditt Namn:</label>
-                            <select id="update-author" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <option value="Kaled Osman">Kaled Osman</option>
-                                <option value="Fahad Hussain">Fahad Hussain</option>
-                                <option value="Stefan Österberg">Stefan Österberg</option>
-                                <option value="Marcus Tibell">Marcus Tibell</option>
-                                <option value="Jens Annell">Jens Annell</option>
-                                <option value="Luwam">Luwam</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Status:</label>
-                            <select id="update-status" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                                <option value="completed">✅ Avslutad</option>
-                                <option value="in-progress">🔄 Pågående</option>
-                                <option value="planned">📅 Planerad</option>
-                                <option value="blocked">❌ Blockerad</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <label>Uppgiftsbeskrivning:</label>
-                        <input type="text" id="update-title" placeholder="Vad har du gjort?" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
-                    </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <label>Detaljer:</label>
-                        <textarea id="update-details" placeholder="Beskriv ditt arbete..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; height: 100px;"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn" style="background: var(--success); color: white; width: 100%;">
-                        ➕ Publicera Uppdatering
-                    </button>
-                </form>
-            </div>
-
-            <div id="team-updates-list">
-                <div style="background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; border-left: 4px solid var(--success);">
-                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
-                        <h4 style="margin: 0;">Dijkstra Dashboard Implementation</h4>
-                        <span style="background: var(--success); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem;">✅ Avslutad</span>
-                    </div>
-                    <p><strong>Kaled Osman</strong> - Jag har implementerat hela dashboarden med Dijkstra-algoritmen och gjort den responsiv för alla enheter.</p>
-                    <small style="color: #666;">Publicerad: 2024-01-15</small>
-                </div>
-
-                <div style="background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; border-left: 4px solid var(--warning);">
-                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
-                        <h4 style="margin: 0;">OSPF Protocol Research</h4>
-                        <span style="background: var(--warning); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem;">🔄 Pågående</span>
-                    </div>
-                    <p><strong>Fahad Hussain</strong> - Forskar om OSPF-protokoll och hur Dijkstra används i praktiska nätverkslösningar.</p>
-                    <small style="color: #666;">Publicerad: 2024-01-14</small>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Assistant Section -->
-        <section id="ai-assistant" class="section">
-            <div class="section-header">
-                <h2>🤖 AI Assistant - Dijkstra Helper</h2>
-            </div>
-
-            <div class="ai-chat-container" id="aiChatContainer">
-                <div class="ai-message">
-                    <strong>🤖 AI Assistant:</strong> Hej! Jag är här för att hjälpa dig med Dijkstra-algoritmen och ditt projekt. Ställ vilken fråga som helst!
-                </div>
-                <div class="user-message">
-                    <strong>👤 Du:</strong> Hur fungerar Dijkstra-algoritmen?
-                </div>
-                <div class="ai-message">
-                    <strong>🤖 AI Assistant:</strong> Dijkstra-algoritmen hittar den kortaste vägen mellan noder i en graf med positiva vikter. Den använder en prioritetskö för att alltid expandera den nod med minst kända avstånd!
-                </div>
-            </div>
-
-            <div class="chat-input">
-                <input type="text" id="aiChatInput" placeholder="Skriv din fråga om Dijkstra eller projektet...">
-                <button class="btn" style="background: var(--secondary); color: white;" onclick="sendAIMessage()">
-                    <i class="fas fa-paper-plane"></i> Skicka
-                </button>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h3>🚀 Snabbkommandon</h3>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1rem;">
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Vad är tidskomplexiteten för Dijkstra?')">
-                        ⏱️ Tidskomplexitet
-                    </button>
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Ge exempel på Dijkstra i nätverk')">
-                        🌐 Nätverksanvändning
-                    </button>
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Hur implementerar jag Dijkstra i Python?')">
-                        🐍 Python Implementation
-                    </button>
-                    <button class="btn" style="background: var(--light);" onclick="quickQuestion('Vad är skillnaden mellan Dijkstra och A*?')">
-                        🔍 Dijkstra vs A*
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Practical Tasks Section -->
-        <section id="practical-tasks" class="section">
-            <div class="section-header">
-                <h2>🎯 Practical Tasks - Projektuppgifter</h2>
-                <button class="btn" style="background: var(--success); color: white;" onclick="addNewTask()">
-                    <i class="fas fa-plus"></i> Ny Uppgift
-                </button>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number" id="total-tasks">8</div>
-                    <div class="stat-label">Totalt Uppgifter</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="completed-tasks">3</div>
-                    <div class="stat-label">Avslutade</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="inprogress-tasks">4</div>
-                    <div class="stat-label">Pågående</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="pending-tasks">1</div>
-                    <div class="stat-label">Väntande</div>
-                </div>
-            </div>
-
-            <div class="task-list" id="tasks-list">
-                <div class="task-card">
-                    <div class="task-header">
-                        <div class="task-title">Implementera Dijkstra Dashboard</div>
-                        <span class="task-priority priority-high">Hög Prioritiet</span>
-                    </div>
-                    <div class="task-meta">
-                        <span><i class="fas fa-user"></i> Kaled Osman</span>
-                        <span><i class="fas fa-calendar"></i> 2024-01-20</span>
-                    </div>
-                    <p>Bygg hela dashboard med Dijkstra visualisering och responsiv design</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%"></div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn complete-btn" style="background: var(--success); color: white;">
-    <i class="fas fa-check"></i> Markera klar
-</button>
-<button class="btn edit-btn" style="background: var(--warning); color: white;">
-    <i class="fas fa-edit"></i> Redigera
-</button>
-<button class="btn delete-btn" style="background: var(--accent); color: white;">
-    <i class="fas fa-trash"></i> Radera
-</button>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="task-card">
-                    <div class="task-header">
-                        <div class="task-title">OSPF Research & Documentation</div>
-                        <span class="task-priority priority-medium">Medel Prioritiet</span>
-                    </div>
-                    <div class="task-meta">
-                        <span><i class="fas fa-user"></i> Fahad Hussain</span>
-                        <span><i class="fas fa-calendar"></i> 2024-01-25</span>
-                    </div>
-                    <p>Forskningsarbete om OSPF-protokoll och praktisk tillämpning av Dijkstra</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 75%"></div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn" style="background: var(--success); color: white;">
-                            <i class="fas fa-check"></i> Markera klar
-                        </button>
-                        <button class="btn" style="background: var(--warning); color: white;">
-                            <i class="fas fa-edit"></i> Redigera
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-      <script>
-// =============================================
-// 🚀 DIJKSTRA DASHBOARD - COMPLETE JAVASCRIPT
-// =============================================
-
-// 🔧 الوظائف الأساسية
-function showNotification(message, type = 'success') {
-    const notificationContainer = document.getElementById('notificationContainer');
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <span>${message}</span>
-        <button class="notification-close" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
+<!-- HELA PROJEKTET -->
+<section id="hela-projektet" class="section active">
+    <div class="section-header">
+        <h2>📁 HELA PROJEKTET</h2>
+        <button class="btn" style="background: var(--primary); color:white;" onclick="showNotification('Dokumentation exporterad!', 'success')">
+            <i class="fas fa-download"></i> Export
         </button>
-    `;
-    notificationContainer.appendChild(notification);
-    setTimeout(() => notification.remove(), 5000);
-}
+    </div>
+    <div style="background:var(--primary); color:white; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+        <h3>🚀 Sammanfattning</h3>
+        <p>Grupp 1 - Full-Stack Dashboard med Algorithm Visualizer</p>
+    </div>
+    <h4>Projektmål</h4>
+    <ul>
+        <li>CRUD Dashboard</li>
+        <li>Algorithm Visualizer (Dijkstra)</li>
+        <li>Full-Stack Utveckling</li>
+    </ul>
+    <h4>Teknisk Stack</h4>
+    <ul>
+        <li>Backend: Python Flask</li>
+        <li>Frontend: HTML/CSS/JS</li>
+        <li>Data: JSON</li>
+    </ul>
+</section>
 
-// 👥 فريق Dashboard
-function initializeTeamDashboard() {
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const row = this.closest('tr');
-            editTeamMember(row);
-        });
-    });
-    
-    document.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const row = this.closest('tr');
-            const name = row.cells[1].textContent;
-            if (confirm(`حذف ${name}؟`)) {
-                row.remove();
-                updateTeamStats();
-                showNotification('تم الحذف!', 'success');
-            }
-        });
-    });
-}
+<!-- DIJKSTRA -->
+<section id="dijkstra-algorithm" class="section">
+    <div class="section-header">
+        <h2>🔍 Dijkstra Algorithm - Steg för Steg</h2>
+    </div>
+    <div class="stats-container">
+        <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Servrar</div></div>
+        <div class="stat-card"><div class="stat-number">13</div><div class="stat-label">Kortaste Väg (ms)</div></div>
+        <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Optimering</div></div>
+    </div>
+    <pre>// Server nätverk
+servers = {
+'WebServer': {'Database':5,'Cache':2},
+'Database': {'Backup':8,'WebServer':5},
+'Cache': {'CDN':3,'WebServer':2},
+'CDN': {'Cache':3},
+'Backup': {'Database':8}
+}</pre>
+    <div style="background: var(--success); color:white; padding:1rem; border-radius:8px; margin-top:1rem;">
+        <p>Start: WebServer (0)</p>
+        <p>Steg 1: Grannar → Database=5, Cache=2</p>
+        <p>Steg 2: Välj Cache → hitta CDN=5</p>
+        <p>Steg 3: Välj Database → hitta Backup=13</p>
+        <strong>Resultat: Kortaste vägar funna ✅</strong>
+    </div>
+</section>
 
-function editTeamMember(row) {
-    const name = prompt('الاسم:', row.cells[1].textContent);
-    const role = prompt('الدور:', row.cells[2].textContent);
-    const department = prompt('القسم:', row.cells[3].textContent);
-    const contribution = prompt('المساهمة:', row.cells[4].textContent);
-    
-    if (name && role) {
-        row.cells[1].textContent = name;
-        row.cells[2].textContent = role;
-        row.cells[3].textContent = department;
-        row.cells[4].textContent = contribution;
-        showNotification('تم التحديث!', 'success');
-    }
-}
+<!-- Dokumentation -->
+<section id="dokumentation" class="section">
+    <div class="section-header">
+        <h2>📚 Dokumentation</h2>
+    </div>
+    <h4>Av Grupp 1</h4>
+    <p>Fahad, Stefan, Kaled, Marcus, Jens, Luwam</p>
+    <p>Dijkstra används för kortaste väg i nätverk, spel och design.</p>
+</section>
 
-function updateTeamStats() {
-    const members = document.querySelectorAll('.team-table tbody tr').length;
-    document.querySelector('#team-dashboard .stat-card:nth-child(1) .stat-number').textContent = members;
-}
-
-// 📝 تحديثات الفريق
-function enableTeamUpdates() {
-    const form = document.getElementById('team-update-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const author = document.getElementById('update-author').value;
-            const status = document.getElementById('update-status').value;
-            const title = document.getElementById('update-title').value;
-            const details = document.getElementById('update-details').value;
-            
-            if (title && details) {
-                addTeamUpdate(author, status, title, details);
-                this.reset();
-            }
-        });
-    }
-}
-
-function addTeamUpdate(author, status, title, details) {
-    const updatesList = document.getElementById('team-updates-list');
-    const statusColors = {
-        'completed': '#27ae60', 'in-progress': '#f39c12', 
-        'planned': '#3498db', 'blocked': '#e74c3c'
-    };
-    
-    const updateHTML = `
-        <div style="background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; border-left: 4px solid ${statusColors[status]}">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <h4 style="margin: 0;">${title}</h4>
-                <span style="background: ${statusColors[status]}; color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem;">
-                    ${status === 'completed' ? '✅' : status === 'in-progress' ? '🔄' : status === 'planned' ? '📅' : '❌'} 
-                    ${status}
-                </span>
-            </div>
-            <p><strong>${author}</strong> - ${details}</p>
-            <small style="color: #666;">${new Date().toLocaleDateString('sv-SE')}</small>
+<!-- Team Collaboration -->
+<section id="team-collaboration" class="section">
+    <div class="section-header"><h2>📝 Team Collaboration</h2></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div style="background:var(--light); padding:1rem; border-radius:8px;">
+            <h4>➕ Lägg till uppgift</h4>
+            <form id="assignment-form">
+                <input type="text" id="task-name" placeholder="Uppgiftsnamn" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;">
+                <textarea id="task-desc" placeholder="Beskrivning" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
+                <select id="task-assignee" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;">
+                    <option value="Kaled Osman">Kaled Osman</option>
+                    <option value="Fahad Hussain">Fahad Hussain</option>
+                </select>
+                <button class="btn" style="background:var(--success); color:white; width:100%;">➕ Lägg till</button>
+            </form>
         </div>
-    `;
-    
-    updatesList.insertAdjacentHTML('afterbegin', updateHTML);
-    showNotification('تم النشر!', 'success');
+        <div style="background:var(--light); padding:1rem; border-radius:8px;">
+            <h4>📋 Aktuella uppgifter</h4>
+            <div id="assignments-list"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Updates -->
+<section id="team-updates" class="section">
+    <div class="section-header"><h2>👥 Team Updates</h2></div>
+    <div style="background:var(--light); padding:1rem; border-radius:8px;">
+        <form id="team-update-form">
+            <input type="text" id="update-title" placeholder="Titel" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;">
+            <textarea id="update-details" placeholder="Detaljer" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
+            <select id="update-status" style="width:100%; padding:0.5rem; margin-bottom:0.5rem;">
+                <option value="completed">✅ Avslutad</option>
+                <option value="in-progress">🔄 Pågående</option>
+                <option value="planned">📅 Planerad</option>
+                <option value="blocked">❌ Blockerad</option>
+            </select>
+            <button class="btn" style="background:var(--success); color:white; width:100%;">➕ Publicera</button>
+        </form>
+    </div>
+    <div id="team-updates-list"></div>
+</section>
+
+<!-- Practical Tasks -->
+<section id="practical-tasks" class="section">
+    <div class="section-header"><h2>🎯 Tasks</h2>
+        <button class="btn" style="background:var(--success); color:white;" onclick="addNewTask()">➕ Ny Uppgift</button>
+    </div>
+    <div class="stats-container">
+        <div class="stat-card"><div class="stat-number" id="total-tasks">0</div><div class="stat-label">Totalt</div></div>
+        <div class="stat-card"><div class="stat-number" id="completed-tasks">0</div><div class="stat-label">Avslutade</div></div>
+        <div class="stat-card"><div class="stat-number" id="inprogress-tasks">0</div><div class="stat-label">Pågående</div></div>
+        <div class="stat-card"><div class="stat-number" id="pending-tasks">0</div><div class="stat-label">Väntande</div></div>
+    </div>
+    <div id="tasks-list"></div>
+</section>
+
+<!-- AI Assistant -->
+<section id="ai-assistant" class="section">
+    <div class="section-header"><h2>🤖 AI Assistant</h2></div>
+    <div class="ai-chat-container" id="aiChatContainer"></div>
+    <div class="chat-input">
+        <input type="text" id="aiChatInput" placeholder="Fråga AI...">
+        <button class="btn" style="background:var(--secondary); color:white;" onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i> Skicka</button>
+    </div>
+</section>
+
+<script>
+// Notifications
+function showNotification(msg,type='success'){
+    const container=document.getElementById('notificationContainer');
+    const note=document.createElement('div');
+    note.className='notification '+type;
+    note.innerHTML=`<span>${msg}</span><button class="notification-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+    container.appendChild(note);
+    setTimeout(()=>note.remove(),5000);
 }
 
-// 🎯 المهام العملية
-function addNewTask() {
-    const taskName = prompt('اسم المهمة:');
-    if (taskName) {
-        const tasksList = document.getElementById('tasks-list');
-        const newTask = document.createElement('div');
-        newTask.className = 'task-card';
-        newTask.innerHTML = `
-            <div class="task-header">
-                <div class="task-title">${taskName}</div>
-                <span class="task-priority priority-medium">متوسط</span>
-            </div>
-            <div class="task-meta">
-                <span><i class="fas fa-user"></i> Kaled Osman</span>
-                <span><i class="fas fa-calendar"></i> ${new Date().toISOString().split('T')[0]}</span>
-            </div>
-            <p>مهمة جديدة</p>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%"></div>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button class="btn complete-btn" style="background: #27ae60; color: white;">
-                    <i class="fas fa-check"></i> إكمال
-                </button>
-                <button class="btn edit-btn" style="background: #f39c12; color: white;">
-                    <i class="fas fa-edit"></i> تعديل
-                </button>
-                <button class="btn delete-btn" style="background: #e74c3c; color: white;">
-                    <i class="fas fa-trash"></i> حذف
-                </button>
-            </div>
-        `;
-        tasksList.appendChild(newTask);
-        addTaskEventListeners(newTask);
-        updateTaskStats();
-    }
-}
-
-function addTaskEventListeners(taskElement) {
-    taskElement.querySelector('.complete-btn').addEventListener('click', function() {
-        taskElement.querySelector('.progress-fill').style.width = '100%';
-        taskElement.style.borderLeftColor = '#27ae60';
-        showNotification('تم الإكمال!', 'success');
-        updateTaskStats();
+// Navigation
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        document.querySelectorAll('.nav-tab,.section').forEach(el=>el.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.target).classList.add('active');
     });
-    
-    taskElement.querySelector('.edit-btn').addEventListener('click', function() {
-        const newTitle = prompt('تعديل الاسم:', taskElement.querySelector('.task-title').textContent);
-        if (newTitle) taskElement.querySelector('.task-title').textContent = newTitle;
-    });
-    
-    taskElement.querySelector('.delete-btn').addEventListener('click', function() {
-        if (confirm('حذف المهمة؟')) {
-            taskElement.remove();
-            updateTaskStats();
-        }
-    });
-}
-
-function updateTaskStats() {
-    const tasks = document.querySelectorAll('.task-card');
-    const total = tasks.length;
-    const completed = Array.from(tasks).filter(t => t.querySelector('.progress-fill').style.width === '100%').length;
-    const inProgress = Array.from(tasks).filter(t => {
-        const w = t.querySelector('.progress-fill').style.width;
-        return w !== '100%' && w !== '0%';
-    }).length;
-    const pending = total - completed - inProgress;
-    
-    document.getElementById('total-tasks').textContent = total;
-    document.getElementById('completed-tasks').textContent = completed;
-    document.getElementById('inprogress-tasks').textContent = inProgress;
-    document.getElementById('pending-tasks').textContent = pending;
-}
-
-// 🤖 المساعد الذكي
-function sendAIMessage() {
-    const input = document.getElementById('aiChatInput');
-    const message = input.value.trim();
-    if (message) {
-        const chatContainer = document.getElementById('aiChatContainer');
-        
-        const userMsg = document.createElement('div');
-        userMsg.className = 'user-message';
-        userMsg.innerHTML = `<strong>👤 أنت:</strong> ${message}`;
-        chatContainer.appendChild(userMsg);
-        
-        setTimeout(() => {
-            const aiResponse = getAIResponse(message);
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'ai-message';
-            aiMsg.innerHTML = `<strong>🤖 مساعد:</strong> ${aiResponse}`;
-            chatContainer.appendChild(aiMsg);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }, 1000);
-        
-        input.value = '';
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-}
-
-function quickQuestion(question) {
-    document.getElementById('aiChatInput').value = question;
-    sendAIMessage();
-}
-
-function getAIResponse(question) {
-    const responses = {
-        'tidskomplexitet': 'Dijkstra: O(V²) مع مصفوفة أو O(E + V log V) مع قائمة أولوية!',
-        'nätverk': 'يستخدم Dijkstra في OSPF لإيجاد أقصر المسارات بين الموجهات!',
-        'python': 'في Python، استخدم heapq لتنفيذ فعال لـ Dijkstra!',
-        'skillnad': 'Dijkstra لأقصر المسارات، A* يستخدم الاستدلال للبحث الأسرع!'
-    };
-    
-    const q = question.toLowerCase();
-    for (const [key, response] of Object.entries(responses)) {
-        if (q.includes(key)) return response;
-    }
-    
-    return 'شكراً لسؤالك عن Dijkstra! يمكنني المساعدة في التنفيذ والتعقيد والتطبيقات العملية.';
-}
-
-// 🚀 التهيئة
-document.addEventListener('DOMContentLoaded', function() {
-    // التنقل
-    document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.nav-tab, .section').forEach(el => el.classList.remove('active'));
-            tab.classList.add('active');
-            document.getElementById(tab.dataset.target).classList.add('active');
-        });
-    });
-    
-    // تهيئة المكونات
-    initializeTeamDashboard();
-    enableTeamUpdates();
-    
-    // المهام الحالية
-    document.querySelectorAll('.task-card').forEach(addTaskEventListeners);
-    updateTaskStats();
-    
-    // Enter في الدردشة
-    document.getElementById('aiChatInput')?.addEventListener('keypress', e => {
-        if (e.key === 'Enter') sendAIMessage();
-    });
-    
-    // Sync Team
-    document.querySelector('#team-dashboard .btn')?.addEventListener('click', () => {
-        showNotification('تم المزامنة!', 'success');
-    });
-    
-    showNotification('مرحباً في Dashboard!', 'info');
 });
+
+// Tasks
+function addNewTask(){
+    const name=prompt('Uppgiftsnamn:');
+    if(!name)return;
+    const list=document.getElementById('tasks-list');
+    const task=document.createElement('div');
+    task.className='task-card';
+    task.innerHTML=`<div class="task-header"><div class="task-title">${name}</div><span class="task-priority priority-medium">Medel</span></div>
+        <div class="task-meta"><span><i class="fas fa-user"></i> Kaled Osman</span><span><i class="fas fa-calendar"></i> ${new Date().toISOString().split('T')[0]}</span></div>
+        <p>Ny uppgift</p><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+        <button class="btn complete-btn" style="background:#27ae60;color:white;"><i class="fas fa-check"></i> Klar</button>
+        <button class="btn edit-btn" style="background:#f39c12;color:white;"><i class="fas fa-edit"></i> Redigera</button>
+        <button class="btn delete-btn" style="background:#e74c3c;color:white;"><i class="fas fa-trash"></i> Radera</button></div>`;
+    list.appendChild(task);
+    addTaskEventListeners(task);
+    updateTaskStats();
+}
+function addTaskEventListeners(t){
+    t.querySelector('.complete-btn').addEventListener('click',()=>{t.querySelector('.progress-fill').style.width='100%';showNotification('Uppgift klar!','success');updateTaskStats();});
+    t.querySelector('.edit-btn').addEventListener('click',()=>{const newT=prompt('Ny titel:',t.querySelector('.task-title').textContent);if(newT)t.querySelector('.task-title').textContent=newT;});
+    t.querySelector('.delete-btn').addEventListener('click',()=>{if(confirm('Radera uppgift?')){t.remove();updateTaskStats();}});
+}
+function updateTaskStats(){
+    const tasks=document.querySelectorAll('.task-card');
+    const total=tasks.length;
+    const completed=[...tasks].filter(t=>t.querySelector('.progress-fill').style.width==='100%').length;
+    const inprogress=[...tasks].filter(t=>{const w=t.querySelector('.progress-fill').style.width;return w!=='100%'&&w!=='0%';}).length;
+    const pending=total-completed-inprogress;
+    document.getElementById('total-tasks').textContent=total;
+    document.getElementById('completed-tasks').textContent=completed;
+    document.getElementById('inprogress-tasks').textContent=inprogress;
+    document.getElementById('pending-tasks').textContent=pending;
+}
+
+// AI
+function sendAIMessage(){
+    const input=document.getElementById('aiChatInput'); const msg=input.value.trim(); if(!msg)return;
+    const chat=document.getElementById('aiChatContainer');
+    const userMsg=document.createElement('div'); userMsg.className='user-message'; userMsg.innerHTML=`<strong>👤 Du:</strong> ${msg}`; chat.appendChild(userMsg);
+    setTimeout(()=>{ const ai=document.createElement('div'); ai.className='ai-message'; ai.innerHTML=`<strong>🤖 AI:</strong> ${getAIResponse(msg)}`; chat.appendChild(ai); chat.scrollTop=chat.scrollHeight;},500);
+    input.value=''; chat.scrollTop=chat.scrollHeight;
+}
+function getAIResponse(q){q=q.toLowerCase(); if(q.includes('tidskomplexitet'))return 'O(V²) matris eller O(E+V log V) med prioritetskö.'; if(q.includes('python'))return 'Använd heapq i Python.'; if(q.includes('nätverk'))return 'OSPF använder Dijkstra för kortaste väg.'; if(q.includes('skillnad'))return 'Dijkstra för kortaste väg, A* använder heuristik.'; return 'Jag kan hjälpa dig med Dijkstra, uppgifter och praktiska tips!';}
+
+document.addEventListener('DOMContentLoaded',()=>{showNotification('Välkommen!','info');});
+
 </script>
 </body>
-</html>  
-</body>
 </html>
+// ===================== Mohammed Feedback =====================
+
+// Lägg till knapp och logik för team updates
+function enableMohammedFeedback() {
+    const updatesList = document.getElementById('team-updates-list');
+    updatesList.querySelectorAll('.team-update').forEach(update => {
+        addFeedbackButton(update);
+    });
+}
+
+// Skapa knapp för feedback
+function addFeedbackButton(updateElement) {
+    if(updateElement.querySelector('.feedback-btn')) return; // redan finns
+    const btn = document.createElement('button');
+    btn.textContent = '💬 Feedback från Mohammed';
+    btn.className = 'btn';
+    btn.style.background = '#8e44ad';
+    btn.style.color = 'white';
+    btn.style.marginTop = '5px';
+    btn.addEventListener('click', () => {
+        const comment = prompt('Skriv feedback från Mohammed:');
+        if(comment) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.style.background = '#f0e6f7';
+            feedbackDiv.style.padding = '5px 10px';
+            feedbackDiv.style.borderRadius = '5px';
+            feedbackDiv.style.marginTop = '5px';
+            feedbackDiv.innerHTML = `<strong>Mohammed:</strong> ${comment}`;
+            updateElement.appendChild(feedbackDiv);
+            showNotification('Feedback tillagd!', 'info');
+        }
+    });
+    updateElement.appendChild(btn);
+}
+
+// ===================== Tasks Feedback =====================
+function enableTaskFeedback() {
+    const tasksList = document.getElementById('tasks-list');
+    tasksList.querySelectorAll('.task-card').forEach(task => {
+        addTaskFeedbackButton(task);
+    });
+}
+
+function addTaskFeedbackButton(taskElement) {
+    if(taskElement.querySelector('.task-feedback-btn')) return;
+    const btn = document.createElement('button');
+    btn.textContent = '💬 Feedback från Mohammed';
+    btn.className = 'btn task-feedback-btn';
+    btn.style.background = '#8e44ad';
+    btn.style.color = 'white';
+    btn.style.marginTop = '5px';
+    btn.addEventListener('click', () => {
+        const comment = prompt('Skriv feedback från Mohammed:');
+        if(comment) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.style.background = '#f0e6f7';
+            feedbackDiv.style.padding = '5px 10px';
+            feedbackDiv.style.borderRadius = '5px';
+            feedbackDiv.style.marginTop = '5px';
+            feedbackDiv.innerHTML = `<strong>Mohammed:</strong> ${comment}`;
+            taskElement.appendChild(feedbackDiv);
+            showNotification('Feedback tillagd!', 'info');
+        }
+    });
+    taskElement.appendChild(btn);
+}
+
+// ===================== Initiering =====================
+document.addEventListener('DOMContentLoaded', function(){
+    enableMohammedFeedback();
+    enableTaskFeedback();
+});
