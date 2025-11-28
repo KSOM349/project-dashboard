@@ -65,7 +65,7 @@
             background: linear-gradient(135deg, #2563eb, #1e40af);
         }
 
-        .login-modal, .add-content-modal, .register-modal, .forgot-password-modal, .user-management-modal {
+        .login-modal, .add-content-modal, .register-modal, .forgot-password-modal, .user-management-modal, .team-chat-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -76,7 +76,7 @@
             z-index: 1000;
         }
 
-        .login-modal.active, .add-content-modal.active, .register-modal.active, .forgot-password-modal.active, .user-management-modal.active {
+        .login-modal.active, .add-content-modal.active, .register-modal.active, .forgot-password-modal.active, .user-management-modal.active, .team-chat-modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -144,12 +144,6 @@
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
-        }
-
-        .typing-indicator {
-            font-style: italic;
-            color: #6B7280;
-            font-size: 0.875rem;
         }
 
         .realtime-notification {
@@ -267,8 +261,85 @@
         </div>
     </div>
 
-    <!-- NEW: Live Team Chat Modal -->
-    <div class="login-modal" id="teamChatModal">
+    <!-- Forgot Password Modal -->
+    <div class="forgot-password-modal" id="forgotPasswordModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Reset Password</h2>
+            <form id="forgotPasswordForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email Address</label>
+                    <input type="email" id="resetEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl transition-all font-medium">
+                    Send Reset Link
+                </button>
+            </form>
+            <div class="mt-4 text-center">
+                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
+                    Back to Login
+                </button>
+            </div>
+            <button onclick="closeForgotPassword()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- User Management Modal -->
+    <div class="user-management-modal" id="userManagementModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-4xl w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">User Management</h2>
+            <div class="space-y-4">
+                <div id="usersList" class="space-y-3">
+                    <!-- Users will be displayed here -->
+                </div>
+            </div>
+            <button onclick="closeUserManagement()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Content Modal -->
+    <div class="add-content-modal" id="addContentModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white" id="modalTitle">Add New Content</h2>
+            <form id="addContentForm" class="space-y-4">
+                <input type="hidden" id="contentSection">
+                <input type="hidden" id="editContentId">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" id="contentTitle" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Content</label>
+                    <textarea id="contentDescription" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-40" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Author</label>
+                    <select id="contentAuthor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="Kaled Osman">Kaled Osman</option>
+                        <option value="Fahad Hussain">Fahad Hussain</option>
+                        <option value="Stefan Österberg">Stefan Österberg</option>
+                        <option value="Marcus Tibell">Marcus Tibell</option>
+                        <option value="Jens Annell">Jens Annell</option>
+                        <option value="Luwam">Luwam</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">
+                        <span id="submitButtonText">Add Content</span>
+                    </button>
+                    <button type="button" onclick="closeAddContent()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NEW: Team Chat Modal -->
+    <div class="team-chat-modal" id="teamChatModal">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl h-[80vh] flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Chat</h2>
@@ -466,7 +537,7 @@
                     </div>
                 </div>
 
-                <!-- Other sections remain exactly the same -->
+                <!-- Other sections -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
@@ -477,7 +548,6 @@
                     <div id="project-documentation-content" class="space-y-4 mb-8"></div>
                 </div>
 
-                <!-- Team Collaboration Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
@@ -486,10 +556,47 @@
                         </button>
                     </div>
                     <div id="team-collaboration-content" class="space-y-4 mb-8"></div>
-                    <!-- Existing team collaboration content remains -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
+                            <form id="assignment-form" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Name:</label>
+                                    <input type="text" id="task-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description:</label>
+                                    <textarea id="task-desc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Assignee:</label>
+                                    <select id="task-assignee" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                        <option value="Kaled Osman">Kaled Osman</option>
+                                        <option value="Fahad Hussain">Fahad Hussain</option>
+                                        <option value="Stefan Österberg">Stefan Österberg</option>
+                                        <option value="Marcus Tibell">Marcus Tibell</option>
+                                        <option value="Jens Annell">Jens Annell</option>
+                                        <option value="Luwam">Luwam</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Add Task
+                                </button>
+                            </form>
+                        </div>
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
+                            <div id="assignments-list" class="space-y-3">
+                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
+                                    <strong class="text-gray-800 dark:text-white">Improve Dijkstra Algorithm</strong>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add performance improvements and complexity analysis</p>
+                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Kaled Osman</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Team Updates Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
@@ -498,10 +605,49 @@
                         </button>
                     </div>
                     <div id="team-updates-content" class="space-y-4 mb-8"></div>
-                    <!-- Existing team updates content remains -->
+                    <div class="space-y-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
+                            <form id="team-update-form" class="space-y-3">
+                                <div class="grid md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Your Name:</label>
+                                        <select id="update-author" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="Kaled Osman">Kaled Osman</option>
+                                            <option value="Fahad Hussain">Fahad Hussain</option>
+                                            <option value="Stefan Österberg">Stefan Österberg</option>
+                                            <option value="Marcus Tibell">Marcus Tibell</option>
+                                            <option value="Jens Annell">Jens Annell</option>
+                                            <option value="Luwam">Luwam</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Status:</label>
+                                        <select id="update-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="completed">Completed</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="planned">Planned</option>
+                                            <option value="blocked">Blocked</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Description:</label>
+                                    <input type="text" id="update-title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Details:</label>
+                                    <textarea id="update-details" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24" placeholder="Describe your work..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Publish Update
+                                </button>
+                            </form>
+                        </div>
+                        <div id="team-updates-list" class="space-y-4"></div>
+                    </div>
                 </div>
 
-                <!-- AI Assistant Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
@@ -510,7 +656,33 @@
                         </button>
                     </div>
                     <div id="ai-assistant-content" class="space-y-4 mb-8"></div>
-                    <!-- Existing AI assistant content remains -->
+                    <div class="space-y-4">
+                        <div class="ai-chat-container border border-gray-300 dark:border-gray-600 rounded-lg p-4 h-64 overflow-y-auto theme-transition bg-white dark:bg-gray-800">
+                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2">
+                                <strong class="text-gray-800 dark:text-white">AI Assistant:</strong> 
+                                <span class="text-gray-700 dark:text-gray-300">Hello! I'm here to help you with Security Chaos Engineering and Cloud Networks. Ask me anything!</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="aiChatInput" class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition bg-white dark:bg-gray-700 text-gray-800 dark:text-white" placeholder="Ask about Security Chaos Engineering or Cloud Networks...">
+                            <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Send
+                            </button>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Quick Commands</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="quickQuestion('What is Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    Security Chaos Engineering
+                                </button>
+                                <button onclick="quickQuestion('How to apply Security Chaos Engineering in AWS?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    AWS Implementation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -529,14 +701,11 @@
                 this.activityHistory = [];
             }
 
-            // Simulate WebSocket connection
             connect(user) {
                 this.currentUser = user;
                 
-                // Simulate WebSocket behavior
                 this.simulatedWebSocket = {
                     send: (data) => {
-                        // In real implementation, this would send to server
                         console.log('WebSocket send:', data);
                         this.handleIncomingMessage(data);
                     },
@@ -545,11 +714,9 @@
                     }
                 };
 
-                // Join the "room"
                 this.broadcastUserJoin(user);
                 this.updateUIForRealtime();
                 
-                // Start simulating other users
                 this.simulateOtherUsers();
             }
 
@@ -600,16 +767,12 @@
             }
 
             broadcastMessage(message) {
-                // Store activity
                 this.activityHistory.push(message);
                 if (this.activityHistory.length > 50) {
                     this.activityHistory.shift();
                 }
 
-                // Update local UI
                 this.handleIncomingMessage(message);
-
-                // In real implementation, this would broadcast to other clients via server
                 console.log('Broadcasting:', message);
             }
 
@@ -634,6 +797,7 @@
                 this.connectedUsers.set(user.id, user);
                 this.updateOnlineUsersList();
                 this.addActivity(`${user.name} joined the dashboard`, 'user_join');
+                showRealtimeNotification(`${user.name} joined the dashboard`);
             }
 
             handleUserLeave(user) {
@@ -643,7 +807,6 @@
             }
 
             handleContentUpdate(content, user) {
-                // Update content in real-time across all sections
                 if (user.id !== this.currentUser.id) {
                     this.addActivity(`${user.name} added content to ${content.section}`, 'content_update');
                     renderSectionContents(content.section);
@@ -700,7 +863,6 @@
                     `;
                     activityList.insertBefore(activityElement, activityList.firstChild);
                     
-                    // Show activity feed
                     document.getElementById('liveActivityFeed').classList.remove('hidden');
                 }
             }
@@ -724,7 +886,6 @@
             updateUIForRealtime() {
                 const isConnected = this.simulatedWebSocket !== null;
                 
-                // Show/hide realtime elements
                 document.getElementById('realtimeStatus').classList.toggle('hidden', !isConnected);
                 document.getElementById('liveActivity').classList.toggle('hidden', !isConnected);
                 document.getElementById('liveTeamSection').classList.toggle('hidden', !isConnected);
@@ -734,7 +895,6 @@
                 }
             }
 
-            // Simulate other users for demo purposes
             simulateOtherUsers() {
                 const demoUsers = [
                     { id: '2', name: 'Kaled Osman', role: 'user' },
@@ -742,14 +902,12 @@
                     { id: '4', name: 'Stefan Österberg', role: 'user' }
                 ];
 
-                // Simulate users joining
                 demoUsers.forEach((user, index) => {
                     setTimeout(() => {
                         this.handleUserJoin(user);
                     }, (index + 1) * 2000);
                 });
 
-                // Simulate some activity
                 setTimeout(() => {
                     this.addActivity('Kaled Osman added content to Project Documentation', 'content_update');
                 }, 5000);
@@ -760,10 +918,8 @@
             }
         }
 
-        // Initialize realtime system
         const realtimeSystem = new RealtimeSystem();
 
-        // NEW: Realtime notification function
         function showRealtimeNotification(message) {
             const notification = document.createElement('div');
             notification.className = 'realtime-notification';
@@ -780,7 +936,6 @@
             }, 5000);
         }
 
-        // NEW: Team Chat Functions
         function openTeamChat() {
             if (!currentUser) {
                 showNotification('Please login to use team chat', 'error');
@@ -807,11 +962,10 @@
         // EXISTING CODE (UNCHANGED)
         // =============================================
 
-        // User Management System
         let users = JSON.parse(localStorage.getItem('dashboardUsers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
 
-        // Create default admin user if not exists
         function initializeDefaultAdmin() {
             if (users.length === 0) {
                 const defaultAdmin = {
@@ -829,12 +983,15 @@
             }
         }
 
-        // Save users to localStorage
         function saveUsers() {
             localStorage.setItem('dashboardUsers', JSON.stringify(users));
         }
 
-        // MODIFIED: Login functionality with realtime connection
+        function saveContents() {
+            localStorage.setItem('userContents', JSON.stringify(userContents));
+        }
+
+        // MODIFIED: Login with realtime
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
@@ -849,70 +1006,23 @@
                 closeLogin();
                 showNotification(`Welcome back, ${user.name}!`, 'success');
                 
-                // NEW: Connect to realtime system
+                // NEW: Connect to realtime
                 realtimeSystem.connect(user);
             } else {
                 showNotification('Invalid username or password', 'error');
             }
         });
 
-        // MODIFIED: Logout with realtime disconnect
+        // MODIFIED: Logout with realtime
         function logout() {
-            // NEW: Disconnect from realtime system
             realtimeSystem.disconnect();
-            
             currentUser = null;
             localStorage.removeItem('currentUser');
             updateUIAfterLogout();
             showNotification('Logged out successfully', 'info');
         }
 
-        // MODIFIED: Update UI after login to show realtime features
-        function updateUIAfterLogin() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('userSection').classList.remove('hidden');
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Team Member';
-            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-            document.getElementById('loginStatus').textContent = `Welcome, ${currentUser.name}`;
-
-            // Show admin button only for admin users
-            if (currentUser.role === 'admin') {
-                document.getElementById('adminButton').classList.remove('hidden');
-            }
-        }
-
-        // MODIFIED: Open Add Content with realtime broadcast
-        function openAddContent(section, contentId = null) {
-            if (!currentUser) {
-                showNotification('Please login to add content', 'error');
-                openLogin();
-                return;
-            }
-
-            document.getElementById('contentSection').value = section;
-            document.getElementById('editContentId').value = contentId || '';
-            
-            if (contentId) {
-                document.getElementById('modalTitle').textContent = 'Edit Content';
-                document.getElementById('submitButtonText').textContent = 'Update Content';
-                const content = userContents[section].find(item => item.id === contentId);
-                if (content) {
-                    document.getElementById('contentTitle').value = content.title;
-                    document.getElementById('contentDescription').value = content.description;
-                    document.getElementById('contentAuthor').value = content.author;
-                }
-            } else {
-                document.getElementById('modalTitle').textContent = 'Add New Content';
-                document.getElementById('submitButtonText').textContent = 'Add Content';
-                document.getElementById('addContentForm').reset();
-                document.getElementById('contentAuthor').value = currentUser.name;
-            }
-            
-            document.getElementById('addContentModal').classList.add('active');
-        }
-
-        // MODIFIED: Add Content with realtime broadcast
+        // MODIFIED: Add content with realtime
         document.getElementById('addContentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -957,7 +1067,7 @@
             closeAddContent();
             showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
             
-            // NEW: Broadcast content update to other users
+            // NEW: Broadcast to other users
             if (realtimeSystem && currentUser) {
                 realtimeSystem.broadcastContentUpdate({
                     ...content,
@@ -966,16 +1076,237 @@
             }
         });
 
-        // Rest of the existing functions remain exactly the same...
-        // [All other existing functions continue unchanged]
+        // Rest of existing functions...
+        function updateUIAfterLogin() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('userSection').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Team Member';
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('loginStatus').textContent = `Welcome, ${currentUser.name}`;
 
-        // Initialize the application
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminButton').classList.remove('hidden');
+            }
+        }
+
+        function updateUIAfterLogout() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('userSection').classList.add('hidden');
+            document.getElementById('loginStatus').textContent = 'Please login to access all features';
+            document.getElementById('adminButton').classList.add('hidden');
+        }
+
+        function openLogin() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLogin() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('loginForm').reset();
+        }
+
+        function showRegister() {
+            closeLogin();
+            document.getElementById('registerModal').classList.add('active');
+        }
+
+        function closeRegister() {
+            document.getElementById('registerModal').classList.remove('active');
+            document.getElementById('registerForm').reset();
+        }
+
+        function showForgotPassword() {
+            closeLogin();
+            document.getElementById('forgotPasswordModal').classList.add('active');
+        }
+
+        function closeForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+            document.getElementById('forgotPasswordForm').reset();
+        }
+
+        function showLogin() {
+            closeRegister();
+            closeForgotPassword();
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function openAddContent(section, contentId = null) {
+            if (!currentUser) {
+                showNotification('Please login to add content', 'error');
+                openLogin();
+                return;
+            }
+
+            document.getElementById('contentSection').value = section;
+            document.getElementById('editContentId').value = contentId || '';
+            
+            if (contentId) {
+                document.getElementById('modalTitle').textContent = 'Edit Content';
+                document.getElementById('submitButtonText').textContent = 'Update Content';
+                const content = userContents[section].find(item => item.id === contentId);
+                if (content) {
+                    document.getElementById('contentTitle').value = content.title;
+                    document.getElementById('contentDescription').value = content.description;
+                    document.getElementById('contentAuthor').value = content.author;
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = 'Add New Content';
+                document.getElementById('submitButtonText').textContent = 'Add Content';
+                document.getElementById('addContentForm').reset();
+                document.getElementById('contentAuthor').value = currentUser.name;
+            }
+            
+            document.getElementById('addContentModal').classList.add('active');
+        }
+
+        function closeAddContent() {
+            document.getElementById('addContentModal').classList.remove('active');
+        }
+
+        function renderSectionContents(section) {
+            const container = document.getElementById(`${section}-content`);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!userContents[section] || userContents[section].length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No content added yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userContents[section].forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.className = 'user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800';
+                contentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
+                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString('en-US')}</span>
+                    </div>
+                    ${content.updated ? `
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-500">
+                        <i class="fas fa-sync mr-1"></i> Updated: ${new Date(content.updated).toLocaleDateString('en-US')}
+                    </div>
+                    ` : ''}
+                `;
+                container.appendChild(contentElement);
+            });
+        }
+
+        function editContent(section, contentId) {
+            openAddContent(section, contentId);
+        }
+
+        function deleteContent(section, contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                userContents[section] = userContents[section].filter(item => item.id !== contentId);
+                saveContents();
+                renderSectionContents(section);
+                showNotification('Content deleted successfully!', 'success');
+            }
+        }
+
+        function initializeAllContents() {
+            const sections = ['overview', 'project-documentation', 'team-collaboration', 'team-updates', 'ai-assistant'];
+            sections.forEach(section => {
+                renderSectionContents(section);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+            
+            showNotification('Theme changed to ' + newTheme + ' mode', 'success');
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => {
+                        b.classList.remove('active-section');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    });
+                    this.classList.add('active-section');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    
+                    const sectionId = this.dataset.section;
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+        }
+
+        function fetchSystemData() {
+            showNotification('Fetching system data...', 'info');
+            setTimeout(() => {
+                showNotification('System data updated!', 'success');
+            }, 1000);
+        }
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             initializeDefaultAdmin();
             
             if (currentUser) {
                 updateUIAfterLogin();
-                // NEW: Connect to realtime system if user is logged in
                 realtimeSystem.connect(currentUser);
             }
 
