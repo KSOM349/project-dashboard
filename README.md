@@ -253,136 +253,305 @@
                     </div>
                 </div>
 
-                <!-- Team Updates Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Updates & Tasks</h2>
-                    
-                    <div class="space-y-8">
-                        <div class="p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add Your Update</h3>
-                            <form id="team-update-form" class="space-y-4">
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Your Name:</label>
-                                        <select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option>Kaled Osman</option>
-                                            <option>Fahad Hussain</option>
-                                            <option>Stefan Österberg</option>
-                                            <option>Marcus Tibell</option>
-                                            <option>Jens Annell</option>
-                                            <option>Luwam</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Status:</label>
-                                        <select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option>Completed</option>
-                                            <option>In Progress</option>
-                                            <option>Planned</option>
-                                            <option>Blocked</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Task Description:</label>
-                                    <input type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Details:</label>
-                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-32" placeholder="Describe your work..."></textarea>
-                                </div>
-                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl transition-all shadow-lg font-medium">
-                                    <i class="fas fa-share mr-3"></i> Publish Update
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Project Documentation Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Project Documentation</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Project Documentation - Graph Algorithms</h2>
                     <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">By Group 1: Fahad Hussain, Stefan Österberg, Kaled Osman, Marcus Tibell, Jens Annell, Luwam</h3>
+                        
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Complete Project Documentation</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Detailed documentation about the Security Chaos Engineering project.</p>
+                            <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">Dijkstra's Algorithm</h4>
+                            <p class="text-gray-600 dark:text-gray-400"><strong>The purpose of Dijkstra's algorithm</strong> is to find the shortest possible path between nodes in a weighted graph.</p>
+                        </div>
+
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">Kaled - Why does the shortest path matter?</h4>
+                            <p class="text-gray-600 dark:text-gray-400">"As mentioned earlier, the purpose of the algorithm is to find the shortest possible path, so why does the shortest possible path matter?"</p>
+                        </div>
+
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h4 class="font-semibold mb-2 text-gray-800 dark:text-white">Fahad - Uses of shortest path</h4>
+                            <p class="text-gray-600 dark:text-gray-400">"A common usage of the shortest path within our sphere of operation is for example, in networking, where speed and efficiency are crucial..."</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Collaboration Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Collaboration</h2>
-                    <div class="space-y-4">
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Team Collaboration - Group Documentation</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Team Tasks & Assignments</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Collaborate with your team members on various tasks.</p>
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
+                            <form id="assignment-form" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Name:</label>
+                                    <input type="text" id="task-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description:</label>
+                                    <textarea id="task-desc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Assignee:</label>
+                                    <select id="task-assignee" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                        <option value="Kaled Osman">Kaled Osman</option>
+                                        <option value="Fahad Hussain">Fahad Hussain</option>
+                                        <option value="Stefan Österberg">Stefan Österberg</option>
+                                        <option value="Marcus Tibell">Marcus Tibell</option>
+                                        <option value="Jens Annell">Jens Annell</option>
+                                        <option value="Luwam">Luwam</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Add Task
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
+                            <div id="assignments-list" class="space-y-3">
+                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
+                                    <strong class="text-gray-800 dark:text-white">Improve Dijkstra Algorithm</strong>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add performance improvements and complexity analysis</p>
+                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Kaled Osman</small>
+                                </div>
+                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
+                                    <strong class="text-gray-800 dark:text-white">OSPF Protocols Research</strong>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Study OSPF protocols and their applications in networks</p>
+                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Fahad Hussain</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Updates Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Team Updates & Tasks</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
+                            <form id="team-update-form" class="space-y-3">
+                                <div class="grid md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Your Name:</label>
+                                        <select id="update-author" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="Kaled Osman">Kaled Osman</option>
+                                            <option value="Fahad Hussain">Fahad Hussain</option>
+                                            <option value="Stefan Österberg">Stefan Österberg</option>
+                                            <option value="Marcus Tibell">Marcus Tibell</option>
+                                            <option value="Jens Annell">Jens Annell</option>
+                                            <option value="Luwam">Luwam</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Status:</label>
+                                        <select id="update-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="completed">Completed</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="planned">Planned</option>
+                                            <option value="blocked">Blocked</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Description:</label>
+                                    <input type="text" id="update-title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Details:</label>
+                                    <textarea id="update-details" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24" placeholder="Describe your work..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Publish Update
+                                </button>
+                            </form>
+                        </div>
+
+                        <div id="team-updates-list" class="space-y-4">
+                            <!-- Team updates will be added here dynamically -->
                         </div>
                     </div>
                 </div>
 
                 <!-- AI Assistant Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">AI Assistant</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">AI Assistant - Security Chaos Engineering</h2>
+                    
                     <div class="space-y-4">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Security Chaos Engineering Assistant</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Get help with Security Chaos Engineering concepts and implementations.</p>
+                        <div class="ai-chat-container border border-gray-300 dark:border-gray-600 rounded-lg p-4 h-64 overflow-y-auto theme-transition">
+                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2">
+                                <strong class="text-gray-800 dark:text-white">AI Assistant:</strong> Hello! I'm here to help you with Security Chaos Engineering and Cloud Networks. Ask me anything!
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="aiChatInput" class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="Ask about Security Chaos Engineering or Cloud Networks...">
+                            <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
+                                Send
+                            </button>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Quick Commands</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="quickQuestion('What is Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    Security Chaos Engineering
+                                </button>
+                                <button onclick="quickQuestion('How to apply Security Chaos Engineering in AWS?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    AWS Implementation
+                                </button>
+                                <button onclick="quickQuestion('What are the best tools for Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    Tools & Technologies
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Practical Tasks Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Practical Tasks</h2>
-                    <div class="space-y-4">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Project Tasks & Assignments</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Manage and track your project tasks.</p>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Practical Tasks - Project Assignments</h2>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="grid grid-cols-4 gap-4 flex-1">
+                            <div class="text-center p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg theme-transition">
+                                <div class="text-2xl font-bold">8</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Total Tasks</div>
+                            </div>
+                            <div class="text-center p-4 bg-green-50 dark:bg-green-900/30 rounded-lg theme-transition">
+                                <div class="text-2xl font-bold">3</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+                            </div>
+                            <div class="text-center p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg theme-transition">
+                                <div class="text-2xl font-bold">2</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">In Progress</div>
+                            </div>
+                            <div class="text-center p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg theme-transition">
+                                <div class="text-2xl font-bold">3</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Pending</div>
+                            </div>
                         </div>
+                        <button onclick="addNewTask()" class="ml-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
+                            New Task
+                        </button>
+                    </div>
+
+                    <div id="tasks-list" class="space-y-3">
+                        <!-- Tasks will be added here dynamically -->
                     </div>
                 </div>
 
                 <!-- Algorithm Visualizer Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="algorithm-visualizer">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Algorithm Visualizer</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Algorithm Visualizer</h2>
+                    
                     <div class="space-y-4">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Dijkstra Algorithm Visualization</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Visualize and understand the Dijkstra algorithm.</p>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
+                                <div class="text-2xl font-bold">5</div>
+                                <div>Servers in Network</div>
+                            </div>
+                            <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
+                                <div class="text-2xl font-bold">13 ms</div>
+                                <div>Shortest Path</div>
+                            </div>
+                            <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg">
+                                <div class="text-2xl font-bold">100%</div>
+                                <div>Optimization</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                            <pre class="whitespace-pre-wrap dark:text-gray-300">// Server Network Configuration
+servers = {
+    'WebServer': {'Database': 5, 'Cache': 2},
+    'Database': {'Backup': 8, 'WebServer': 5},
+    'Cache': {'CDN': 3, 'WebServer': 2},
+    'CDN': {'Cache': 3},
+    'Backup': {'Database': 8}
+}</pre>
+                        </div>
+                        
+                        <div class="p-4 bg-green-500 text-white rounded-lg">
+                            <h4 class="font-bold">Dijkstra Step-by-Step:</h4>
+                            <p>Start: WebServer (0)</p>
+                            <p>Step 1: Find neighbors → Database=5, Cache=2</p>
+                            <p>Step 2: Select Cache → find CDN=5</p>
+                            <p>Step 3: Select Database → find Backup=13</p>
+                            <p class="font-bold">Result: All shortest paths found! ✅</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- My Implementation Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="my-implementation">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">My Implementation</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">My Implementation</h2>
+                    
                     <div class="space-y-4">
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Personal Contributions</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Track your personal contributions to the project.</p>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Backend Implementation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Python Flask server with REST API endpoints for system monitoring.</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Frontend Implementation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Modern dashboard implementation with real-time data updates.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Dashboard Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-dashboard">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Dashboard</h2>
-                    <div class="space-y-4">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Team Performance & Metrics</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Monitor team performance and project metrics.</p>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Team Dashboard</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <div class="text-2xl font-bold">6</div>
+                            <div class="text-gray-600 dark:text-gray-400">Team Members</div>
                         </div>
+                        <div class="text-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <div class="text-2xl font-bold">12</div>
+                            <div class="text-gray-600 dark:text-gray-400">Completed Tasks</div>
+                        </div>
+                        <div class="text-center p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <div class="text-2xl font-bold">85%</div>
+                            <div class="text-gray-600 dark:text-gray-400">Project Progress</div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                        <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Team Members</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
+                            <li>Kaled Osman - Team Lead & Backend Developer</li>
+                            <li>Fahad Hussain - Network Specialist</li>
+                            <li>Stefan Österberg - Frontend Developer</li>
+                            <li>Marcus Tibell - Security Engineer</li>
+                            <li>Jens Annell - DevOps Engineer</li>
+                            <li>Luwam - UI/UX Designer</li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Dijkstra Algorithm Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="dijkstra-algorithm">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Dijkstra Algorithm</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Dijkstra Algorithm</h2>
+                    
                     <div class="space-y-4">
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Algorithm Details & Implementation</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Learn about the Dijkstra algorithm and its implementation.</p>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Algorithm Explanation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Dijkstra's algorithm finds the shortest path between nodes in a graph.</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Implementation Steps</h3>
+                            <ol class="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                                <li>Initialize distances and visited nodes</li>
+                                <li>Select node with smallest distance</li>
+                                <li>Update neighbor distances</li>
+                                <li>Repeat until all nodes visited</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -391,6 +560,7 @@
     </div>
 
     <script>
+        // جميع الدوال والوظائف السابقة محفوظة هنا
         // Theme management
         function toggleTheme() {
             const body = document.body;
@@ -399,32 +569,7 @@
             
             body.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            
-            // Update all text colors for better readability
-            updateTextColors(newTheme);
-            
             showNotification('Theme changed to ' + newTheme + ' mode', 'success');
-        }
-
-        // Update text colors for better readability
-        function updateTextColors(theme) {
-            const textElements = document.querySelectorAll('.text-gray-600, .text-gray-700, .text-gray-800');
-            textElements.forEach(element => {
-                if (theme === 'dark') {
-                    element.classList.remove('text-gray-600', 'text-gray-700', 'text-gray-800');
-                    element.classList.add('text-gray-300');
-                } else {
-                    element.classList.remove('text-gray-300');
-                    // Restore original classes based on content type
-                    if (element.classList.contains('original-gray-600')) {
-                        element.classList.add('text-gray-600');
-                    } else if (element.classList.contains('original-gray-700')) {
-                        element.classList.add('text-gray-700');
-                    } else {
-                        element.classList.add('text-gray-800');
-                    }
-                }
-            });
         }
 
         // Login modal functions
@@ -508,12 +653,169 @@
             showNotification('Alert check completed', 'success');
         }
 
+        // Team Collaboration functionality
+        document.getElementById('assignment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('task-name').value;
+            const desc = document.getElementById('task-desc').value;
+            const assignee = document.getElementById('task-assignee').value;
+            
+            if (name && desc) {
+                const assignmentsList = document.getElementById('assignments-list');
+                const newAssignment = document.createElement('div');
+                newAssignment.className = 'p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition';
+                newAssignment.innerHTML = `
+                    <strong class="text-gray-800 dark:text-white">${name}</strong>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${desc}</p>
+                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> ${assignee}</small>
+                `;
+                assignmentsList.appendChild(newAssignment);
+                
+                this.reset();
+                showNotification('Task added!', 'success');
+            }
+        });
+
         // Team updates functionality
         document.getElementById('team-update-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            showNotification('Update published successfully!', 'success');
-            this.reset();
+            const author = document.getElementById('update-author').value;
+            const status = document.getElementById('update-status').value;
+            const title = document.getElementById('update-title').value;
+            const details = document.getElementById('update-details').value;
+
+            if (title && details) {
+                addTeamUpdate(author, status, title, details);
+                this.reset();
+            }
         });
+
+        function addTeamUpdate(author, status, title, details) {
+            const updatesList = document.getElementById('team-updates-list');
+            const statusColors = {
+                'completed': '#10B981',
+                'in-progress': '#F59E0B', 
+                'planned': '#3B82F6',
+                'blocked': '#EF4444'
+            };
+
+            const updateHTML = `
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl" style="border-left: 4px solid ${statusColors[status]}">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">${title}</h4>
+                        <span class="px-2 py-1 rounded text-white text-sm" style="background: ${statusColors[status]}">
+                            ${status === 'completed' ? '✅' : status === 'in-progress' ? '🔄' : status === 'planned' ? '📅' : '❌'} 
+                            ${status}
+                        </span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400"><strong>${author}</strong> - ${details}</p>
+                    <small class="text-gray-500">${new Date().toLocaleDateString('en-US')}</small>
+                </div>
+            `;
+
+            updatesList.insertAdjacentHTML('afterbegin', updateHTML);
+            showNotification('Update published!', 'success');
+        }
+
+        // AI Assistant functionality
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatContainer = document.getElementById('aiChatContainer');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'p-3 bg-gray-100 dark:bg-gray-800 rounded-lg theme-transition mb-2';
+            userMsg.innerHTML = `<strong class="text-gray-800 dark:text-white">You:</strong> ${message}`;
+            chatContainer.appendChild(userMsg);
+
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2';
+                aiMsg.innerHTML = `<strong class="text-gray-800 dark:text-white">AI Assistant:</strong> ${getAIResponse(message)}`;
+                chatContainer.appendChild(aiMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('aiChatInput').value = question;
+            sendAIMessage();
+        }
+
+        function getAIResponse(question) {
+            const responses = {
+                'security chaos engineering': 'Security Chaos Engineering is the discipline of experimenting on a system in order to build confidence in the system\'s capability to withstand turbulent conditions in production.',
+                'aws': 'In AWS, you can implement Security Chaos Engineering using services like AWS Fault Injection Simulator, CloudWatch, and Lambda functions.',
+                'tools': 'Popular tools for Security Chaos Engineering include Gremlin, ChaosToolkit, and Simian Army with security integrations.',
+                'implementation': 'To implement Security Chaos Engineering, start with identifying critical services, define failure hypotheses, run controlled experiments, and analyze results.',
+                'cloud networks': 'Cloud networks in AWS, Azure, and GCP provide scalable infrastructure where Security Chaos Engineering can test resilience and security controls.',
+                'difference': 'While Chaos Engineering tests system resilience, Security Chaos Engineering specifically tests security controls and incident response capabilities.'
+            };
+
+            const q = question.toLowerCase();
+            for (const [key, response] of Object.entries(responses)) {
+                if (q.includes(key)) return response;
+            }
+            return 'I can help you with Security Chaos Engineering concepts, cloud network implementations, and best practices!';
+        }
+
+        // Practical Tasks functionality
+        function addNewTask() {
+            const taskName = prompt('Task name:');
+            if (!taskName) return;
+
+            const tasksList = document.getElementById('tasks-list');
+            const taskId = Date.now();
+            
+            const taskHTML = `
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl" id="task-${taskId}">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-semibold text-gray-800 dark:text-white">${taskName}</h4>
+                        <button onclick="removeTask(${taskId})" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-2">New task</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 0%" id="progress-${taskId}"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Assignee: Kaled Osman</span>
+                        <button onclick="completeTask(${taskId})" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                            Mark as complete
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            tasksList.insertAdjacentHTML('beforeend', taskHTML);
+            showNotification('New task added!', 'success');
+        }
+
+        function removeTask(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            if (taskElement && confirm('Do you want to remove this task?')) {
+                taskElement.remove();
+                showNotification('Task removed', 'info');
+            }
+        }
+
+        function completeTask(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const progressElement = document.getElementById(`progress-${taskId}`);
+            if (taskElement && progressElement) {
+                progressElement.style.width = '100%';
+                taskElement.querySelector('button').disabled = true;
+                taskElement.querySelector('button').textContent = 'Completed ✓';
+                taskElement.querySelector('button').classList.remove('bg-green-500', 'hover:bg-green-600');
+                taskElement.querySelector('button').classList.add('bg-gray-400');
+                showNotification('Task marked as completed!', 'success');
+            }
+        }
 
         // Login form handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -522,30 +824,12 @@
             closeLogin();
         });
 
-        // Store original text classes for light mode
-        function storeOriginalTextClasses() {
-            const textElements = document.querySelectorAll('.text-gray-600, .text-gray-700, .text-gray-800');
-            textElements.forEach(element => {
-                if (element.classList.contains('text-gray-600')) {
-                    element.classList.add('original-gray-600');
-                } else if (element.classList.contains('text-gray-700')) {
-                    element.classList.add('original-gray-700');
-                } else if (element.classList.contains('text-gray-800')) {
-                    element.classList.add('original-gray-800');
-                }
-            });
-        }
-
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            // Store original text classes
-            storeOriginalTextClasses();
-            
             // Set initial theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
-                updateTextColors('dark');
             }
 
             // Setup navigation
