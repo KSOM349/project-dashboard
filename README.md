@@ -13,9 +13,11 @@
             --bg-light: #ffffff;
             --bg-dark: #0f172a;
             --text-light: #1e293b;
-            --text-dark: #f1f5f9;
+            --text-dark: #f8fafc;
             --sidebar-light: #f8fafc;
             --sidebar-dark: #1e293b;
+            --card-light: #ffffff;
+            --card-dark: #334155;
         }
 
         .theme-transition {
@@ -26,12 +28,14 @@
             --bg-color: var(--bg-light);
             --text-color: var(--text-light);
             --sidebar-bg: var(--sidebar-light);
+            --card-bg: var(--card-light);
         }
 
         [data-theme="dark"] {
             --bg-color: var(--bg-dark);
             --text-color: var(--text-dark);
             --sidebar-bg: var(--sidebar-dark);
+            --card-bg: var(--card-dark);
         }
 
         body {
@@ -44,6 +48,12 @@
             background-color: var(--sidebar-bg);
         }
 
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid;
+            border-color: var(--border-color);
+        }
+
         .active-section {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
@@ -52,18 +62,6 @@
 
         .gradient-header {
             background: linear-gradient(135deg, #2563eb, #1e40af);
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-        }
-
-        .dark .card {
-            background: #1e293b;
-            border-color: #334155;
         }
 
         .login-modal {
@@ -82,27 +80,48 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* تحسين القراءة في الوضع الداكن */
+        [data-theme="dark"] .text-gray-800 {
+            color: #f8fafc !important;
+        }
+        
+        [data-theme="dark"] .text-gray-600 {
+            color: #cbd5e1 !important;
+        }
+        
+        [data-theme="dark"] .text-gray-700 {
+            color: #e2e8f0 !important;
+        }
+        
+        [data-theme="dark"] .border-gray-200 {
+            border-color: #475569 !important;
+        }
+        
+        [data-theme="dark"] .bg-white {
+            background-color: #334155 !important;
+        }
     </style>
 </head>
 <body class="theme-transition" data-theme="light">
     <!-- Login Modal -->
     <div class="login-modal" id="loginModal">
-        <div class="card p-8 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold mb-6 text-center">Team Login</h2>
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Team Login</h2>
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-2">Username</label>
-                    <input type="text" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Username</label>
+                    <input type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-2">Password</label>
-                    <input type="password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
+                    <input type="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all font-medium">
                     Sign In
                 </button>
             </form>
-            <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+            <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
@@ -113,37 +132,52 @@
         <!-- Sidebar -->
         <div class="sidebar w-80 flex-shrink-0 theme-transition p-6">
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-blue-600">Security Chaos Engineering</h1>
+                <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
             </div>
             
             <!-- Login Button -->
-            <button onclick="openLogin()" class="w-full mb-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 rounded-lg transition-all shadow-lg">
+            <button onclick="openLogin()" class="w-full mb-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all shadow-lg font-medium">
                 <i class="fas fa-sign-in-alt mr-3"></i>Team Login
             </button>
 
-            <!-- Navigation -->
+            <!-- Navigation - جميع الأقسام الـ 11 -->
             <nav class="space-y-2 mb-8">
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
                     <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
                 </button>
-                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-800" data-section="project-documentation">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="project-documentation">
                     <i class="fas fa-folder mr-3 w-6 text-center"></i>Project Documentation
                 </button>
-                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-800" data-section="team-collaboration">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-collaboration">
                     <i class="fas fa-users mr-3 w-6 text-center"></i>Team Collaboration
                 </button>
-                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-800" data-section="team-updates">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-updates">
                     <i class="fas fa-bullhorn mr-3 w-6 text-center"></i>Team Updates
                 </button>
-                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-800" data-section="ai-assistant">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="ai-assistant">
                     <i class="fas fa-robot mr-3 w-6 text-center"></i>AI Assistant
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="practical-tasks">
+                    <i class="fas fa-tasks mr-3 w-6 text-center"></i>Practical Tasks
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="algorithm-visualizer">
+                    <i class="fas fa-project-diagram mr-3 w-6 text-center"></i>Algorithm Visualizer
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="my-implementation">
+                    <i class="fas fa-code mr-3 w-6 text-center"></i>My Implementation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-dashboard">
+                    <i class="fas fa-tachometer-alt mr-3 w-6 text-center"></i>Team Dashboard
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="dijkstra-algorithm">
+                    <i class="fas fa-network-wired mr-3 w-6 text-center"></i>Dijkstra Algorithm
                 </button>
             </nav>
 
             <!-- Theme Toggle -->
             <div class="mt-auto">
-                <button onclick="toggleTheme()" class="w-full p-4 rounded-xl theme-transition bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center">
+                <button onclick="toggleTheme()" class="w-full p-4 rounded-xl theme-transition bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 flex items-center justify-center font-medium">
                     <i class="fas fa-moon mr-3"></i>Toggle Theme
                 </button>
             </div>
@@ -161,11 +195,11 @@
                     <div class="flex items-center space-x-4">
                         <div class="hidden md:flex space-x-3">
                             <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                                <div class="text-lg font-bold" id="cpu-percent">12%</div>
+                                <div class="text-lg font-bold">12%</div>
                                 <div class="text-xs opacity-90">CPU</div>
                             </div>
                             <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                                <div class="text-lg font-bold" id="memory-percent">45%</div>
+                                <div class="text-lg font-bold">45%</div>
                                 <div class="text-xs opacity-90">Memory</div>
                             </div>
                         </div>
@@ -179,29 +213,29 @@
             <!-- Content Sections -->
             <div class="p-8">
                 <!-- Overview Section -->
-                <div class="section-content card p-8 mb-8" id="overview">
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
                     <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Project Overview</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2" id="total-tasks">8</div>
+                            <div class="text-3xl font-bold mb-2">8</div>
                             <div class="text-blue-100">Total Tasks</div>
                         </div>
                         <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2" id="completed-tasks">3</div>
+                            <div class="text-3xl font-bold mb-2">3</div>
                             <div class="text-green-100">Completed</div>
                         </div>
                         <div class="text-center p-6 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2" id="inprogress-tasks">2</div>
+                            <div class="text-3xl font-bold mb-2">2</div>
                             <div class="text-yellow-100">In Progress</div>
                         </div>
                         <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2" id="team-members">6</div>
+                            <div class="text-3xl font-bold mb-2">6</div>
                             <div class="text-purple-100">Team Members</div>
                         </div>
                     </div>
                     
-                    <div class="p-6 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl mb-8 border border-blue-200 dark:border-blue-800">
+                    <div class="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-2xl mb-8 border border-blue-200 dark:border-blue-800">
                         <h3 class="text-xl font-semibold mb-3 text-blue-800 dark:text-blue-200">Project Summary</h3>
                         <p class="text-blue-700 dark:text-blue-300">"Group 1 - Full-Stack Dashboard with Algorithm Visualizer" - A comprehensive dashboard for Security Chaos Engineering and Cloud Networks.</p>
                     </div>
@@ -209,7 +243,7 @@
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">System Status</h3>
                         <div id="alerts-container" class="mb-6">
-                            <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 text-green-800 dark:text-green-300 rounded-2xl border border-green-200 dark:border-green-800">
+                            <div class="p-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 rounded-2xl border border-green-200 dark:border-green-800">
                                 <i class="fas fa-check-circle mr-3"></i> All systems functioning normally
                             </div>
                         </div>
@@ -220,7 +254,7 @@
                 </div>
 
                 <!-- Team Updates Section -->
-                <div class="section-content card p-8 mb-8 hidden" id="team-updates">
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
                     <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Updates & Tasks</h2>
                     
                     <div class="space-y-8">
@@ -230,46 +264,128 @@
                                 <div class="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Your Name:</label>
-                                        <select id="update-author" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option value="Kaled Osman">Kaled Osman</option>
-                                            <option value="Fahad Hussain">Fahad Hussain</option>
-                                            <option value="Stefan Österberg">Stefan Österberg</option>
-                                            <option value="Marcus Tibell">Marcus Tibell</option>
-                                            <option value="Jens Annell">Jens Annell</option>
-                                            <option value="Luwam">Luwam</option>
+                                        <select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                            <option>Kaled Osman</option>
+                                            <option>Fahad Hussain</option>
+                                            <option>Stefan Österberg</option>
+                                            <option>Marcus Tibell</option>
+                                            <option>Jens Annell</option>
+                                            <option>Luwam</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Status:</label>
-                                        <select id="update-status" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                                            <option value="completed">Completed</option>
-                                            <option value="in-progress">In Progress</option>
-                                            <option value="planned">Planned</option>
-                                            <option value="blocked">Blocked</option>
+                                        <select class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                            <option>Completed</option>
+                                            <option>In Progress</option>
+                                            <option>Planned</option>
+                                            <option>Blocked</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Task Description:</label>
-                                    <input type="text" id="update-title" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
+                                    <input type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Details:</label>
-                                    <textarea id="update-details" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-32" placeholder="Describe your work..."></textarea>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-32" placeholder="Describe your work..."></textarea>
                                 </div>
-                                <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-4 rounded-xl transition-all shadow-lg">
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl transition-all shadow-lg font-medium">
                                     <i class="fas fa-share mr-3"></i> Publish Update
                                 </button>
                             </form>
                         </div>
+                    </div>
+                </div>
 
-                        <div id="team-updates-list" class="space-y-4">
-                            <!-- Team updates will be added here dynamically -->
+                <!-- Project Documentation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Project Documentation</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Complete Project Documentation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Detailed documentation about the Security Chaos Engineering project.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Add other sections here following the same pattern -->
+                <!-- Team Collaboration Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Collaboration</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Team Tasks & Assignments</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Collaborate with your team members on various tasks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">AI Assistant</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Security Chaos Engineering Assistant</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Get help with Security Chaos Engineering concepts and implementations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Practical Tasks Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Practical Tasks</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Project Tasks & Assignments</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Manage and track your project tasks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Algorithm Visualizer Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="algorithm-visualizer">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Algorithm Visualizer</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Dijkstra Algorithm Visualization</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Visualize and understand the Dijkstra algorithm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Implementation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="my-implementation">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">My Implementation</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Personal Contributions</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Track your personal contributions to the project.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Dashboard Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-dashboard">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Team Dashboard</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Team Performance & Metrics</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Monitor team performance and project metrics.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dijkstra Algorithm Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="dijkstra-algorithm">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Dijkstra Algorithm</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Algorithm Details & Implementation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Learn about the Dijkstra algorithm and its implementation.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -284,14 +400,31 @@
             body.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            // Add dark class to body for Tailwind dark mode
-            if (newTheme === 'dark') {
-                body.classList.add('dark');
-            } else {
-                body.classList.remove('dark');
-            }
+            // Update all text colors for better readability
+            updateTextColors(newTheme);
             
             showNotification('Theme changed to ' + newTheme + ' mode', 'success');
+        }
+
+        // Update text colors for better readability
+        function updateTextColors(theme) {
+            const textElements = document.querySelectorAll('.text-gray-600, .text-gray-700, .text-gray-800');
+            textElements.forEach(element => {
+                if (theme === 'dark') {
+                    element.classList.remove('text-gray-600', 'text-gray-700', 'text-gray-800');
+                    element.classList.add('text-gray-300');
+                } else {
+                    element.classList.remove('text-gray-300');
+                    // Restore original classes based on content type
+                    if (element.classList.contains('original-gray-600')) {
+                        element.classList.add('text-gray-600');
+                    } else if (element.classList.contains('original-gray-700')) {
+                        element.classList.add('text-gray-700');
+                    } else {
+                        element.classList.add('text-gray-800');
+                    }
+                }
+            });
         }
 
         // Login modal functions
@@ -338,10 +471,10 @@
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.section-btn').forEach(b => {
                         b.classList.remove('active-section');
-                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-800');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
                     });
                     this.classList.add('active-section');
-                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-800');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
                     
                     const sectionId = this.dataset.section;
                     document.querySelectorAll('.section-content').forEach(section => {
@@ -357,8 +490,6 @@
             showNotification('Fetching system data...', 'info');
             
             setTimeout(() => {
-                document.getElementById('cpu-percent').textContent = '12%';
-                document.getElementById('memory-percent').textContent = '45%';
                 showNotification('System data updated!', 'success');
             }, 1000);
         }
@@ -369,7 +500,7 @@
             
             const alertsContainer = document.getElementById('alerts-container');
             alertsContainer.innerHTML = `
-                <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 text-green-800 dark:text-green-300 rounded-2xl border border-green-200 dark:border-green-800">
+                <div class="p-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 rounded-2xl border border-green-200 dark:border-green-800">
                     <i class="fas fa-check-circle mr-3"></i> No critical alerts found
                 </div>
             `;
@@ -380,53 +511,9 @@
         // Team updates functionality
         document.getElementById('team-update-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const author = document.getElementById('update-author').value;
-            const status = document.getElementById('update-status').value;
-            const title = document.getElementById('update-title').value;
-            const details = document.getElementById('update-details').value;
-
-            if (title && details) {
-                addTeamUpdate(author, status, title, details);
-                this.reset();
-            }
-        });
-
-        function addTeamUpdate(author, status, title, details) {
-            const updatesList = document.getElementById('team-updates-list');
-            const statusColors = {
-                'completed': 'from-green-500 to-green-600',
-                'in-progress': 'from-yellow-500 to-yellow-600', 
-                'planned': 'from-blue-500 to-blue-600',
-                'blocked': 'from-red-500 to-red-600'
-            };
-
-            const statusIcons = {
-                'completed': 'fa-check-circle',
-                'in-progress': 'fa-spinner', 
-                'planned': 'fa-calendar',
-                'blocked': 'fa-exclamation-triangle'
-            };
-
-            const updateHTML = `
-                <div class="p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 bg-gradient-to-r ${statusColors[status]} text-white">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-xl font-semibold">${title}</h4>
-                        <span class="px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm">
-                            <i class="fas ${statusIcons[status]} mr-2"></i>
-                            ${status.charAt(0).toUpperCase() + status.slice(1)}
-                        </span>
-                    </div>
-                    <p class="mb-3 opacity-90">${details}</p>
-                    <div class="flex justify-between items-center text-sm opacity-80">
-                        <span><i class="fas fa-user mr-2"></i>${author}</span>
-                        <span><i class="fas fa-clock mr-2"></i>${new Date().toLocaleDateString('en-US')}</span>
-                    </div>
-                </div>
-            `;
-
-            updatesList.insertAdjacentHTML('afterbegin', updateHTML);
             showNotification('Update published successfully!', 'success');
-        }
+            this.reset();
+        });
 
         // Login form handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -435,13 +522,30 @@
             closeLogin();
         });
 
+        // Store original text classes for light mode
+        function storeOriginalTextClasses() {
+            const textElements = document.querySelectorAll('.text-gray-600, .text-gray-700, .text-gray-800');
+            textElements.forEach(element => {
+                if (element.classList.contains('text-gray-600')) {
+                    element.classList.add('original-gray-600');
+                } else if (element.classList.contains('text-gray-700')) {
+                    element.classList.add('original-gray-700');
+                } else if (element.classList.contains('text-gray-800')) {
+                    element.classList.add('original-gray-800');
+                }
+            });
+        }
+
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
+            // Store original text classes
+            storeOriginalTextClasses();
+            
             // Set initial theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
-                document.body.classList.add('dark');
+                updateTextColors('dark');
             }
 
             // Setup navigation
