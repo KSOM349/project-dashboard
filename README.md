@@ -90,7 +90,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* تحسين القراءة في الوضع الداكن */
         [data-theme="dark"] .text-gray-800 {
             color: #f8fafc !important;
         }
@@ -113,7 +112,7 @@
     </style>
 </head>
 <body class="theme-transition" data-theme="light">
-    <!-- Login Modal -->
+    <!-- Modals -->
     <div class="login-modal" id="loginModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Team Login</h2>
@@ -136,7 +135,6 @@
         </div>
     </div>
 
-    <!-- Add Content Modal -->
     <div class="add-content-modal" id="addContentModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white" id="modalTitle">Add New Content</h2>
@@ -183,12 +181,10 @@
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
             </div>
             
-            <!-- Login Button -->
             <button onclick="openLogin()" class="w-full mb-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all shadow-lg font-medium">
                 <i class="fas fa-sign-in-alt mr-3"></i>Team Login
             </button>
 
-            <!-- Navigation - جميع الأقسام الـ 11 -->
             <nav class="space-y-2 mb-8">
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
                     <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
@@ -222,7 +218,6 @@
                 </button>
             </nav>
 
-            <!-- Theme Toggle -->
             <div class="mt-auto">
                 <button onclick="toggleTheme()" class="w-full p-4 rounded-xl theme-transition bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 flex items-center justify-center font-medium">
                     <i class="fas fa-moon mr-3"></i>Toggle Theme
@@ -232,7 +227,6 @@
 
         <!-- Main Content -->
         <div class="flex-1 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-            <!-- Header -->
             <header class="gradient-header text-white p-6 shadow-lg">
                 <div class="flex justify-between items-center">
                     <div>
@@ -257,7 +251,6 @@
                 </div>
             </header>
 
-            <!-- Content Sections -->
             <div class="p-8">
                 <!-- Overview Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
@@ -268,10 +261,7 @@
                         </button>
                     </div>
                     
-                    <!-- User Added Content -->
-                    <div id="overview-content" class="space-y-4 mb-8">
-                        <!-- سيتم إضافة المحتوى هنا -->
-                    </div>
+                    <div id="overview-content" class="space-y-4 mb-8"></div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
@@ -293,20 +283,30 @@
                     </div>
                 </div>
 
+                <!-- Project Documentation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
+                        <button onclick="openAddContent('project-documentation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="project-documentation-content" class="space-y-4 mb-8"></div>
+                    <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                        <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Complete Project Documentation</h3>
+                        <p class="text-gray-600 dark:text-gray-400">Detailed documentation about the Security Chaos Engineering project.</p>
+                    </div>
+                </div>
+
                 <!-- Team Collaboration Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration - Group Documentation</h2>
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
                         <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
                             <i class="fas fa-plus mr-2"></i>Add Content
                         </button>
                     </div>
-
-                    <!-- User Added Content -->
-                    <div id="team-collaboration-content" class="space-y-4 mb-8">
-                        <!-- سيتم إضافة المحتوى هنا -->
-                    </div>
-                    
+                    <div id="team-collaboration-content" class="space-y-4 mb-8"></div>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
                             <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
@@ -335,7 +335,6 @@
                                 </button>
                             </form>
                         </div>
-
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
                             <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
                             <div id="assignments-list" class="space-y-3">
@@ -357,17 +356,12 @@
                 <!-- Team Updates Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates & Tasks</h2>
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
                         <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
                             <i class="fas fa-plus mr-2"></i>Add Content
                         </button>
                     </div>
-
-                    <!-- User Added Content -->
-                    <div id="team-updates-content" class="space-y-4 mb-8">
-                        <!-- سيتم إضافة المحتوى هنا -->
-                    </div>
-                    
+                    <div id="team-updates-content" class="space-y-4 mb-8"></div>
                     <div class="space-y-6">
                         <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
                             <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
@@ -407,16 +401,70 @@
                                 </button>
                             </form>
                         </div>
-
-                        <div id="team-updates-list" class="space-y-4">
-                            <!-- Team updates will be added here dynamically -->
-                        </div>
+                        <div id="team-updates-list" class="space-y-4"></div>
                     </div>
                 </div>
 
-                <!-- باقي الأقسام بنفس النمط -->
-                <!-- سيتم إضافة الأقسام الأخرى بنفس الطريقة -->
-                
+                <!-- باقي الأقسام -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="algorithm-visualizer">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Algorithm Visualizer</h2>
+                        <button onclick="openAddContent('algorithm-visualizer')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="algorithm-visualizer-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="my-implementation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">My Implementation</h2>
+                        <button onclick="openAddContent('my-implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="my-implementation-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-dashboard">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Dashboard</h2>
+                        <button onclick="openAddContent('team-dashboard')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-dashboard-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="dijkstra-algorithm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Dijkstra Algorithm</h2>
+                        <button onclick="openAddContent('dijkstra-algorithm')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="dijkstra-algorithm-content" class="space-y-4 mb-8"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -425,21 +473,17 @@
         // نظام إدارة المحتوى
         let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
 
-        // حفظ المحتوى في localStorage
         function saveContents() {
             localStorage.setItem('userContents', JSON.stringify(userContents));
         }
 
-        // فتح نافذة إضافة المحتوى
         function openAddContent(section, contentId = null) {
             document.getElementById('contentSection').value = section;
             document.getElementById('editContentId').value = contentId || '';
             
             if (contentId) {
-                // وضع التعديل
                 document.getElementById('modalTitle').textContent = 'Edit Content';
                 document.getElementById('submitButtonText').textContent = 'Update Content';
-                
                 const content = userContents[section].find(item => item.id === contentId);
                 if (content) {
                     document.getElementById('contentTitle').value = content.title;
@@ -447,7 +491,6 @@
                     document.getElementById('contentAuthor').value = content.author;
                 }
             } else {
-                // وضع الإضافة
                 document.getElementById('modalTitle').textContent = 'Add New Content';
                 document.getElementById('submitButtonText').textContent = 'Add Content';
                 document.getElementById('addContentForm').reset();
@@ -456,12 +499,10 @@
             document.getElementById('addContentModal').classList.add('active');
         }
 
-        // إغلاق نافذة إضافة المحتوى
         function closeAddContent() {
             document.getElementById('addContentModal').classList.remove('active');
         }
 
-        // إضافة/تعديل المحتوى
         document.getElementById('addContentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -476,7 +517,6 @@
             }
             
             if (contentId) {
-                // تعديل المحتوى الموجود
                 const index = userContents[section].findIndex(item => item.id === contentId);
                 if (index !== -1) {
                     userContents[section][index] = {
@@ -489,7 +529,6 @@
                     };
                 }
             } else {
-                // إضافة محتوى جديد
                 userContents[section].push({
                     id: Date.now().toString(),
                     title,
@@ -506,7 +545,6 @@
             showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
         });
 
-        // عرض المحتوى في القسم
         function renderSectionContents(section) {
             const container = document.getElementById(`${section}-content`);
             if (!container) return;
@@ -553,12 +591,10 @@
             });
         }
 
-        // تعديل المحتوى
         function editContent(section, contentId) {
             openAddContent(section, contentId);
         }
 
-        // حذف المحتوى
         function deleteContent(section, contentId) {
             if (confirm('Are you sure you want to delete this content?')) {
                 userContents[section] = userContents[section].filter(item => item.id !== contentId);
@@ -568,7 +604,6 @@
             }
         }
 
-        // تهيئة جميع المحتويات عند تحميل الصفحة
         function initializeAllContents() {
             const sections = [
                 'overview', 'project-documentation', 'team-collaboration', 
@@ -582,8 +617,7 @@
             });
         }
 
-        // باقي الدوال (التي كانت موجودة سابقاً)
-        // Theme management
+        // باقي الدوال الأساسية
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -594,7 +628,6 @@
             showNotification('Theme changed to ' + newTheme + ' mode', 'success');
         }
 
-        // Login modal functions
         function openLogin() {
             document.getElementById('loginModal').classList.add('active');
         }
@@ -603,9 +636,7 @@
             document.getElementById('loginModal').classList.remove('active');
         }
 
-        // Notification system
         function showNotification(message, type = 'info') {
-            // Create notification element
             const notification = document.createElement('div');
             const colors = {
                 success: 'bg-green-500',
@@ -632,7 +663,6 @@
             }, 5000);
         }
 
-        // Navigation system
         function setupNavigation() {
             document.querySelectorAll('.section-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -652,16 +682,13 @@
             });
         }
 
-        // System data fetching
-        async function fetchSystemData() {
+        function fetchSystemData() {
             showNotification('Fetching system data...', 'info');
-            
             setTimeout(() => {
                 showNotification('System data updated!', 'success');
             }, 1000);
         }
 
-        // Team Collaboration functionality
         document.getElementById('assignment-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('task-name').value;
@@ -684,7 +711,6 @@
             }
         });
 
-        // Team updates functionality
         document.getElementById('team-update-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const author = document.getElementById('update-author').value;
@@ -725,31 +751,21 @@
             showNotification('Update published!', 'success');
         }
 
-        // Login form handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             showNotification('Login successful! Welcome to the team dashboard.', 'success');
             closeLogin();
         });
 
-        // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            // Set initial theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
             }
 
-            // Setup navigation
             setupNavigation();
-            
-            // Initialize system data
             fetchSystemData();
-            
-            // Initialize all user contents
             initializeAllContents();
-            
-            // Show welcome notification
             showNotification('Welcome to Security Chaos Engineering Dashboard!', 'info');
         });
     </script>
