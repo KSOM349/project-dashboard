@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* الأنماط السابقة تبقى كما هي */
+        /* الأنماط الأساسية */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -82,16 +82,7 @@
             justify-content: center;
         }
 
-        .user-content-item {
-            transition: all 0.3s ease;
-        }
-
-        .user-content-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* إصلاح مشكلة التباين في الوضع الداكن */
+        /* إصلاحات الوضع الداكن */
         [data-theme="dark"] {
             color: #f8fafc !important;
         }
@@ -108,33 +99,12 @@
             color: #e2e8f0 !important;
         }
         
-        [data-theme="dark"] .text-gray-500 {
-            color: #94a3b8 !important;
-        }
-        
         [data-theme="dark"] .border-gray-200 {
             border-color: #475569 !important;
         }
         
         [data-theme="dark"] .bg-white {
             background-color: #334155 !important;
-        }
-        
-        [data-theme="dark"] .bg-gray-100 {
-            background-color: #1e293b !important;
-        }
-        
-        [data-theme="dark"] .bg-gray-50 {
-            background-color: #1e293b !important;
-        }
-
-        /* تحسين النص في الوضع الداكن */
-        .dark-text-fix {
-            color: #f8fafc !important;
-        }
-        
-        .dark-bg-fix {
-            background-color: #1e293b !important;
         }
 
         .user-role-admin {
@@ -156,11 +126,11 @@
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Username</label>
-                    <input type="text" id="loginUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="text" id="loginUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Enter your username">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Enter your password">
                 </div>
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all font-medium">
                     Sign In
@@ -184,23 +154,23 @@
             <form id="registerForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Full Name</label>
-                    <input type="text" id="registerName" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="text" id="registerName" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Enter your full name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Username</label>
-                    <input type="text" id="registerUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="text" id="registerUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Choose a username">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
-                    <input type="email" id="registerEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="email" id="registerEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Enter your email">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="registerPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="password" id="registerPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Create a password">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Confirm Password</label>
-                    <input type="password" id="registerConfirmPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                    <input type="password" id="registerConfirmPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required placeholder="Confirm your password">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Role</label>
@@ -222,26 +192,6 @@
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
-    </div>
-
-    <!-- User Management Modal (للمسؤولين فقط) -->
-    <div class="user-management-modal" id="userManagementModal">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-4xl w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">User Management</h2>
-            <div class="space-y-4">
-                <div id="usersList" class="space-y-3">
-                    <!-- سيتم عرض المستخدمين هنا -->
-                </div>
-            </div>
-            <button onclick="closeUserManagement()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- باقي الـ Modals والأقسام تبقى كما هي -->
-    <div class="add-content-modal" id="addContentModal">
-        <!-- ... نفس المحتوى السابق ... -->
     </div>
 
     <!-- Main Layout -->
@@ -272,9 +222,6 @@
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <button onclick="openUserManagement()" id="adminButton" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition-all text-sm hidden">
-                            <i class="fas fa-users-cog mr-2"></i>Manage Users
-                        </button>
                         <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all text-sm">
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
@@ -284,11 +231,21 @@
 
             <!-- Navigation -->
             <nav class="space-y-2 mb-8">
-                <!-- نفس الأزرار السابقة -->
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
                     <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
                 </button>
-                <!-- ... باقي الأزرار ... -->
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="project-documentation">
+                    <i class="fas fa-folder mr-3 w-6 text-center"></i>Project Documentation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-collaboration">
+                    <i class="fas fa-users mr-3 w-6 text-center"></i>Team Collaboration
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-updates">
+                    <i class="fas fa-bullhorn mr-3 w-6 text-center"></i>Team Updates
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="ai-assistant">
+                    <i class="fas fa-robot mr-3 w-6 text-center"></i>AI Assistant
+                </button>
             </nav>
 
             <!-- Theme Toggle -->
@@ -330,31 +287,102 @@
 
             <!-- Content Sections -->
             <div class="p-8">
-                <!-- جميع الأقسام تبقى كما هي -->
-                <!-- ... -->
+                <!-- Overview Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Overview</h2>
+                        <button onclick="openAddContent('overview')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    
+                    <div id="overview-content" class="space-y-4 mb-8"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">8</div>
+                            <div class="text-blue-100">Total Tasks</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">3</div>
+                            <div class="text-green-100">Completed</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">2</div>
+                            <div class="text-yellow-100">In Progress</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">6</div>
+                            <div class="text-purple-100">Team Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- باقي الأقسام -->
             </div>
         </div>
     </div>
 
+    <!-- Add Content Modal -->
+    <div class="add-content-modal" id="addContentModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white" id="modalTitle">Add New Content</h2>
+            <form id="addContentForm" class="space-y-4">
+                <input type="hidden" id="contentSection">
+                <input type="hidden" id="editContentId">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" id="contentTitle" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Content</label>
+                    <textarea id="contentDescription" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-40" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Author</label>
+                    <select id="contentAuthor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="Kaled Osman">Kaled Osman</option>
+                        <option value="Fahad Hussain">Fahad Hussain</option>
+                        <option value="Stefan Österberg">Stefan Österberg</option>
+                        <option value="Marcus Tibell">Marcus Tibell</option>
+                        <option value="Jens Annell">Jens Annell</option>
+                        <option value="Luwam">Luwam</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">
+                        <span id="submitButtonText">Add Content</span>
+                    </button>
+                    <button type="button" onclick="closeAddContent()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // نظام إدارة المستخدمين
+        // نظام إدارة المستخدمين - إصلاح كامل
         let users = JSON.parse(localStorage.getItem('dashboardUsers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
         // إنشاء مستخدم مسؤول افتراضي إذا لم يكن موجوداً
-        if (users.length === 0) {
-            const defaultAdmin = {
-                id: '1',
-                name: 'System Admin',
-                username: 'admin',
-                email: 'admin@dashboard.com',
-                password: 'admin123', // في الواقع يجب تشفير كلمة المرور
-                role: 'admin',
-                createdAt: new Date().toISOString(),
-                isActive: true
-            };
-            users.push(defaultAdmin);
-            localStorage.setItem('dashboardUsers', JSON.stringify(users));
+        function initializeDefaultAdmin() {
+            if (users.length === 0) {
+                const defaultAdmin = {
+                    id: '1',
+                    name: 'System Admin',
+                    username: 'admin',
+                    email: 'admin@dashboard.com',
+                    password: 'admin123',
+                    role: 'admin',
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                };
+                users.push(defaultAdmin);
+                localStorage.setItem('dashboardUsers', JSON.stringify(users));
+                console.log('Default admin user created');
+            }
         }
 
         // حفظ المستخدمين
@@ -367,6 +395,8 @@
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+
+            console.log('Login attempt:', username); // Debug
 
             const user = users.find(u => u.username === username && u.password === password && u.isActive);
             
@@ -413,7 +443,7 @@
                 name,
                 username,
                 email,
-                password, // في الواقع يجب تشفير كلمة المرور
+                password,
                 role,
                 createdAt: new Date().toISOString(),
                 isActive: true
@@ -443,11 +473,6 @@
             document.getElementById('userRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Team Member';
             document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
             document.getElementById('loginStatus').textContent = `Welcome, ${currentUser.name}`;
-
-            // إظهار زر إدارة المستخدمين للمسؤولين فقط
-            if (currentUser.role === 'admin') {
-                document.getElementById('adminButton').classList.remove('hidden');
-            }
         }
 
         // تحديث واجهة المستخدم بعد تسجيل الخروج
@@ -455,77 +480,6 @@
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('userSection').classList.add('hidden');
             document.getElementById('loginStatus').textContent = 'Please login to access all features';
-            document.getElementById('adminButton').classList.add('hidden');
-        }
-
-        // إدارة المستخدمين (للمسؤولين فقط)
-        function openUserManagement() {
-            if (currentUser && currentUser.role === 'admin') {
-                renderUsersList();
-                document.getElementById('userManagementModal').classList.add('active');
-            }
-        }
-
-        function closeUserManagement() {
-            document.getElementById('userManagementModal').classList.remove('active');
-        }
-
-        function renderUsersList() {
-            const usersList = document.getElementById('usersList');
-            usersList.innerHTML = '';
-
-            users.forEach(user => {
-                const userElement = document.createElement('div');
-                userElement.className = 'p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800';
-                userElement.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 ${user.role === 'admin' ? 'user-role-admin' : 'user-role-user'} rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                ${user.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-800 dark:text-white">${user.name}</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">@${user.username} • ${user.role}</p>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="toggleUserStatus('${user.id}')" class="px-3 py-1 rounded text-sm ${
-                                user.isActive ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'
-                            }">
-                                ${user.isActive ? 'Deactivate' : 'Activate'}
-                            </button>
-                            ${user.id !== currentUser.id ? `
-                            <button onclick="deleteUser('${user.id}')" class="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">
-                                Delete
-                            </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        Created: ${new Date(user.createdAt).toLocaleDateString()}
-                    </div>
-                `;
-                usersList.appendChild(userElement);
-            });
-        }
-
-        function toggleUserStatus(userId) {
-            const user = users.find(u => u.id === userId);
-            if (user) {
-                user.isActive = !user.isActive;
-                saveUsers();
-                renderUsersList();
-                showNotification(`User ${user.isActive ? 'activated' : 'deactivated'} successfully`, 'success');
-            }
-        }
-
-        function deleteUser(userId) {
-            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                users = users.filter(u => u.id !== userId);
-                saveUsers();
-                renderUsersList();
-                showNotification('User deleted successfully', 'success');
-            }
         }
 
         // دوال فتح وإغلاق النوافذ
@@ -552,31 +506,6 @@
             closeRegister();
             document.getElementById('loginModal').classList.add('active');
         }
-
-        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            if (currentUser) {
-                updateUIAfterLogin();
-            }
-
-            // باقي كود التهيئة...
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.body.classList.add('dark');
-            }
-
-            setupNavigation();
-            fetchSystemData();
-            initializeAllContents();
-            
-            if (!currentUser) {
-                showNotification('Please login to access all dashboard features', 'info');
-            }
-        });
-
-        // باقي الدوال تبقى كما هي (نظام المحتوى، التصميم، إلخ)
-        // ... [كل الكود السابق يبقى كما هو] ...
 
         // نظام إدارة المحتوى
         let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
@@ -609,16 +538,120 @@
                 document.getElementById('modalTitle').textContent = 'Add New Content';
                 document.getElementById('submitButtonText').textContent = 'Add Content';
                 document.getElementById('addContentForm').reset();
-                // تعيين المستخدم الحالي ككاتب افتراضي
                 document.getElementById('contentAuthor').value = currentUser.name;
             }
             
             document.getElementById('addContentModal').classList.add('active');
         }
 
-        // باقي دوال نظام المحتوى تبقى كما هي...
+        function closeAddContent() {
+            document.getElementById('addContentModal').classList.remove('active');
+        }
 
-        // دوال الإشعارات والتصميم تبقى كما هي...
+        document.getElementById('addContentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const section = document.getElementById('contentSection').value;
+            const contentId = document.getElementById('editContentId').value;
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const author = document.getElementById('contentAuthor').value;
+            
+            if (!userContents[section]) {
+                userContents[section] = [];
+            }
+            
+            if (contentId) {
+                const index = userContents[section].findIndex(item => item.id === contentId);
+                if (index !== -1) {
+                    userContents[section][index] = {
+                        id: contentId,
+                        title,
+                        description,
+                        author,
+                        date: userContents[section][index].date,
+                        updated: new Date().toISOString()
+                    };
+                }
+            } else {
+                userContents[section].push({
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    author,
+                    date: new Date().toISOString(),
+                    updated: null
+                });
+            }
+            
+            saveContents();
+            renderSectionContents(section);
+            closeAddContent();
+            showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
+        });
+
+        function renderSectionContents(section) {
+            const container = document.getElementById(`${section}-content`);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!userContents[section] || userContents[section].length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No content added yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userContents[section].forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800';
+                contentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
+                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString('en-US')}</span>
+                    </div>
+                `;
+                container.appendChild(contentElement);
+            });
+        }
+
+        function editContent(section, contentId) {
+            openAddContent(section, contentId);
+        }
+
+        function deleteContent(section, contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                userContents[section] = userContents[section].filter(item => item.id !== contentId);
+                saveContents();
+                renderSectionContents(section);
+                showNotification('Content deleted successfully!', 'success');
+            }
+        }
+
+        function initializeAllContents() {
+            const sections = ['overview', 'project-documentation', 'team-collaboration', 'team-updates', 'ai-assistant'];
+            sections.forEach(section => {
+                renderSectionContents(section);
+            });
+        }
+
+        // دوال الإشعارات
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             const colors = {
@@ -646,7 +679,75 @@
             }, 5000);
         }
 
-        // ... [باقي الدوال] ...
+        // دوال التصميم والتنقل
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+            
+            showNotification('Theme changed to ' + newTheme + ' mode', 'success');
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => {
+                        b.classList.remove('active-section');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    });
+                    this.classList.add('active-section');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    
+                    const sectionId = this.dataset.section;
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+        }
+
+        function fetchSystemData() {
+            showNotification('Fetching system data...', 'info');
+            setTimeout(() => {
+                showNotification('System data updated!', 'success');
+            }, 1000);
+        }
+
+        // التهيئة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تهيئة المستخدم الافتراضي
+            initializeDefaultAdmin();
+            
+            // التحقق من تسجيل الدخول
+            if (currentUser) {
+                updateUIAfterLogin();
+            }
+
+            // تهيئة التصميم
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.body.classList.add('dark');
+            }
+
+            setupNavigation();
+            fetchSystemData();
+            initializeAllContents();
+            
+            if (!currentUser) {
+                showNotification('Please login to access all dashboard features', 'info');
+            }
+        });
     </script>
 </body>
 </html>
