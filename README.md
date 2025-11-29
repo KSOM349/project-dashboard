@@ -401,7 +401,165 @@
                     </div>
                     
                     <div id="overview-content" class="space-y-4 mb-8"></div>
-                    
+                                    <!-- Project Documentation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
+                        <button onclick="openAddContent('project-documentation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="project-documentation-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Project Requirements</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Document all project requirements and specifications for the Security Chaos Engineering dashboard.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Kaled Osman</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Collaboration Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
+                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-collaboration-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Weekly Team Meeting</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Schedule: Every Monday 10:00 AM. Discuss progress, blockers, and next steps for the project.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Updates Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
+                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-updates-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Project Kickoff Completed</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Successfully completed project kickoff. All team members are onboard and ready to start development.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Project Lead</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">AI Integration Guide</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Guide for integrating AI capabilities into the Security Chaos Engineering dashboard.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> AI Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Practical Tasks Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Setup Development Environment</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Task: Setup local development environment with all necessary tools and dependencies.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Development Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="implementation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Implementation</h2>
+                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="implementation-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Frontend Architecture</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Planning the frontend architecture using React/Vue.js with real-time updates.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Frontend Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="research">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Research</h2>
+                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="research-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Security Chaos Engineering Best Practices</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Research on implementing Security Chaos Engineering principles in cloud environments.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Research Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="resources">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Resources</h2>
+                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="resources-content" class="space-y-4 mb-8">
+                        <div class="user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Useful Links & Documentation</h3>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">Collection of useful resources, documentation, and reference materials for the project.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user mr-1"></i> Documentation Team</span>
+                                <span><i class="fas fa-clock mr-1"></i> ${new Date().toLocaleDateString('en-US')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
                             <div class="text-3xl font-bold mb-2">8</div>
@@ -865,3 +1023,4 @@
     </script>
 </body>
 </html>
+
