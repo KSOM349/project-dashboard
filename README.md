@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* All existing styles remain the same */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -66,7 +65,7 @@
             background: linear-gradient(135deg, #2563eb, #1e40af);
         }
 
-        .login-modal, .add-content-modal, .register-modal, .forgot-password-modal, .user-management-modal, .team-chat-modal {
+        .add-content-modal, .team-chat-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -77,7 +76,7 @@
             z-index: 1000;
         }
 
-        .login-modal.active, .add-content-modal.active, .register-modal.active, .forgot-password-modal.active, .user-management-modal.active, .team-chat-modal.active {
+        .add-content-modal.active, .team-chat-modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -118,16 +117,6 @@
         
         [data-theme="dark"] .bg-gray-50 {
             background-color: #1e293b !important;
-        }
-
-        .user-role-admin {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .user-role-user {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
         }
 
         /* 🆕 NEW REALTIME STYLES - SIMPLE AND VISIBLE */
@@ -228,117 +217,6 @@
     </style>
 </head>
 <body class="theme-transition" data-theme="light">
-    <!-- All existing modals remain exactly the same -->
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Team Login</h2>
-            <form id="loginForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Username</label>
-                    <input type="text" id="loginUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all font-medium">
-                    Sign In
-                </button>
-            </form>
-            <div class="mt-4 text-center">
-                <button onclick="showRegister()" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm mr-2">
-                    Create Account
-                </button>
-                <button onclick="showForgotPassword()" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
-                    Forgot Password?
-                </button>
-            </div>
-            <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div class="register-modal" id="registerModal">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Create Account</h2>
-            <form id="registerForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Full Name</label>
-                    <input type="text" id="registerName" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Username</label>
-                    <input type="text" id="registerUsername" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
-                    <input type="email" id="registerEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="registerPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Confirm Password</label>
-                    <input type="password" id="registerConfirmPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">
-                    Create Account
-                </button>
-            </form>
-            <div class="mt-4 text-center">
-                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
-                    Already have an account? Sign in
-                </button>
-            </div>
-            <button onclick="closeRegister()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div class="forgot-password-modal" id="forgotPasswordModal">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Reset Password</h2>
-            <form id="forgotPasswordForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email Address</label>
-                    <input type="email" id="resetEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl transition-all font-medium">
-                    Send Reset Link
-                </button>
-            </form>
-            <div class="mt-4 text-center">
-                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm">
-                    Back to Login
-                </button>
-            </div>
-            <button onclick="closeForgotPassword()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- User Management Modal -->
-    <div class="user-management-modal" id="userManagementModal">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-4xl w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">User Management</h2>
-            <div class="space-y-4">
-                <div id="usersList" class="space-y-3">
-                    <!-- Users will be displayed here -->
-                </div>
-            </div>
-            <button onclick="closeUserManagement()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-    </div>
-
     <!-- Add Content Modal -->
     <div class="add-content-modal" id="addContentModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
@@ -402,7 +280,7 @@
                 <div id="onlineUsersList" class="flex flex-wrap gap-2">
                     <div class="live-user-badge">
                         <span class="online-indicator"></span>
-                        You (Admin)
+                        You
                     </div>
                 </div>
             </div>
@@ -436,7 +314,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
                 
                 <!-- 🆕 NEW: Realtime Status - VERY VISIBLE -->
-                <div id="realtimeStatus" class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg hidden">
+                <div id="realtimeStatus" class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="online-indicator"></span>
@@ -448,44 +326,32 @@
                 </div>
             </div>
             
-            <!-- Login/User Info Section -->
-            <div id="loginSection" class="w-full mb-6">
-                <button onclick="openLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all shadow-lg font-medium">
-                    <i class="fas fa-sign-in-alt mr-3"></i>Team Login
-                </button>
-            </div>
-
-            <div id="userSection" class="w-full mb-6 hidden">
+            <!-- User Info Section -->
+            <div class="w-full mb-6">
                 <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
                     <div class="flex items-center space-x-3 mb-3">
                         <div class="relative">
-                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold" id="userAvatar">
-                                U
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                T
                             </div>
                             <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-800 dark:text-white truncate" id="userName">User</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" id="userRole">Role</p>
+                            <p class="font-semibold text-gray-800 dark:text-white truncate">Team Member</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <button onclick="openUserManagement()" id="adminButton" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition-all text-sm hidden">
-                            <i class="fas fa-users-cog mr-2"></i>Manage Users
-                        </button>
                         <!-- 🆕 NEW: Team Chat Button - VERY VISIBLE -->
                         <button onclick="openTeamChat()" class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white py-3 rounded-lg transition-all shadow-lg font-medium">
                             <i class="fas fa-comments mr-2"></i>Team Chat
-                        </button>
-                        <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all text-sm">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- 🆕 NEW: Live Team Activity - VERY VISIBLE -->
-            <div id="liveTeamSection" class="mb-6 hidden">
+            <div id="liveTeamSection" class="mb-6">
                 <div class="bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
                     <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
                         <span class="online-indicator"></span>
@@ -537,10 +403,10 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="text-sm opacity-90" id="loginStatus">
-                            Please login to access all features
+                            Welcome to the Team Dashboard
                         </div>
                         <!-- 🆕 NEW: Live Activity Indicator - VERY VISIBLE -->
-                        <div id="liveActivity" class="hidden">
+                        <div id="liveActivity">
                             <div class="flex items-center space-x-2 bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm border-2 border-green-300">
                                 <span class="online-indicator"></span>
                                 <span class="text-sm font-semibold">LIVE MODE ACTIVE</span>
@@ -613,8 +479,156 @@
                     </div>
                 </div>
 
-                <!-- Other sections remain exactly the same -->
-                <!-- ... -->
+                <!-- Project Documentation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
+                        <button onclick="openAddContent('project-documentation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="project-documentation-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <!-- Team Collaboration Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
+                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-collaboration-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
+                            <form id="assignment-form" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Name:</label>
+                                    <input type="text" id="task-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description:</label>
+                                    <textarea id="task-desc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Assignee:</label>
+                                    <select id="task-assignee" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                        <option value="Kaled Osman">Kaled Osman</option>
+                                        <option value="Fahad Hussain">Fahad Hussain</option>
+                                        <option value="Stefan Österberg">Stefan Österberg</option>
+                                        <option value="Marcus Tibell">Marcus Tibell</option>
+                                        <option value="Jens Annell">Jens Annell</option>
+                                        <option value="Luwam">Luwam</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Add Task
+                                </button>
+                            </form>
+                        </div>
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
+                            <div id="assignments-list" class="space-y-3">
+                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
+                                    <strong class="text-gray-800 dark:text-white">Improve Dijkstra Algorithm</strong>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add performance improvements and complexity analysis</p>
+                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Kaled Osman</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Updates Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
+                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-updates-content" class="space-y-4 mb-8"></div>
+                    <div class="space-y-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
+                            <form id="team-update-form" class="space-y-3">
+                                <div class="grid md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Your Name:</label>
+                                        <select id="update-author" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="Kaled Osman">Kaled Osman</option>
+                                            <option value="Fahad Hussain">Fahad Hussain</option>
+                                            <option value="Stefan Österberg">Stefan Österberg</option>
+                                            <option value="Marcus Tibell">Marcus Tibell</option>
+                                            <option value="Jens Annell">Jens Annell</option>
+                                            <option value="Luwam">Luwam</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Status:</label>
+                                        <select id="update-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="completed">Completed</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="planned">Planned</option>
+                                            <option value="blocked">Blocked</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Description:</label>
+                                    <input type="text" id="update-title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Details:</label>
+                                    <textarea id="update-details" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24" placeholder="Describe your work..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Publish Update
+                                </button>
+                            </form>
+                        </div>
+                        <div id="team-updates-list" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4 mb-8"></div>
+                    <div class="space-y-4">
+                        <div class="ai-chat-container border border-gray-300 dark:border-gray-600 rounded-lg p-4 h-64 overflow-y-auto theme-transition bg-white dark:bg-gray-800">
+                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2">
+                                <strong class="text-gray-800 dark:text-white">AI Assistant:</strong> 
+                                <span class="text-gray-700 dark:text-gray-300">Hello! I'm here to help you with Security Chaos Engineering and Cloud Networks. Ask me anything!</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="aiChatInput" class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition bg-white dark:bg-gray-700 text-gray-800 dark:text-white" placeholder="Ask about Security Chaos Engineering or Cloud Networks...">
+                            <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Send
+                            </button>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Quick Commands</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="quickQuestion('What is Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    Security Chaos Engineering
+                                </button>
+                                <button onclick="quickQuestion('How to apply Security Chaos Engineering in AWS?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    AWS Implementation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -624,12 +638,14 @@
         class SimpleRealtimeSystem {
             constructor() {
                 this.connectedUsers = new Map();
-                this.currentUser = null;
-                this.isConnected = false;
+                this.currentUser = { id: '1', name: 'You', role: 'Team Member' };
+                this.isConnected = true;
+                
+                // Start immediately since no login required
+                this.connect();
             }
 
-            connect(user) {
-                this.currentUser = user;
+            connect() {
                 this.isConnected = true;
                 
                 // Show immediate visual feedback
@@ -637,30 +653,12 @@
                 this.addDemoUsers();
                 this.startDemoActivities();
                 
-                console.log('🔗 REALTIME SYSTEM: Connected as', user.name);
-            }
-
-            disconnect() {
-                this.isConnected = false;
-                this.showConnectionStatus();
-                this.connectedUsers.clear();
-                console.log('🔗 REALTIME SYSTEM: Disconnected');
+                console.log('🔗 REALTIME SYSTEM: Connected');
             }
 
             showConnectionStatus() {
-                const statusElement = document.getElementById('realtimeStatus');
-                const liveActivityElement = document.getElementById('liveActivity');
-                const liveTeamSection = document.getElementById('liveTeamSection');
-                
-                if (this.isConnected) {
-                    statusElement.classList.remove('hidden');
-                    liveActivityElement.classList.remove('hidden');
-                    liveTeamSection.classList.remove('hidden');
-                } else {
-                    statusElement.classList.add('hidden');
-                    liveActivityElement.classList.add('hidden');
-                    liveTeamSection.classList.add('hidden');
-                }
+                // All status elements are visible by default now
+                console.log('🟢 Realtime system active');
             }
 
             addDemoUsers() {
@@ -793,8 +791,6 @@
             }
 
             sendChatMessage(messageText) {
-                if (!this.currentUser) return;
-                
                 this.displayChatMessage(messageText, this.currentUser);
                 
                 // Simulate responses from other users
@@ -862,10 +858,6 @@
 
         // 🆕 Team Chat Functions
         function openTeamChat() {
-            if (!currentUser) {
-                showNotification('Please login to use team chat', 'error');
-                return;
-            }
             document.getElementById('teamChatModal').classList.add('active');
         }
 
@@ -877,7 +869,7 @@
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
-            if (message && currentUser) {
+            if (message) {
                 realtimeSystem.sendChatMessage(message);
                 input.value = '';
             }
@@ -891,47 +883,16 @@
         });
 
         // =============================================
-        // EXISTING CODE (UNCHANGED)
+        // EXISTING CODE (WITHOUT LOGIN SYSTEM)
         // =============================================
 
-        let users = JSON.parse(localStorage.getItem('dashboardUsers')) || [];
-        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
 
-        // ... [All existing functions remain exactly the same] ...
-
-        // MODIFIED: Login to connect realtime
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            const user = users.find(u => u.username === username && u.password === password && u.isActive);
-            
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                updateUIAfterLogin();
-                closeLogin();
-                showNotification(`Welcome back, ${user.name}!`, 'success');
-                
-                // 🆕 Connect to realtime system
-                realtimeSystem.connect(user);
-            } else {
-                showNotification('Invalid username or password', 'error');
-            }
-        });
-
-        // MODIFIED: Logout to disconnect realtime
-        function logout() {
-            realtimeSystem.disconnect();
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateUIAfterLogout();
-            showNotification('Logged out successfully', 'info');
+        function saveContents() {
+            localStorage.setItem('userContents', JSON.stringify(userContents));
         }
 
-        // MODIFIED: Add content to trigger realtime notification
+        // Add content with realtime features
         document.getElementById('addContentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -977,24 +938,206 @@
             showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
             
             // 🆕 Show realtime activity
-            if (realtimeSystem.isConnected) {
-                realtimeSystem.addActivity(`${currentUser.name} added content to ${section}`);
-                realtimeSystem.showRealtimeNotification(`${currentUser.name} added: "${title}"`);
-            }
+            realtimeSystem.addActivity(`Added content to ${section}: "${title}"`);
+            realtimeSystem.showRealtimeNotification(`New content added: "${title}"`);
         });
 
-        // ... [Rest of existing code remains unchanged] ...
+        function openAddContent(section, contentId = null) {
+            document.getElementById('contentSection').value = section;
+            document.getElementById('editContentId').value = contentId || '';
+            
+            if (contentId) {
+                document.getElementById('modalTitle').textContent = 'Edit Content';
+                document.getElementById('submitButtonText').textContent = 'Update Content';
+                const content = userContents[section].find(item => item.id === contentId);
+                if (content) {
+                    document.getElementById('contentTitle').value = content.title;
+                    document.getElementById('contentDescription').value = content.description;
+                    document.getElementById('contentAuthor').value = content.author;
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = 'Add New Content';
+                document.getElementById('submitButtonText').textContent = 'Add Content';
+                document.getElementById('addContentForm').reset();
+                document.getElementById('contentAuthor').value = 'Kaled Osman';
+            }
+            
+            document.getElementById('addContentModal').classList.add('active');
+        }
+
+        function closeAddContent() {
+            document.getElementById('addContentModal').classList.remove('active');
+        }
+
+        function renderSectionContents(section) {
+            const container = document.getElementById(`${section}-content`);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!userContents[section] || userContents[section].length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No content added yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userContents[section].forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.className = 'user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800';
+                contentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
+                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString('en-US')}</span>
+                    </div>
+                    ${content.updated ? `
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-500">
+                        <i class="fas fa-sync mr-1"></i> Updated: ${new Date(content.updated).toLocaleDateString('en-US')}
+                    </div>
+                    ` : ''}
+                `;
+                container.appendChild(contentElement);
+            });
+        }
+
+        function editContent(section, contentId) {
+            openAddContent(section, contentId);
+        }
+
+        function deleteContent(section, contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                userContents[section] = userContents[section].filter(item => item.id !== contentId);
+                saveContents();
+                renderSectionContents(section);
+                showNotification('Content deleted successfully!', 'success');
+            }
+        }
+
+        function initializeAllContents() {
+            const sections = ['overview', 'project-documentation', 'team-collaboration', 'team-updates', 'ai-assistant'];
+            sections.forEach(section => {
+                renderSectionContents(section);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+            
+            showNotification('Theme changed to ' + newTheme + ' mode', 'success');
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => {
+                        b.classList.remove('active-section');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    });
+                    this.classList.add('active-section');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    
+                    const sectionId = this.dataset.section;
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+        }
+
+        function fetchSystemData() {
+            showNotification('Fetching system data...', 'info');
+            setTimeout(() => {
+                showNotification('System data updated!', 'success');
+            }, 1000);
+        }
+
+        // AI Assistant Functions
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatContainer = document.querySelector('.ai-chat-container');
+                const userMessage = document.createElement('div');
+                userMessage.className = 'p-3 bg-blue-100 dark:bg-blue-800 rounded-lg mb-2 ml-8';
+                userMessage.innerHTML = `<strong>You:</strong> ${message}`;
+                chatContainer.appendChild(userMessage);
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = document.createElement('div');
+                    aiResponse.className = 'p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-2';
+                    aiResponse.innerHTML = `<strong>AI Assistant:</strong> I understand you're asking about "${message}". In Security Chaos Engineering, this typically involves...`;
+                    chatContainer.appendChild(aiResponse);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('aiChatInput').value = question;
+            sendAIMessage();
+        }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            initializeDefaultAdmin();
-            
-            if (currentUser) {
-                updateUIAfterLogin();
-                // 🆕 Connect to realtime if user is logged in
-                realtimeSystem.connect(currentUser);
-            }
-
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
@@ -1005,9 +1148,7 @@
             fetchSystemData();
             initializeAllContents();
             
-            if (!currentUser) {
-                showNotification('Please login to access all dashboard features', 'info');
-            }
+            showNotification('Welcome to the Team Dashboard! Realtime features are active.', 'success');
         });
 
     </script>
