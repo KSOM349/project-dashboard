@@ -1014,86 +1014,69 @@
         // Initialize the realtime system
         const realtimeSystem = new SimpleRealtimeSystem();
 
-        // 🆕 Team Chat Functions
-        function openTeamChat() {
-            document.getElementById('teamChatModal').classList.add('active');
-        }
-
-        function closeTeamChat() {
-            document.getElementById('teamChatModal').classList.remove('active');
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+          <!-- 🆕 FIXED: Team Chat Modal med bättre layout -->
+    <div class="team-chat-modal" id="teamChatModal">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full mx-4 shadow-2xl max-w-4xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                    <span class="realtime-badge">
+                        <span class="online-indicator"></span>
+                        SIMULERAD CHAT
+                    </span>
+                    Team Chat
+                </h2>
+                <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
             
-            if (message) {
-                realtimeSystem.sendChatMessage(message);
-                input.value = '';
-            }
-        }
-
-        // Handle Enter key in chat
-        document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendChatMessage();
-            }
-        });
-
-        // =============================================
-        // EXISTING CODE (WITHOUT LOGIN SYSTEM)
-        // =============================================
-
-        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
-
-        function saveContents() {
-            localStorage.setItem('userContents', JSON.stringify(userContents));
-        }
-
-        // Add content with realtime features
-        document.getElementById('addContentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            <!-- Info Banner - Förklarar hur chatten fungerar -->
+            <div class="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-info-circle text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    <div>
+                        <div class="font-semibold text-yellow-800 dark:text-yellow-200">Simulerad Chat</div>
+                        <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                            💬 Denna chat är för demonstration. Meddelanden skickas inte till riktiga användare. 
+                            Systemet simulerar svar från teammedlemmar efter 2 sekunder.
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            const section = document.getElementById('contentSection').value;
-            const contentId = document.getElementById('editContentId').value;
-            const title = document.getElementById('contentTitle').value;
-            const description = document.getElementById('contentDescription').value;
-            const author = document.getElementById('contentAuthor').value;
-            
-            if (!userContents[section]) {
-                userContents[section] = [];
-            }
-            
-            let content;
-            if (contentId) {
-                const index = userContents[section].findIndex(item => item.id === contentId);
-                if (index !== -1) {
-                    content = {
-                        id: contentId,
-                        title,
-                        description,
-                        author,
-                        date: userContents[section][index].date,
-                        updated: new Date().toISOString()
-                    };
-                    userContents[section][index] = content;
-                }
-            } else {
-                content = {
-                    id: Date.now().toString(),
-                    title,
-                    description,
-                    author,
-                    date: new Date().toISOString(),
-                    updated: null
-                };
-                userContents[section].push(content);
-            }
-            
-            saveContents();
-            renderSectionContents(section);
-            closeAddContent();
-            showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
+            <!-- Online Users -->
+            <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
+                <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
+                    <span class="online-indicator"></span>
+                    Online Now (Simulerade)
+                </h3>
+                <div id="onlineUsersList" class="flex flex-wrap gap-2">
+                    <div class="live-user-badge">
+                        <span class="online-indicator"></span>
+                        You
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900" style="max-height: 400px; min-height: 200px;">
+                <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
+                    <i class="fas fa-comments text-2xl mb-2 block"></i>
+                    Starta chatt med ditt team! Meddelanden får simulerade svar.
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="flex gap-2 items-center">
+                <input type="text" id="chatInput" placeholder="Skriv ditt meddelande..." 
+                       class="flex-1 p-3 border-2 border-blue-300 dark:border-blue-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all shadow-lg">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
             
             // 🆕 Show realtime activity
             realtimeSystem.addActivity(`Added content to ${section}: "${title}"`);
@@ -1322,3 +1305,4 @@
     </script>
 </body>
 </html>
+
