@@ -703,3 +703,4 @@
         showNotification('Welcome to the Team Dashboard! All features are active.', 'success');
     });
 </script>
+
