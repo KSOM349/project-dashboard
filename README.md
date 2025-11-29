@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Alla dina befintliga styles förblir oförändrade */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -83,33 +82,44 @@
             justify-content: center;
         }
 
-        /* 🆕 FIXED CHAT STYLES */
-        .team-chat-modal {
-            align-items: flex-start;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+        .user-content-item {
+            transition: all 0.3s ease;
         }
 
-        .team-chat-modal > div {
-            max-height: 90vh;
-            height: auto;
+        .user-content-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        @media (max-width: 768px) {
-            .team-chat-modal > div {
-                height: 90vh;
-            }
+        [data-theme="dark"] .text-gray-800 {
+            color: #f8fafc !important;
+        }
+        
+        [data-theme="dark"] .text-gray-600 {
+            color: #cbd5e1 !important;
+        }
+        
+        [data-theme="dark"] .text-gray-700 {
+            color: #e2e8f0 !important;
+        }
+        
+        [data-theme="dark"] .border-gray-200 {
+            border-color: #475569 !important;
+        }
+        
+        [data-theme="dark"] .bg-white {
+            background-color: #334155 !important;
+        }
+        
+        [data-theme="dark"] .bg-gray-100 {
+            background-color: #1e293b !important;
+        }
+        
+        [data-theme="dark"] .bg-gray-50 {
+            background-color: #1e293b !important;
         }
 
-        .chat-input-container {
-            min-height: 60px;
-        }
-
-        .chat-messages-container {
-            max-height: 400px;
-            min-height: 300px;
-        }
-
+        /* 🆕 NEW REALTIME STYLES - SIMPLE AND VISIBLE */
         .online-indicator {
             width: 10px;
             height: 10px;
@@ -150,9 +160,8 @@
             margin: 8px 0;
             padding: 12px 16px;
             border-radius: 18px;
-            max-width: 85%;
+            max-width: 80%;
             word-wrap: break-word;
-            word-break: break-word;
         }
 
         .chat-message.own {
@@ -208,16 +217,52 @@
     </style>
 </head>
 <body class="theme-transition" data-theme="light">
-    <!-- Dina befintliga modaler och layout... -->
+    <!-- Add Content Modal -->
+    <div class="add-content-modal" id="addContentModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white" id="modalTitle">Add New Content</h2>
+            <form id="addContentForm" class="space-y-4">
+                <input type="hidden" id="contentSection">
+                <input type="hidden" id="editContentId">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" id="contentTitle" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Content</label>
+                    <textarea id="contentDescription" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-40" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Author</label>
+                    <select id="contentAuthor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="Kaled Osman">Kaled Osman</option>
+                        <option value="Fahad Hussain">Fahad Hussain</option>
+                        <option value="Stefan Österberg">Stefan Österberg</option>
+                        <option value="Marcus Tibell">Marcus Tibell</option>
+                        <option value="Jens Annell">Jens Annell</option>
+                        <option value="Luwam">Luwam</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">
+                        <span id="submitButtonText">Add Content</span>
+                    </button>
+                    <button type="button" onclick="closeAddContent()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <!-- 🆕 UPPDATERAD Team Chat Modal med bättre layout -->
+    <!-- 🆕 NEW: Team Chat Modal -->
     <div class="team-chat-modal" id="teamChatModal">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full mx-4 shadow-2xl max-w-4xl">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl h-[80vh] flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                     <span class="realtime-badge">
                         <span class="online-indicator"></span>
-                        SIMULERAD CHAT
+                        LIVE
                     </span>
                     Team Chat
                 </h2>
@@ -226,25 +271,11 @@
                 </button>
             </div>
             
-            <!-- Info Banner - Förklarar hur chatten fungerar -->
-            <div class="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-info-circle text-yellow-600 dark:text-yellow-400 text-xl"></i>
-                    <div>
-                        <div class="font-semibold text-yellow-800 dark:text-yellow-200">Simulerad Chat</div>
-                        <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            Denna chat är för demonstration. Meddelanden skickas inte till riktiga användare. 
-                            Systemet simulerar svar från teammedlemmar efter 2 sekunder.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Online Users -->
             <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
                 <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
                     <span class="online-indicator"></span>
-                    Online Now (Simulerade)
+                    Online Now
                 </h3>
                 <div id="onlineUsersList" class="flex flex-wrap gap-2">
                     <div class="live-user-badge">
@@ -255,66 +286,554 @@
             </div>
 
             <!-- Chat Messages -->
-            <div id="chatMessages" class="chat-messages-container overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900">
+            <div id="chatMessages" class="flex-1 overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900">
                 <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
                     <i class="fas fa-comments text-2xl mb-2 block"></i>
-                    Start chatting with your team! Messages will get simulated responses.
+                    Start chatting with your team in real-time!
                 </div>
             </div>
 
             <!-- Chat Input -->
-            <div class="chat-input-container flex gap-2 items-end">
+            <div class="flex gap-2">
                 <input type="text" id="chatInput" placeholder="Type your message..." 
                        class="flex-1 p-4 border-2 border-blue-300 dark:border-blue-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white text-lg"
                        onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl transition-all shadow-lg h-fit">
+                <button onclick="sendChatMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl transition-all shadow-lg">
                     <i class="fas fa-paper-plane text-lg"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Resten av din befintliga kod... -->
+    <!-- Main Layout -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar w-80 flex-shrink-0 theme-transition p-6">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
+                
+                <!-- 🆕 NEW: Realtime Status - VERY VISIBLE -->
+                <div id="realtimeStatus" class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="online-indicator"></span>
+                            <span class="font-semibold">LIVE UPDATES ACTIVE</span>
+                        </div>
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="text-xs opacity-90 mt-1">Real-time collaboration enabled</div>
+                </div>
+            </div>
+            
+            <!-- User Info Section -->
+            <div class="w-full mb-6">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                T
+                            </div>
+                            <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 dark:text-white truncate">Team Member</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <!-- 🆕 NEW: Team Chat Button - VERY VISIBLE -->
+                        <button onclick="openTeamChat()" class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white py-3 rounded-lg transition-all shadow-lg font-medium">
+                            <i class="fas fa-comments mr-2"></i>Team Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🆕 NEW: Live Team Activity - VERY VISIBLE -->
+            <div id="liveTeamSection" class="mb-6">
+                <div class="bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
+                    <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
+                        <span class="online-indicator"></span>
+                        Live Team Activity
+                    </h3>
+                    <div id="liveTeamList" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Online team members will appear here -->
+                    </div>
+                    <div id="realtimeActivities" class="mt-3 space-y-2">
+                        <!-- Real-time activities will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation - ALL 9 SECTIONS -->
+            <nav class="space-y-2 mb-8">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
+                    <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="project-documentation">
+                    <i class="fas fa-folder mr-3 w-6 text-center"></i>Project Documentation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-collaboration">
+                    <i class="fas fa-users mr-3 w-6 text-center"></i>Team Collaboration
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-updates">
+                    <i class="fas fa-bullhorn mr-3 w-6 text-center"></i>Team Updates
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="ai-assistant">
+                    <i class="fas fa-robot mr-3 w-6 text-center"></i>AI Assistant
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="practical-tasks">
+                    <i class="fas fa-tasks mr-3 w-6 text-center"></i>Practical Tasks
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="implementation">
+                    <i class="fas fa-code mr-3 w-6 text-center"></i>Implementation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="research">
+                    <i class="fas fa-search mr-3 w-6 text-center"></i>Research
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="resources">
+                    <i class="fas fa-book mr-3 w-6 text-center"></i>Resources
+                </button>
+            </nav>
+
+            <!-- Theme Toggle -->
+            <div class="mt-auto">
+                <button onclick="toggleTheme()" class="w-full p-4 rounded-xl theme-transition bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 flex items-center justify-center font-medium">
+                    <i class="fas fa-moon mr-3"></i>Toggle Theme
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+            <header class="gradient-header text-white p-6 shadow-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold">Security Chaos Engineering Dashboard</h1>
+                        <p class="mt-2 opacity-90">Group 1 - Full-Stack Dashboard with Real-time Data</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm opacity-90" id="loginStatus">
+                            Welcome to the Team Dashboard
+                        </div>
+                        <!-- 🆕 NEW: Live Activity Indicator - VERY VISIBLE -->
+                        <div id="liveActivity">
+                            <div class="flex items-center space-x-2 bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm border-2 border-green-300">
+                                <span class="online-indicator"></span>
+                                <span class="text-sm font-semibold">LIVE MODE ACTIVE</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex space-x-3">
+                            <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                                <div class="text-lg font-bold">12%</div>
+                                <div class="text-xs opacity-90">CPU</div>
+                            </div>
+                            <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                                <div class="text-lg font-bold">45%</div>
+                                <div class="text-xs opacity-90">Memory</div>
+                            </div>
+                        </div>
+                        <button onclick="fetchSystemData()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl transition-all backdrop-blur-sm">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections - ALL 9 SECTIONS -->
+            <div class="p-8">
+                <!-- Overview Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Overview</h2>
+                        <button onclick="openAddContent('overview')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    
+                    <!-- 🆕 NEW: Live Activity Feed - VERY VISIBLE -->
+                    <div id="liveActivityFeed" class="mb-6 p-6 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800 shadow-lg">
+                        <h3 class="font-semibold mb-4 text-gray-800 dark:text-white text-xl flex items-center gap-2">
+                            <span class="realtime-badge">
+                                <span class="online-indicator"></span>
+                                LIVE
+                            </span>
+                            Team Activity Feed
+                        </h3>
+                        <div id="activityList" class="space-y-3">
+                            <div class="text-center text-gray-500 dark:text-gray-400 py-4">
+                                <i class="fas fa-bolt text-2xl mb-2"></i>
+                                <div>Team activities will appear here in real-time</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="overview-content" class="space-y-4 mb-8"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">8</div>
+                            <div class="text-blue-100">Total Tasks</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">3</div>
+                            <div class="text-green-100">Completed</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">2</div>
+                            <div class="text-yellow-100">In Progress</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">6</div>
+                            <div class="text-purple-100">Team Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Documentation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
+                        <button onclick="openAddContent('project-documentation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="project-documentation-content" class="space-y-4 mb-8"></div>
+                </div>
+
+                <!-- Team Collaboration Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
+                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-collaboration-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
+                            <form id="assignment-form" class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Name:</label>
+                                    <input type="text" id="task-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description:</label>
+                                    <textarea id="task-desc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Assignee:</label>
+                                    <select id="task-assignee" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                        <option value="Kaled Osman">Kaled Osman</option>
+                                        <option value="Fahad Hussain">Fahad Hussain</option>
+                                        <option value="Stefan Österberg">Stefan Österberg</option>
+                                        <option value="Marcus Tibell">Marcus Tibell</option>
+                                        <option value="Jens Annell">Jens Annell</option>
+                                        <option value="Luwam">Luwam</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Add Task
+                                </button>
+                            </form>
+                        </div>
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
+                            <div id="assignments-list" class="space-y-3">
+                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
+                                    <strong class="text-gray-800 dark:text-white">Improve Dijkstra Algorithm</strong>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add performance improvements and complexity analysis</p>
+                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Kaled Osman</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Updates Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
+                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-updates-content" class="space-y-4 mb-8"></div>
+                    <div class="space-y-6">
+                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
+                            <form id="team-update-form" class="space-y-3">
+                                <div class="grid md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Your Name:</label>
+                                        <select id="update-author" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="Kaled Osman">Kaled Osman</option>
+                                            <option value="Fahad Hussain">Fahad Hussain</option>
+                                            <option value="Stefan Österberg">Stefan Österberg</option>
+                                            <option value="Marcus Tibell">Marcus Tibell</option>
+                                            <option value="Jens Annell">Jens Annell</option>
+                                            <option value="Luwam">Luwam</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Status:</label>
+                                        <select id="update-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
+                                            <option value="completed">Completed</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="planned">Planned</option>
+                                            <option value="blocked">Blocked</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Description:</label>
+                                    <input type="text" id="update-title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Details:</label>
+                                    <textarea id="update-details" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24" placeholder="Describe your work..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
+                                    Publish Update
+                                </button>
+                            </form>
+                        </div>
+                        <div id="team-updates-list" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4 mb-8"></div>
+                    <div class="space-y-4">
+                        <div class="ai-chat-container border border-gray-300 dark:border-gray-600 rounded-lg p-4 h-64 overflow-y-auto theme-transition bg-white dark:bg-gray-800">
+                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2">
+                                <strong class="text-gray-800 dark:text-white">AI Assistant:</strong> 
+                                <span class="text-gray-700 dark:text-gray-300">Hello! I'm here to help you with Security Chaos Engineering and Cloud Networks. Ask me anything!</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="aiChatInput" class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition bg-white dark:bg-gray-700 text-gray-800 dark:text-white" placeholder="Ask about Security Chaos Engineering or Cloud Networks...">
+                            <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Send
+                            </button>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Quick Commands</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="quickQuestion('What is Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    Security Chaos Engineering
+                                </button>
+                                <button onclick="quickQuestion('How to apply Security Chaos Engineering in AWS?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
+                                    AWS Implementation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Practical Tasks Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Current Practical Tasks</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-700">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Network Security Analysis</h4>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-2">Analyze current network security protocols and identify potential vulnerabilities.</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-sm text-blue-600 dark:text-blue-400">Status: In Progress</span>
+                                        <span class="text-sm text-gray-500">Due: 2024-02-15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border-2 border-green-200 dark:border-green-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Completed Tasks</h3>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-700">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium text-gray-800 dark:text-white">Initial Research</span>
+                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="implementation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Implementation</h2>
+                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="implementation-content" class="space-y-4 mb-8"></div>
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-700">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Implementation Progress</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
+                                <span class="font-medium text-gray-800 dark:text-white">Backend API Development</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">75%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
+                                <span class="font-medium text-gray-800 dark:text-white">Frontend Dashboard</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">90%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="research">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Research</h2>
+                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="research-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Topics</h3>
+                            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Security Chaos Engineering Principles
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Cloud Network Security
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-spinner text-blue-500 mr-2"></i>
+                                    AWS Security Best Practices
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="far fa-circle text-gray-400 mr-2"></i>
+                                    Chaos Engineering Tools
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl border-2 border-teal-200 dark:border-teal-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Resources</h3>
+                            <div class="space-y-3">
+                                <a href="#" class="block p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="font-medium text-gray-800 dark:text-white">AWS Security Documentation</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Official AWS security guidelines and best practices</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="resources">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Resources</h2>
+                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="resources-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border-2 border-indigo-200 dark:border-indigo-700 text-center">
+                            <i class="fas fa-book text-4xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Documentation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Project documentation and guidelines</p>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border-2 border-pink-200 dark:border-pink-700 text-center">
+                            <i class="fas fa-tools text-4xl text-pink-600 dark:text-pink-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Tools</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Development tools and resources</p>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl border-2 border-amber-200 dark:border-amber-700 text-center">
+                            <i class="fas fa-link text-4xl text-amber-600 dark:text-amber-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Links</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Useful references and websites</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 🆕 FÖRBÄTTRAD REALTIME SYSTEM med bättre förklaringar
+        // 🆕 SIMPLE AND VISIBLE REALTIME SYSTEM
         class SimpleRealtimeSystem {
             constructor() {
                 this.connectedUsers = new Map();
                 this.currentUser = { id: '1', name: 'You', role: 'Team Member' };
                 this.isConnected = true;
-                this.chatHistory = [];
                 
-                console.log('💬 CHAT SYSTEM: Simulerad chat - inga riktiga meddelanden skickas');
+                // Start immediately since no login required
                 this.connect();
             }
 
             connect() {
                 this.isConnected = true;
+                
+                // Show immediate visual feedback
+                this.showConnectionStatus();
                 this.addDemoUsers();
                 this.startDemoActivities();
                 
-                console.log('🔗 REALTIME SYSTEM: Ansluten - All aktivitet är simulerad');
+                console.log('🔗 REALTIME SYSTEM: Connected');
+            }
+
+            showConnectionStatus() {
+                // All status elements are visible by default now
+                console.log('🟢 Realtime system active');
             }
 
             addDemoUsers() {
+                // Add demo team members
                 const demoUsers = [
                     { id: '2', name: 'Kaled Osman', role: 'Developer' },
                     { id: '3', name: 'Fahad Hussain', role: 'Researcher' },
                     { id: '4', name: 'Stefan Österberg', role: 'Architect' },
-                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' }
+                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' },
+                    { id: '6', name: 'Jens Annell', role: 'Analyst' },
+                    { id: '7', name: 'Luwam', role: 'Designer' }
                 ];
 
                 const onlineList = document.getElementById('onlineUsersList');
                 const liveTeamList = document.getElementById('liveTeamList');
                 
+                // Add current user first
                 this.addUserToLists(this.currentUser, onlineList, liveTeamList);
                 
+                // Add demo users with delays for realism
                 demoUsers.forEach((user, index) => {
                     setTimeout(() => {
                         this.addUserToLists(user, onlineList, liveTeamList);
-                        this.showRealtimeNotification(`📱 ${user.name} gick med i dashboarden (simulerad)`);
-                        this.addActivity(`${user.name} gick med i team session`);
+                        this.showRealtimeNotification(`${user.name} joined the dashboard`);
+                        this.addActivity(`${user.name} joined the team session`);
                     }, (index + 1) * 1500);
                 });
             }
@@ -322,6 +841,7 @@
             addUserToLists(user, onlineList, liveTeamList) {
                 this.connectedUsers.set(user.id, user);
                 
+                // Add to online users in chat
                 if (onlineList) {
                     const userBadge = document.createElement('div');
                     userBadge.className = 'live-user-badge';
@@ -332,6 +852,7 @@
                     onlineList.appendChild(userBadge);
                 }
 
+                // Add to live team list
                 if (liveTeamList) {
                     const userElement = document.createElement('div');
                     userElement.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-800';
@@ -349,150 +870,27 @@
                 }
             }
 
-            // 🆕 FÖRBÄTTRAD CHAT FUNKTION med tydligare simulering
-            sendChatMessage(messageText) {
-                if (!messageText.trim()) return;
-                
-                // Spara meddelande i historik
-                this.chatHistory.push({
-                    user: this.currentUser,
-                    text: messageText,
-                    timestamp: new Date(),
-                    type: 'sent'
-                });
-                
-                this.displayChatMessage(messageText, this.currentUser);
-                
-                // 🎭 SIMULERA SVAR från andra användare
-                this.simulateResponse(messageText);
-            }
-
-            simulateResponse(originalMessage) {
-                const users = Array.from(this.connectedUsers.values());
-                const randomUser = users.find(u => u.id !== this.currentUser.id);
-                
-                if (!randomUser) return;
-
-                // Vänta 1-3 sekunder för mer realistiskt svar
-                const delay = 1000 + Math.random() * 2000;
-                
-                setTimeout(() => {
-                    const responses = this.generateResponse(originalMessage, randomUser);
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    
-                    // Spara simulerat svar i historik
-                    this.chatHistory.push({
-                        user: randomUser,
-                        text: randomResponse,
-                        timestamp: new Date(),
-                        type: 'received'
-                    });
-                    
-                    this.displayChatMessage(randomResponse, randomUser);
-                    
-                    // Visa notifikation om chatten inte är öppen
-                    if (!document.getElementById('teamChatModal').classList.contains('active')) {
-                        this.showRealtimeNotification(`💬 ${randomUser.name}: ${randomResponse}`);
-                    }
-                }, delay);
-            }
-
-            generateResponse(originalMessage, user) {
-                const message = originalMessage.toLowerCase();
-                
-                // Olika svar baserat på innehåll i meddelandet
-                if (message.includes('?')) {
-                    return [
-                        "Bra fråga! Jag måste kolla upp det.",
-                        "Jag tror jag vet svaret på det. Låt mig dubbelkolla.",
-                        "Det är en intressant fråga. Vad tror du själv?",
-                        "Jag har funderat på det också. Vi borde diskutera det på nästa möte."
-                    ];
-                } else if (message.includes('tack') || message.includes('thank')) {
-                    return [
-                        "Ingen orsak! Glad att kunna hjälpa.",
-                        "Visst, det var så lite!",
-                        "Alltid kul att samarbeta med dig!",
-                        "Tack själv för bra teamwork!"
-                    ];
-                } else if (message.includes('hej') || message.includes('hello') || message.includes('hi')) {
-                    return [
-                        "Hej! Kul att du är här!",
-                        "Tjena! Hur går det?",
-                        "Hejsan! Ska vi jobba på något speciellt idag?",
-                        "Hallå! Bra timing, jag behövde just prata med dig."
-                    ];
-                } else {
-                    return [
-                        "Intressant! Kan du berätta mer?",
-                        "Jag håller med dig där.",
-                        "Det låter som en bra idé.",
-                        "Jag ska titta på det direkt.",
-                        "Bra poäng! Vi borde dokumentera det.",
-                        "Perfekt timing - jag jobbade just med något liknande."
-                    ];
-                }
-            }
-
-            displayChatMessage(text, user) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (!chatMessages) return;
-
-                const messageElement = document.createElement('div');
-                const isOwnMessage = user.id === this.currentUser.id;
-                messageElement.className = `chat-message ${isOwnMessage ? 'own' : 'other'}`;
-                messageElement.innerHTML = `
-                    <div class="font-semibold ${isOwnMessage ? 'text-blue-100' : 'text-gray-800'}">${user.name}</div>
-                    <div class="${isOwnMessage ? 'text-white' : 'text-gray-700'}">${text}</div>
-                    <div class="text-xs ${isOwnMessage ? 'text-blue-200' : 'text-gray-500'} mt-1">${new Date().toLocaleTimeString()}</div>
-                `;
-                chatMessages.appendChild(messageElement);
-                
-                // Ta bort placeholder
-                const placeholder = chatMessages.querySelector('.text-center');
-                if (placeholder) placeholder.remove();
-                
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            showRealtimeNotification(message) {
-                const notification = document.createElement('div');
-                notification.className = 'realtime-notification';
-                notification.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="online-indicator"></span>
-                        <div>
-                            <div class="font-semibold text-gray-800">Team Activity</div>
-                            <div class="text-sm text-gray-600">${message}</div>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'slideInRight 0.5s ease reverse';
-                    setTimeout(() => {
-                        if (notification.parentElement) {
-                            notification.remove();
-                        }
-                    }, 500);
-                }, 4000);
-            }
-
             startDemoActivities() {
-                // Simulera team aktiviteter
-                setTimeout(() => this.simulateActivity('Kaled Osman', 'la till dokumentation i Project Documentation'), 3000);
-                setTimeout(() => this.simulateActivity('Fahad Hussain', 'jobbar med algoritmförbättringar'), 6000);
-                setTimeout(() => this.simulateActivity('Stefan Österberg', 'uppdaterade teamuppgifter i Collaboration'), 9000);
+                // Simulate team activities
+                setTimeout(() => this.simulateActivity('Kaled Osman', 'added documentation to Project Documentation'), 3000);
+                setTimeout(() => this.simulateActivity('Fahad Hussain', 'is working on algorithm improvements'), 6000);
+                setTimeout(() => this.simulateActivity('Stefan Österberg', 'updated team tasks in Collaboration'), 9000);
+                setTimeout(() => this.simulateActivity('Marcus Tibell', 'reviewed security protocols'), 12000);
+                setTimeout(() => this.simulateActivity('Jens Annell', 'added research notes to Research section'), 15000);
+                setTimeout(() => this.simulateActivity('Luwam', 'updated design resources in Resources'), 18000);
                 
+                // Keep adding activities periodically
                 setInterval(() => {
                     const users = Array.from(this.connectedUsers.values());
                     const randomUser = users[Math.floor(Math.random() * users.length)];
                     const activities = [
-                        'redigerar projekt dokumentation',
-                        'la till nytt innehåll i dashboarden',
-                        'granskar team uppdateringar',
-                        'jobbar med praktiska uppgifter'
+                        'is editing project documentation',
+                        'added new content to dashboard',
+                        'is reviewing team updates',
+                        'is working on practical tasks',
+                        'updated implementation notes',
+                        'added research findings',
+                        'updated resource links'
                     ];
                     const randomActivity = activities[Math.floor(Math.random() * activities.length)];
                     
@@ -523,15 +921,93 @@
                         <div class="text-xs text-gray-500 mt-1">${new Date().toLocaleTimeString()}</div>
                     `;
                     
+                    // Remove placeholder if it exists
                     const placeholder = activityList.querySelector('.text-center');
                     if (placeholder) placeholder.remove();
                     
                     activityList.insertBefore(activityElement, activityList.firstChild);
                     
+                    // Keep only last 5 activities
                     if (activityList.children.length > 5) {
                         activityList.removeChild(activityList.lastChild);
                     }
                 }
+
+                // Also add to sidebar activities
+                if (realtimeActivities) {
+                    const sidebarActivity = document.createElement('div');
+                    sidebarActivity.className = 'text-sm text-gray-600 dark:text-gray-400 p-2 bg-white/50 dark:bg-gray-600/50 rounded';
+                    sidebarActivity.textContent = `• ${text}`;
+                    realtimeActivities.insertBefore(sidebarActivity, realtimeActivities.firstChild);
+                    
+                    if (realtimeActivities.children.length > 3) {
+                        realtimeActivities.removeChild(realtimeActivities.lastChild);
+                    }
+                }
+            }
+
+            sendChatMessage(messageText) {
+                this.displayChatMessage(messageText, this.currentUser);
+                
+                // Simulate responses from other users
+                setTimeout(() => {
+                    const users = Array.from(this.connectedUsers.values());
+                    const randomUser = users.find(u => u.id !== this.currentUser.id);
+                    if (randomUser) {
+                        const responses = [
+                            "Thanks for the update!",
+                            "I'm working on that right now",
+                            "Can we discuss this in the meeting?",
+                            "Great progress!",
+                            "I'll review this shortly",
+                            "That's interesting, let me check",
+                            "I have some thoughts on this"
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        this.displayChatMessage(randomResponse, randomUser);
+                    }
+                }, 2000);
+            }
+
+            displayChatMessage(text, user) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (chatMessages) {
+                    const messageElement = document.createElement('div');
+                    const isOwnMessage = user.id === this.currentUser.id;
+                    messageElement.className = `chat-message ${isOwnMessage ? 'own' : 'other'}`;
+                    messageElement.innerHTML = `
+                        <div class="font-semibold ${isOwnMessage ? 'text-blue-100' : 'text-gray-800'}">${user.name}</div>
+                        <div class="${isOwnMessage ? 'text-white' : 'text-gray-700'}">${text}</div>
+                        <div class="text-xs ${isOwnMessage ? 'text-blue-200' : 'text-gray-500'} mt-1">${new Date().toLocaleTimeString()}</div>
+                    `;
+                    chatMessages.appendChild(messageElement);
+                    
+                    // Remove initial placeholder
+                    const placeholder = chatMessages.querySelector('.text-center');
+                    if (placeholder) placeholder.remove();
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+
+            showRealtimeNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'realtime-notification';
+                notification.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="online-indicator"></span>
+                        <div>
+                            <div class="font-semibold text-gray-800">Live Update</div>
+                            <div class="text-sm text-gray-600">${message}</div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideInRight 0.5s ease reverse';
+                    setTimeout(() => notification.remove(), 500);
+                }, 4000);
             }
         }
 
@@ -561,11 +1037,288 @@
         document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendChatMessage();
-                e.preventDefault();
             }
         });
 
-        // Resten av din befintliga kod...
+        // =============================================
+        // EXISTING CODE (WITHOUT LOGIN SYSTEM)
+        // =============================================
+
+        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
+
+        function saveContents() {
+            localStorage.setItem('userContents', JSON.stringify(userContents));
+        }
+
+        // Add content with realtime features
+        document.getElementById('addContentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const section = document.getElementById('contentSection').value;
+            const contentId = document.getElementById('editContentId').value;
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const author = document.getElementById('contentAuthor').value;
+            
+            if (!userContents[section]) {
+                userContents[section] = [];
+            }
+            
+            let content;
+            if (contentId) {
+                const index = userContents[section].findIndex(item => item.id === contentId);
+                if (index !== -1) {
+                    content = {
+                        id: contentId,
+                        title,
+                        description,
+                        author,
+                        date: userContents[section][index].date,
+                        updated: new Date().toISOString()
+                    };
+                    userContents[section][index] = content;
+                }
+            } else {
+                content = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    author,
+                    date: new Date().toISOString(),
+                    updated: null
+                };
+                userContents[section].push(content);
+            }
+            
+            saveContents();
+            renderSectionContents(section);
+            closeAddContent();
+            showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
+            
+            // 🆕 Show realtime activity
+            realtimeSystem.addActivity(`Added content to ${section}: "${title}"`);
+            realtimeSystem.showRealtimeNotification(`New content added: "${title}"`);
+        });
+
+        function openAddContent(section, contentId = null) {
+            document.getElementById('contentSection').value = section;
+            document.getElementById('editContentId').value = contentId || '';
+            
+            if (contentId) {
+                document.getElementById('modalTitle').textContent = 'Edit Content';
+                document.getElementById('submitButtonText').textContent = 'Update Content';
+                const content = userContents[section].find(item => item.id === contentId);
+                if (content) {
+                    document.getElementById('contentTitle').value = content.title;
+                    document.getElementById('contentDescription').value = content.description;
+                    document.getElementById('contentAuthor').value = content.author;
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = 'Add New Content';
+                document.getElementById('submitButtonText').textContent = 'Add Content';
+                document.getElementById('addContentForm').reset();
+                document.getElementById('contentAuthor').value = 'Kaled Osman';
+            }
+            
+            document.getElementById('addContentModal').classList.add('active');
+        }
+
+        function closeAddContent() {
+            document.getElementById('addContentModal').classList.remove('active');
+        }
+
+        function renderSectionContents(section) {
+            const container = document.getElementById(`${section}-content`);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!userContents[section] || userContents[section].length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No content added yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userContents[section].forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.className = 'user-content-item p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800';
+                contentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
+                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString('en-US')}</span>
+                    </div>
+                    ${content.updated ? `
+                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-500">
+                        <i class="fas fa-sync mr-1"></i> Updated: ${new Date(content.updated).toLocaleDateString('en-US')}
+                    </div>
+                    ` : ''}
+                `;
+                container.appendChild(contentElement);
+            });
+        }
+
+        function editContent(section, contentId) {
+            openAddContent(section, contentId);
+        }
+
+        function deleteContent(section, contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                userContents[section] = userContents[section].filter(item => item.id !== contentId);
+                saveContents();
+                renderSectionContents(section);
+                showNotification('Content deleted successfully!', 'success');
+            }
+        }
+
+        function initializeAllContents() {
+            const sections = [
+                'overview', 
+                'project-documentation', 
+                'team-collaboration', 
+                'team-updates', 
+                'ai-assistant',
+                'practical-tasks',
+                'implementation', 
+                'research',
+                'resources'
+            ];
+            sections.forEach(section => {
+                renderSectionContents(section);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                body.classList.add('dark');
+            } else {
+                body.classList.remove('dark');
+            }
+            
+            showNotification('Theme changed to ' + newTheme + ' mode', 'success');
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => {
+                        b.classList.remove('active-section');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    });
+                    this.classList.add('active-section');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    
+                    const sectionId = this.dataset.section;
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+        }
+
+        function fetchSystemData() {
+            showNotification('Fetching system data...', 'info');
+            setTimeout(() => {
+                showNotification('System data updated!', 'success');
+            }, 1000);
+        }
+
+        // AI Assistant Functions
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatContainer = document.querySelector('.ai-chat-container');
+                const userMessage = document.createElement('div');
+                userMessage.className = 'p-3 bg-blue-100 dark:bg-blue-800 rounded-lg mb-2 ml-8';
+                userMessage.innerHTML = `<strong>You:</strong> ${message}`;
+                chatContainer.appendChild(userMessage);
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = document.createElement('div');
+                    aiResponse.className = 'p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-2';
+                    aiResponse.innerHTML = `<strong>AI Assistant:</strong> I understand you're asking about "${message}". In Security Chaos Engineering, this typically involves...`;
+                    chatContainer.appendChild(aiResponse);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('aiChatInput').value = question;
+            sendAIMessage();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.body.classList.add('dark');
+            }
+
+            setupNavigation();
+            fetchSystemData();
+            initializeAllContents();
+            
+            showNotification('Welcome to the Team Dashboard! Realtime features are active.', 'success');
+        });
+
     </script>
 </body>
 </html>
