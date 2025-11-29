@@ -366,7 +366,7 @@
                 </div>
             </div>
 
-            <!-- Navigation -->
+            <!-- Navigation - ALL 9 SECTIONS -->
             <nav class="space-y-2 mb-8">
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
                     <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
@@ -382,6 +382,18 @@
                 </button>
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="ai-assistant">
                     <i class="fas fa-robot mr-3 w-6 text-center"></i>AI Assistant
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="practical-tasks">
+                    <i class="fas fa-tasks mr-3 w-6 text-center"></i>Practical Tasks
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="implementation">
+                    <i class="fas fa-code mr-3 w-6 text-center"></i>Implementation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="research">
+                    <i class="fas fa-search mr-3 w-6 text-center"></i>Research
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="resources">
+                    <i class="fas fa-book mr-3 w-6 text-center"></i>Resources
                 </button>
             </nav>
 
@@ -429,7 +441,7 @@
                 </div>
             </header>
 
-            <!-- Content Sections -->
+            <!-- Content Sections - ALL 9 SECTIONS -->
             <div class="p-8">
                 <!-- Overview Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
@@ -629,6 +641,144 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Practical Tasks Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Current Practical Tasks</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-700">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Network Security Analysis</h4>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-2">Analyze current network security protocols and identify potential vulnerabilities.</p>
+                                    <div class="flex justify-between items-center mt-3">
+                                        <span class="text-sm text-blue-600 dark:text-blue-400">Status: In Progress</span>
+                                        <span class="text-sm text-gray-500">Due: 2024-02-15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border-2 border-green-200 dark:border-green-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Completed Tasks</h3>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-700">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium text-gray-800 dark:text-white">Initial Research</span>
+                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="implementation">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Implementation</h2>
+                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="implementation-content" class="space-y-4 mb-8"></div>
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-700">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Implementation Progress</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
+                                <span class="font-medium text-gray-800 dark:text-white">Backend API Development</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">75%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
+                                <span class="font-medium text-gray-800 dark:text-white">Frontend Dashboard</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">90%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="research">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Research</h2>
+                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="research-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Topics</h3>
+                            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Security Chaos Engineering Principles
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Cloud Network Security
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-spinner text-blue-500 mr-2"></i>
+                                    AWS Security Best Practices
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="far fa-circle text-gray-400 mr-2"></i>
+                                    Chaos Engineering Tools
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl border-2 border-teal-200 dark:border-teal-700">
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Resources</h3>
+                            <div class="space-y-3">
+                                <a href="#" class="block p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="font-medium text-gray-800 dark:text-white">AWS Security Documentation</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Official AWS security guidelines and best practices</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="resources">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Resources</h2>
+                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="resources-content" class="space-y-4 mb-8"></div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border-2 border-indigo-200 dark:border-indigo-700 text-center">
+                            <i class="fas fa-book text-4xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Documentation</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Project documentation and guidelines</p>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border-2 border-pink-200 dark:border-pink-700 text-center">
+                            <i class="fas fa-tools text-4xl text-pink-600 dark:text-pink-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Tools</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Development tools and resources</p>
+                        </div>
+                        <div class="p-6 bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl border-2 border-amber-200 dark:border-amber-700 text-center">
+                            <i class="fas fa-link text-4xl text-amber-600 dark:text-amber-400 mb-4"></i>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Links</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Useful references and websites</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -667,7 +817,9 @@
                     { id: '2', name: 'Kaled Osman', role: 'Developer' },
                     { id: '3', name: 'Fahad Hussain', role: 'Researcher' },
                     { id: '4', name: 'Stefan Österberg', role: 'Architect' },
-                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' }
+                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' },
+                    { id: '6', name: 'Jens Annell', role: 'Analyst' },
+                    { id: '7', name: 'Luwam', role: 'Designer' }
                 ];
 
                 const onlineList = document.getElementById('onlineUsersList');
@@ -724,6 +876,8 @@
                 setTimeout(() => this.simulateActivity('Fahad Hussain', 'is working on algorithm improvements'), 6000);
                 setTimeout(() => this.simulateActivity('Stefan Österberg', 'updated team tasks in Collaboration'), 9000);
                 setTimeout(() => this.simulateActivity('Marcus Tibell', 'reviewed security protocols'), 12000);
+                setTimeout(() => this.simulateActivity('Jens Annell', 'added research notes to Research section'), 15000);
+                setTimeout(() => this.simulateActivity('Luwam', 'updated design resources in Resources'), 18000);
                 
                 // Keep adding activities periodically
                 setInterval(() => {
@@ -734,7 +888,9 @@
                         'added new content to dashboard',
                         'is reviewing team updates',
                         'is working on practical tasks',
-                        'updated implementation notes'
+                        'updated implementation notes',
+                        'added research findings',
+                        'updated resource links'
                     ];
                     const randomActivity = activities[Math.floor(Math.random() * activities.length)];
                     
@@ -803,7 +959,9 @@
                             "I'm working on that right now",
                             "Can we discuss this in the meeting?",
                             "Great progress!",
-                            "I'll review this shortly"
+                            "I'll review this shortly",
+                            "That's interesting, let me check",
+                            "I have some thoughts on this"
                         ];
                         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
                         this.displayChatMessage(randomResponse, randomUser);
@@ -1029,7 +1187,17 @@
         }
 
         function initializeAllContents() {
-            const sections = ['overview', 'project-documentation', 'team-collaboration', 'team-updates', 'ai-assistant'];
+            const sections = [
+                'overview', 
+                'project-documentation', 
+                'team-collaboration', 
+                'team-updates', 
+                'ai-assistant',
+                'practical-tasks',
+                'implementation', 
+                'research',
+                'resources'
+            ];
             sections.forEach(section => {
                 renderSectionContents(section);
             });
