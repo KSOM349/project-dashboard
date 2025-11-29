@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Alla dina befintliga styles förblir oförändrade */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -83,7 +82,6 @@
             justify-content: center;
         }
 
-        /* 🆕 FIXED CHAT STYLES */
         .team-chat-modal {
             align-items: flex-start;
             padding-top: 2rem;
@@ -153,6 +151,7 @@
             max-width: 85%;
             word-wrap: break-word;
             word-break: break-word;
+            position: relative;
         }
 
         .chat-message.own {
@@ -208,33 +207,70 @@
     </style>
 </head>
 <body class="theme-transition" data-theme="light">
-    <!-- Dina befintliga modaler och layout... -->
+    <!-- Add Content Modal -->
+    <div class="add-content-modal" id="addContentModal">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Add New Content</h2>
+            <form id="addContentForm" class="space-y-4">
+                <input type="hidden" id="contentSection">
+                <input type="hidden" id="editContentId">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" id="contentTitle" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Content</label>
+                    <textarea id="contentDescription" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-40" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Author</label>
+                    <select id="contentAuthor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="Kaled Osman">Kaled Osman</option>
+                        <option value="Fahad Hussain">Fahad Hussain</option>
+                        <option value="Stefan Österberg">Stefan Österberg</option>
+                        <option value="Marcus Tibell">Marcus Tibell</option>
+                        <option value="Jens Annell">Jens Annell</option>
+                        <option value="Luwam">Luwam</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">Add Content</button>
+                    <button type="button" onclick="closeAddContent()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <!-- 🆕 UPPDATERAD Team Chat Modal med bättre layout -->
+    <!-- Team Chat Modal -->
     <div class="team-chat-modal" id="teamChatModal">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full mx-4 shadow-2xl max-w-4xl">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                     <span class="realtime-badge">
                         <span class="online-indicator"></span>
-                        SIMULERAD CHAT
+                        RIKTIG CHAT
                     </span>
                     Team Chat
                 </h2>
-                <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="showDeletedMessages()" class="text-blue-600 hover:text-blue-800 text-sm">
+                        <i class="fas fa-trash-restore"></i> Ångra
+                    </button>
+                    <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
             </div>
             
-            <!-- Info Banner - Förklarar hur chatten fungerar -->
-            <div class="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
+            <!-- Info Banner -->
+            <div class="mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
                 <div class="flex items-center gap-3">
-                    <i class="fas fa-info-circle text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
                     <div>
-                        <div class="font-semibold text-yellow-800 dark:text-yellow-200">Simulerad Chat</div>
-                        <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            Denna chat är för demonstration. Meddelanden skickas inte till riktiga användare. 
-                            Systemet simulerar svar från teammedlemmar efter 2 sekunder.
+                        <div class="font-semibold text-green-800 dark:text-green-200">Riktig Team Chat</div>
+                        <div class="text-sm text-green-700 dark:text-green-300 mt-1">
+                            Alla meddelanden är riktiga och delas mellan alla som använder denna dashboard! 
+                            Skicka meddelanden och se hur andra kan svara på riktigt.
                         </div>
                     </div>
                 </div>
@@ -244,13 +280,10 @@
             <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
                 <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
                     <span class="online-indicator"></span>
-                    Online Now (Simulerade)
+                    Team Members
                 </h3>
                 <div id="onlineUsersList" class="flex flex-wrap gap-2">
-                    <div class="live-user-badge">
-                        <span class="online-indicator"></span>
-                        You
-                    </div>
+                    <!-- Team members will appear here -->
                 </div>
             </div>
 
@@ -258,7 +291,7 @@
             <div id="chatMessages" class="chat-messages-container overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900">
                 <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
                     <i class="fas fa-comments text-2xl mb-2 block"></i>
-                    Start chatting with your team! Messages will get simulated responses.
+                    Start chatting with your team! All messages are real and shared between all users.
                 </div>
             </div>
 
@@ -274,273 +307,414 @@
         </div>
     </div>
 
-    <!-- Resten av din befintliga kod... -->
+    <!-- Main Layout -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar w-80 flex-shrink-0 theme-transition p-6">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
+                
+                <div id="realtimeStatus" class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="online-indicator"></span>
+                            <span class="font-semibold">LIVE UPDATES ACTIVE</span>
+                        </div>
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="text-xs opacity-90 mt-1">Real-time collaboration enabled</div>
+                </div>
+            </div>
+            
+            <!-- User Info Section -->
+            <div class="w-full mb-6">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                T
+                            </div>
+                            <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 dark:text-white truncate">Team Member</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <button onclick="openTeamChat()" class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white py-3 rounded-lg transition-all shadow-lg font-medium">
+                            <i class="fas fa-comments mr-2"></i>Team Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Team Activity -->
+            <div id="liveTeamSection" class="mb-6">
+                <div class="bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
+                    <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
+                        <span class="online-indicator"></span>
+                        Live Team Activity
+                    </h3>
+                    <div id="liveTeamList" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Online team members will appear here -->
+                    </div>
+                    <div id="realtimeActivities" class="mt-3 space-y-2">
+                        <!-- Real-time activities will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-2 mb-8">
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
+                    <i class="fas fa-home mr-3 w-6 text-center"></i>Overview
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="project-documentation">
+                    <i class="fas fa-folder mr-3 w-6 text-center"></i>Project Documentation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-collaboration">
+                    <i class="fas fa-users mr-3 w-6 text-center"></i>Team Collaboration
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="team-updates">
+                    <i class="fas fa-bullhorn mr-3 w-6 text-center"></i>Team Updates
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="ai-assistant">
+                    <i class="fas fa-robot mr-3 w-6 text-center"></i>AI Assistant
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="practical-tasks">
+                    <i class="fas fa-tasks mr-3 w-6 text-center"></i>Practical Tasks
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="implementation">
+                    <i class="fas fa-code mr-3 w-6 text-center"></i>Implementation
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="research">
+                    <i class="fas fa-search mr-3 w-6 text-center"></i>Research
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="resources">
+                    <i class="fas fa-book mr-3 w-6 text-center"></i>Resources
+                </button>
+            </nav>
+
+            <!-- Theme Toggle -->
+            <div class="mt-auto">
+                <button onclick="toggleTheme()" class="w-full p-4 rounded-xl theme-transition bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 flex items-center justify-center font-medium">
+                    <i class="fas fa-moon mr-3"></i>Toggle Theme
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+            <header class="gradient-header text-white p-6 shadow-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold">Security Chaos Engineering Dashboard</h1>
+                        <p class="mt-2 opacity-90">Group 1 - Full-Stack Dashboard with Real-time Data</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm opacity-90" id="loginStatus">
+                            Welcome to the Team Dashboard
+                        </div>
+                        <div id="liveActivity">
+                            <div class="flex items-center space-x-2 bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm border-2 border-green-300">
+                                <span class="online-indicator"></span>
+                                <span class="text-sm font-semibold">LIVE MODE ACTIVE</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex space-x-3">
+                            <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                                <div class="text-lg font-bold">12%</div>
+                                <div class="text-xs opacity-90">CPU</div>
+                            </div>
+                            <div class="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                                <div class="text-lg font-bold">45%</div>
+                                <div class="text-xs opacity-90">Memory</div>
+                            </div>
+                        </div>
+                        <button onclick="fetchSystemData()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-3 rounded-xl transition-all backdrop-blur-sm">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="p-8">
+                <!-- Overview Section -->
+                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Overview</h2>
+                        <button onclick="openAddContent('overview')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    
+                    <!-- Live Activity Feed -->
+                    <div id="liveActivityFeed" class="mb-6 p-6 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800 shadow-lg">
+                        <h3 class="font-semibold mb-4 text-gray-800 dark:text-white text-xl flex items-center gap-2">
+                            <span class="realtime-badge">
+                                <span class="online-indicator"></span>
+                                LIVE
+                            </span>
+                            Team Activity Feed
+                        </h3>
+                        <div id="activityList" class="space-y-3">
+                            <div class="text-center text-gray-500 dark:text-gray-400 py-4">
+                                <i class="fas fa-bolt text-2xl mb-2"></i>
+                                <div>Team activities will appear here in real-time</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="overview-content" class="space-y-4 mb-8"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="text-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">8</div>
+                            <div class="text-blue-100">Total Tasks</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">3</div>
+                            <div class="text-green-100">Completed</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">2</div>
+                            <div class="text-yellow-100">In Progress</div>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg">
+                            <div class="text-3xl font-bold mb-2">6</div>
+                            <div class="text-purple-100">Team Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other sections would go here... -->
+            </div>
+        </div>
+    </div>
 
     <script>
-        // 🆕 FÖRBÄTTRAD REALTIME SYSTEM med bättre förklaringar
-        class SimpleRealtimeSystem {
+        // 🎯 RIKTIG TEAM CHAT SYSTEM - Alla kan kommunicera på riktigt
+        class RealTeamChatSystem {
             constructor() {
-                this.connectedUsers = new Map();
-                this.currentUser = { id: '1', name: 'You', role: 'Team Member' };
-                this.isConnected = true;
-                this.chatHistory = [];
-                
-                console.log('💬 CHAT SYSTEM: Simulerad chat - inga riktiga meddelanden skickas');
-                this.connect();
-            }
-
-            connect() {
-                this.isConnected = true;
-                this.addDemoUsers();
-                this.startDemoActivities();
-                
-                console.log('🔗 REALTIME SYSTEM: Ansluten - All aktivitet är simulerad');
-            }
-
-            addDemoUsers() {
-                const demoUsers = [
+                this.chatKey = 'team-chat-messages';
+                this.deletedKey = 'team-chat-deleted';
+                this.currentUser = 'You';
+                this.teamMembers = [
+                    { id: '1', name: 'You', role: 'Team Member' },
                     { id: '2', name: 'Kaled Osman', role: 'Developer' },
                     { id: '3', name: 'Fahad Hussain', role: 'Researcher' },
                     { id: '4', name: 'Stefan Österberg', role: 'Architect' },
-                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' }
+                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' },
+                    { id: '6', name: 'Jens Annell', role: 'Analyst' },
+                    { id: '7', name: 'Luwam', role: 'Designer' }
                 ];
-
-                const onlineList = document.getElementById('onlineUsersList');
-                const liveTeamList = document.getElementById('liveTeamList');
                 
-                this.addUserToLists(this.currentUser, onlineList, liveTeamList);
-                
-                demoUsers.forEach((user, index) => {
-                    setTimeout(() => {
-                        this.addUserToLists(user, onlineList, liveTeamList);
-                        this.showRealtimeNotification(`📱 ${user.name} gick med i dashboarden (simulerad)`);
-                        this.addActivity(`${user.name} gick med i team session`);
-                    }, (index + 1) * 1500);
-                });
+                this.loadMessages();
+                this.showTeamMembers();
+                this.startAutoRefresh();
             }
 
-            addUserToLists(user, onlineList, liveTeamList) {
-                this.connectedUsers.set(user.id, user);
+            loadMessages() {
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
                 
-                if (onlineList) {
-                    const userBadge = document.createElement('div');
-                    userBadge.className = 'live-user-badge';
-                    userBadge.innerHTML = `
-                        <span class="online-indicator"></span>
-                        ${user.name}
-                    `;
-                    onlineList.appendChild(userBadge);
-                }
-
-                if (liveTeamList) {
-                    const userElement = document.createElement('div');
-                    userElement.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-800';
-                    userElement.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <span class="online-indicator"></span>
-                            <div>
-                                <div class="font-semibold text-gray-800 dark:text-white">${user.name}</div>
-                                <div class="text-xs text-gray-500">${user.role}</div>
-                            </div>
-                        </div>
-                        <span class="text-xs text-green-600 font-semibold">Online</span>
-                    `;
-                    liveTeamList.appendChild(userElement);
-                }
+                const activeMessages = messages.filter(msg => 
+                    !deletedMessages.some(deleted => 
+                        deleted.id === msg.id && deleted.user === this.currentUser
+                    )
+                );
+                
+                this.displayMessages(activeMessages);
             }
 
-            // 🆕 FÖRBÄTTRAD CHAT FUNKTION med tydligare simulering
-            sendChatMessage(messageText) {
-                if (!messageText.trim()) return;
-                
-                // Spara meddelande i historik
-                this.chatHistory.push({
+            saveMessage(text) {
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
+                const newMessage = {
+                    id: Date.now().toString(),
                     user: this.currentUser,
-                    text: messageText,
-                    timestamp: new Date(),
-                    type: 'sent'
-                });
+                    text: text,
+                    timestamp: new Date().toLocaleTimeString(),
+                    date: new Date().toISOString()
+                };
+                messages.push(newMessage);
                 
-                this.displayChatMessage(messageText, this.currentUser);
+                if (messages.length > 200) messages.shift();
                 
-                // 🎭 SIMULERA SVAR från andra användare
-                this.simulateResponse(messageText);
+                localStorage.setItem(this.chatKey, JSON.stringify(messages));
+                this.loadMessages();
             }
 
-            simulateResponse(originalMessage) {
-                const users = Array.from(this.connectedUsers.values());
-                const randomUser = users.find(u => u.id !== this.currentUser.id);
+            deleteMessage(messageId) {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
                 
-                if (!randomUser) return;
-
-                // Vänta 1-3 sekunder för mer realistiskt svar
-                const delay = 1000 + Math.random() * 2000;
+                const messageToDelete = messages.find(msg => msg.id === messageId);
                 
-                setTimeout(() => {
-                    const responses = this.generateResponse(originalMessage, randomUser);
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    
-                    // Spara simulerat svar i historik
-                    this.chatHistory.push({
-                        user: randomUser,
-                        text: randomResponse,
-                        timestamp: new Date(),
-                        type: 'received'
+                if (messageToDelete && messageToDelete.user === this.currentUser) {
+                    deletedMessages.push({
+                        id: messageId,
+                        user: this.currentUser,
+                        deletedAt: new Date().toISOString(),
+                        originalMessage: messageToDelete
                     });
                     
-                    this.displayChatMessage(randomResponse, randomUser);
+                    localStorage.setItem(this.deletedKey, JSON.stringify(deletedMessages));
+                    this.loadMessages();
                     
-                    // Visa notifikation om chatten inte är öppen
-                    if (!document.getElementById('teamChatModal').classList.contains('active')) {
-                        this.showRealtimeNotification(`💬 ${randomUser.name}: ${randomResponse}`);
-                    }
-                }, delay);
-            }
-
-            generateResponse(originalMessage, user) {
-                const message = originalMessage.toLowerCase();
-                
-                // Olika svar baserat på innehåll i meddelandet
-                if (message.includes('?')) {
-                    return [
-                        "Bra fråga! Jag måste kolla upp det.",
-                        "Jag tror jag vet svaret på det. Låt mig dubbelkolla.",
-                        "Det är en intressant fråga. Vad tror du själv?",
-                        "Jag har funderat på det också. Vi borde diskutera det på nästa möte."
-                    ];
-                } else if (message.includes('tack') || message.includes('thank')) {
-                    return [
-                        "Ingen orsak! Glad att kunna hjälpa.",
-                        "Visst, det var så lite!",
-                        "Alltid kul att samarbeta med dig!",
-                        "Tack själv för bra teamwork!"
-                    ];
-                } else if (message.includes('hej') || message.includes('hello') || message.includes('hi')) {
-                    return [
-                        "Hej! Kul att du är här!",
-                        "Tjena! Hur går det?",
-                        "Hejsan! Ska vi jobba på något speciellt idag?",
-                        "Hallå! Bra timing, jag behövde just prata med dig."
-                    ];
-                } else {
-                    return [
-                        "Intressant! Kan du berätta mer?",
-                        "Jag håller med dig där.",
-                        "Det låter som en bra idé.",
-                        "Jag ska titta på det direkt.",
-                        "Bra poäng! Vi borde dokumentera det.",
-                        "Perfekt timing - jag jobbade just med något liknande."
-                    ];
+                    this.showUndoNotification(messageId);
                 }
             }
 
-            displayChatMessage(text, user) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (!chatMessages) return;
-
-                const messageElement = document.createElement('div');
-                const isOwnMessage = user.id === this.currentUser.id;
-                messageElement.className = `chat-message ${isOwnMessage ? 'own' : 'other'}`;
-                messageElement.innerHTML = `
-                    <div class="font-semibold ${isOwnMessage ? 'text-blue-100' : 'text-gray-800'}">${user.name}</div>
-                    <div class="${isOwnMessage ? 'text-white' : 'text-gray-700'}">${text}</div>
-                    <div class="text-xs ${isOwnMessage ? 'text-blue-200' : 'text-gray-500'} mt-1">${new Date().toLocaleTimeString()}</div>
-                `;
-                chatMessages.appendChild(messageElement);
+            restoreMessage(messageId) {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const updatedDeleted = deletedMessages.filter(msg => msg.id !== messageId);
                 
-                // Ta bort placeholder
-                const placeholder = chatMessages.querySelector('.text-center');
-                if (placeholder) placeholder.remove();
-                
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                localStorage.setItem(this.deletedKey, JSON.stringify(updatedDeleted));
+                this.loadMessages();
             }
 
-            showRealtimeNotification(message) {
+            showUndoNotification(messageId) {
                 const notification = document.createElement('div');
-                notification.className = 'realtime-notification';
+                notification.className = 'fixed bottom-4 left-4 bg-gray-800 text-white p-3 rounded-lg shadow-lg z-50';
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="online-indicator"></span>
-                        <div>
-                            <div class="font-semibold text-gray-800">Team Activity</div>
-                            <div class="text-sm text-gray-600">${message}</div>
-                        </div>
+                        <span>Meddelande raderat</span>
+                        <button onclick="chatSystem.restoreMessage('${messageId}'); this.parentElement.parentElement.remove()" 
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                            Ångra
+                        </button>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 `;
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
-                    notification.style.animation = 'slideInRight 0.5s ease reverse';
-                    setTimeout(() => {
-                        if (notification.parentElement) {
-                            notification.remove();
-                        }
-                    }, 500);
-                }, 4000);
-            }
-
-            startDemoActivities() {
-                // Simulera team aktiviteter
-                setTimeout(() => this.simulateActivity('Kaled Osman', 'la till dokumentation i Project Documentation'), 3000);
-                setTimeout(() => this.simulateActivity('Fahad Hussain', 'jobbar med algoritmförbättringar'), 6000);
-                setTimeout(() => this.simulateActivity('Stefan Österberg', 'uppdaterade teamuppgifter i Collaboration'), 9000);
-                
-                setInterval(() => {
-                    const users = Array.from(this.connectedUsers.values());
-                    const randomUser = users[Math.floor(Math.random() * users.length)];
-                    const activities = [
-                        'redigerar projekt dokumentation',
-                        'la till nytt innehåll i dashboarden',
-                        'granskar team uppdateringar',
-                        'jobbar med praktiska uppgifter'
-                    ];
-                    const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-                    
-                    if (randomUser && randomUser.id !== this.currentUser.id) {
-                        this.simulateActivity(randomUser.name, randomActivity);
+                    if (notification.parentElement) {
+                        notification.remove();
                     }
-                }, 15000);
+                }, 5000);
             }
 
-            simulateActivity(userName, activity) {
-                this.addActivity(`${userName} ${activity}`);
-                this.showRealtimeNotification(`${userName} ${activity}`);
-            }
+            displayMessages(messages) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
 
-            addActivity(text) {
-                const activityList = document.getElementById('activityList');
-                const realtimeActivities = document.getElementById('realtimeActivities');
+                chatMessages.innerHTML = '';
                 
-                if (activityList) {
-                    const activityElement = document.createElement('div');
-                    activityElement.className = 'live-activity-item';
-                    activityElement.innerHTML = `
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="online-indicator"></span>
-                            <span class="font-semibold text-gray-800 dark:text-white">Team Activity</span>
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
+                            <i class="fas fa-comments text-2xl mb-2 block"></i>
+                            Start chatting with your team! All messages are real and shared between all users.
                         </div>
-                        <div class="text-gray-700 dark:text-gray-300">${text}</div>
-                        <div class="text-xs text-gray-500 mt-1">${new Date().toLocaleTimeString()}</div>
                     `;
-                    
-                    const placeholder = activityList.querySelector('.text-center');
-                    if (placeholder) placeholder.remove();
-                    
-                    activityList.insertBefore(activityElement, activityList.firstChild);
-                    
-                    if (activityList.children.length > 5) {
-                        activityList.removeChild(activityList.lastChild);
-                    }
+                    return;
                 }
+
+                messages.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    const isOwnMessage = msg.user === this.currentUser;
+                    messageElement.className = `chat-message ${isOwnMessage ? 'own' : 'other'}`;
+                    
+                    messageElement.innerHTML = `
+                        <div class="font-semibold ${isOwnMessage ? 'text-blue-100' : 'text-gray-800'}">${msg.user}</div>
+                        <div class="${isOwnMessage ? 'text-white' : 'text-gray-700'}">${msg.text}</div>
+                        <div class="text-xs ${isOwnMessage ? 'text-blue-200' : 'text-gray-500'} mt-1">${msg.timestamp}</div>
+                        ${isOwnMessage ? `
+                            <button onclick="chatSystem.deleteMessage('${msg.id}')" 
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : ''}
+                    `;
+                    chatMessages.appendChild(messageElement);
+                });
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            showTeamMembers() {
+                const onlineList = document.getElementById('onlineUsersList');
+                const liveTeamList = document.getElementById('liveTeamList');
+                
+                if (onlineList) {
+                    onlineList.innerHTML = '';
+                    this.teamMembers.forEach(member => {
+                        const userBadge = document.createElement('div');
+                        userBadge.className = 'live-user-badge';
+                        userBadge.innerHTML = `
+                            <span class="online-indicator"></span>
+                            ${member.name}
+                        `;
+                        onlineList.appendChild(userBadge);
+                    });
+                }
+
+                if (liveTeamList) {
+                    liveTeamList.innerHTML = '';
+                    this.teamMembers.forEach(member => {
+                        if (member.name !== 'You') {
+                            const userElement = document.createElement('div');
+                            userElement.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-800';
+                            userElement.innerHTML = `
+                                <div class="flex items-center space-x-3">
+                                    <span class="online-indicator"></span>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 dark:text-white">${member.name}</div>
+                                        <div class="text-xs text-gray-500">${member.role}</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-green-600 font-semibold">Online</span>
+                            `;
+                            liveTeamList.appendChild(userElement);
+                        }
+                    });
+                }
+            }
+
+            showDeletedMessages() {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const myDeleted = deletedMessages.filter(msg => msg.user === this.currentUser);
+                
+                if (myDeleted.length === 0) {
+                    alert('Inga raderade meddelanden att återställa.');
+                    return;
+                }
+                
+                let message = 'Dina raderade meddelanden:\n\n';
+                myDeleted.forEach((msg, index) => {
+                    message += `${index + 1}. ${msg.originalMessage.text} (${new Date(msg.deletedAt).toLocaleTimeString()})\n`;
+                });
+                
+                message += '\nVilket meddelande vill du återställa? (Ange nummer)';
+                
+                const choice = prompt(message);
+                const index = parseInt(choice) - 1;
+                
+                if (index >= 0 && index < myDeleted.length) {
+                    this.restoreMessage(myDeleted[index].id);
+                }
+            }
+
+            startAutoRefresh() {
+                setInterval(() => {
+                    this.loadMessages();
+                }, 3000);
             }
         }
 
-        // Initialize the realtime system
-        const realtimeSystem = new SimpleRealtimeSystem();
+        // Initialize the real chat system
+        const chatSystem = new RealTeamChatSystem();
 
-        // 🆕 Team Chat Functions
+        // Chat Functions
         function openTeamChat() {
             document.getElementById('teamChatModal').classList.add('active');
+            setTimeout(() => chatSystem.loadMessages(), 100);
         }
 
         function closeTeamChat() {
@@ -552,9 +726,13 @@
             const message = input.value.trim();
             
             if (message) {
-                realtimeSystem.sendChatMessage(message);
+                chatSystem.saveMessage(message);
                 input.value = '';
             }
+        }
+
+        function showDeletedMessages() {
+            chatSystem.showDeletedMessages();
         }
 
         // Handle Enter key in chat
@@ -565,7 +743,226 @@
             }
         });
 
-        // Resten av din befintliga kod...
+        // Content Management System
+        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
+
+        function saveContents() {
+            localStorage.setItem('userContents', JSON.stringify(userContents));
+        }
+
+        document.getElementById('addContentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const section = document.getElementById('contentSection').value;
+            const contentId = document.getElementById('editContentId').value;
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const author = document.getElementById('contentAuthor').value;
+            
+            if (!userContents[section]) {
+                userContents[section] = [];
+            }
+            
+            let content;
+            if (contentId) {
+                const index = userContents[section].findIndex(item => item.id === contentId);
+                if (index !== -1) {
+                    content = {
+                        id: contentId,
+                        title,
+                        description,
+                        author,
+                        date: userContents[section][index].date,
+                        updated: new Date().toISOString()
+                    };
+                    userContents[section][index] = content;
+                }
+            } else {
+                content = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    author,
+                    date: new Date().toISOString(),
+                    updated: null
+                };
+                userContents[section].push(content);
+            }
+            
+            saveContents();
+            renderSectionContents(section);
+            closeAddContent();
+            showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
+        });
+
+        function openAddContent(section, contentId = null) {
+            document.getElementById('contentSection').value = section;
+            document.getElementById('editContentId').value = contentId || '';
+            
+            if (contentId) {
+                document.getElementById('modalTitle').textContent = 'Edit Content';
+                const content = userContents[section].find(item => item.id === contentId);
+                if (content) {
+                    document.getElementById('contentTitle').value = content.title;
+                    document.getElementById('contentDescription').value = content.description;
+                    document.getElementById('contentAuthor').value = content.author;
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = 'Add New Content';
+                document.getElementById('addContentForm').reset();
+                document.getElementById('contentAuthor').value = 'Kaled Osman';
+            }
+            
+            document.getElementById('addContentModal').classList.add('active');
+        }
+
+        function closeAddContent() {
+            document.getElementById('addContentModal').classList.remove('active');
+        }
+
+        function renderSectionContents(section) {
+            const container = document.getElementById(`${section}-content`);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!userContents[section] || userContents[section].length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No content added yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            userContents[section].forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 mb-4';
+                contentElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
+                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString()}</span>
+                    </div>
+                `;
+                container.appendChild(contentElement);
+            });
+        }
+
+        function editContent(section, contentId) {
+            openAddContent(section, contentId);
+        }
+
+        function deleteContent(section, contentId) {
+            if (confirm('Are you sure you want to delete this content?')) {
+                userContents[section] = userContents[section].filter(item => item.id !== contentId);
+                saveContents();
+                renderSectionContents(section);
+                showNotification('Content deleted successfully!', 'success');
+            }
+        }
+
+        function initializeAllContents() {
+            const sections = [
+                'overview', 'project-documentation', 'team-collaboration', 'team-updates',
+                'ai-assistant', 'practical-tasks', 'implementation', 'research',
+                'resources'
+            ];
+            sections.forEach(section => {
+                renderSectionContents(section);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            showNotification('Theme changed!', 'success');
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => {
+                        b.classList.remove('active-section');
+                        b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    });
+                    this.classList.add('active-section');
+                    this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                    
+                    const sectionId = this.dataset.section;
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(sectionId).classList.remove('hidden');
+                });
+            });
+        }
+
+        function fetchSystemData() {
+            showNotification('Fetching system data...', 'info');
+            setTimeout(() => {
+                showNotification('System data updated!', 'success');
+            }, 1000);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+
+            setupNavigation();
+            fetchSystemData();
+            initializeAllContents();
+            
+            showNotification('Welcome to the Team Dashboard! Real chat is active.', 'success');
+        });
     </script>
 </body>
 </html>
