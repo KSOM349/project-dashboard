@@ -255,22 +255,45 @@
         </div>
     </div>
 
-    <!-- 🆕 NEW: Team Chat Modal -->
+        <!-- 🆕 SMART Team Chat Modal -->
     <div class="team-chat-modal" id="teamChatModal">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl h-[80vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl mx-4 shadow-2xl" style="width: 500px; max-width: 90vw;">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                     <span class="realtime-badge">
                         <span class="online-indicator"></span>
-                        LIVE
+                        SMART CHAT
                     </span>
-                    Team Chat
                 </h2>
-                <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                    <i class="fas fa-times text-xl"></i>
+                <div class="flex gap-2">
+                    <button onclick="showDeletedMessages()" class="text-blue-600 hover:text-blue-800 text-sm">
+                        <i class="fas fa-trash-restore"></i> Ångra
+                    </button>
+                    <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="overflow-y-auto mb-3 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900" style="height: 300px;">
+                <div class="text-center text-gray-500 text-sm py-4">
+                    <i class="fas fa-comments text-xl mb-2 block"></i>
+                    Start chatting with your team!
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="flex gap-2">
+                <input type="text" id="chatInput" placeholder="Type message..." 
+                       class="flex-1 p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white"
+                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
-            
+        </div>
+    </div>
             <!-- Online Users -->
             <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
                 <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
@@ -1305,4 +1328,5 @@
     </script>
 </body>
 </html>
+
 
