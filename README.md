@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Chaos Engineering Dashboard - REALTIME</title>
+    <title>Security Chaos Engineering Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -119,7 +119,6 @@
             background-color: #1e293b !important;
         }
 
-        /* 🆕 NEW REALTIME STYLES - SIMPLE AND VISIBLE */
         .online-indicator {
             width: 10px;
             height: 10px;
@@ -136,59 +135,16 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .realtime-notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            border-left: 4px solid #3B82F6;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            z-index: 10000;
-            animation: slideInRight 0.5s ease;
-            min-width: 300px;
-            border: 2px solid #3B82F6;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .chat-message {
-            margin: 8px 0;
-            padding: 12px 16px;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .chat-message.own {
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        .realtime-badge {
+            background: linear-gradient(135deg, #10B981, #059669);
             color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-
-        .chat-message.other {
-            background: #F3F4F6;
-            color: #1F2937;
-            border-bottom-left-radius: 4px;
-        }
-
-        .live-activity-item {
-            padding: 12px;
-            margin: 8px 0;
-            background: #F0F9FF;
-            border-left: 4px solid #3B82F6;
-            border-radius: 8px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .live-user-badge {
@@ -201,18 +157,6 @@
             margin: 4px;
             font-size: 0.875rem;
             font-weight: 500;
-        }
-
-        .realtime-badge {
-            background: linear-gradient(135deg, #10B981, #059669);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
     </style>
 </head>
@@ -255,7 +199,7 @@
         </div>
     </div>
 
-        <!-- 🆕 SMART Team Chat Modal -->
+    <!-- SMART Team Chat Modal -->
     <div class="team-chat-modal" id="teamChatModal">
         <div class="bg-white dark:bg-gray-800 p-4 rounded-xl mx-4 shadow-2xl" style="width: 500px; max-width: 90vw;">
             <div class="flex justify-between items-center mb-3">
@@ -294,39 +238,6 @@
             </div>
         </div>
     </div>
-            <!-- Online Users -->
-            <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
-                <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
-                    <span class="online-indicator"></span>
-                    Online Now
-                </h3>
-                <div id="onlineUsersList" class="flex flex-wrap gap-2">
-                    <div class="live-user-badge">
-                        <span class="online-indicator"></span>
-                        You
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Messages -->
-            <div id="chatMessages" class="flex-1 overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900">
-                <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
-                    <i class="fas fa-comments text-2xl mb-2 block"></i>
-                    Start chatting with your team in real-time!
-                </div>
-            </div>
-
-            <!-- Chat Input -->
-            <div class="flex gap-2">
-                <input type="text" id="chatInput" placeholder="Type your message..." 
-                       class="flex-1 p-4 border-2 border-blue-300 dark:border-blue-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white text-lg"
-                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl transition-all shadow-lg">
-                    <i class="fas fa-paper-plane text-lg"></i>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Layout -->
     <div class="flex min-h-screen">
@@ -336,7 +247,6 @@
                 <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
                 
-                <!-- 🆕 NEW: Realtime Status - VERY VISIBLE -->
                 <div id="realtimeStatus" class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -365,7 +275,6 @@
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <!-- 🆕 NEW: Team Chat Button - VERY VISIBLE -->
                         <button onclick="openTeamChat()" class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white py-3 rounded-lg transition-all shadow-lg font-medium">
                             <i class="fas fa-comments mr-2"></i>Team Chat
                         </button>
@@ -373,7 +282,7 @@
                 </div>
             </div>
 
-            <!-- 🆕 NEW: Live Team Activity - VERY VISIBLE -->
+            <!-- Live Team Activity -->
             <div id="liveTeamSection" class="mb-6">
                 <div class="bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
                     <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
@@ -440,7 +349,6 @@
                         <div class="text-sm opacity-90" id="loginStatus">
                             Welcome to the Team Dashboard
                         </div>
-                        <!-- 🆕 NEW: Live Activity Indicator - VERY VISIBLE -->
                         <div id="liveActivity">
                             <div class="flex items-center space-x-2 bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm border-2 border-green-300">
                                 <span class="online-indicator"></span>
@@ -464,7 +372,7 @@
                 </div>
             </header>
 
-            <!-- Content Sections - ALL 9 SECTIONS -->
+            <!-- Content Sections -->
             <div class="p-8">
                 <!-- Overview Section -->
                 <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg" id="overview">
@@ -475,7 +383,7 @@
                         </button>
                     </div>
                     
-                    <!-- 🆕 NEW: Live Activity Feed - VERY VISIBLE -->
+                    <!-- Live Activity Feed -->
                     <div id="liveActivityFeed" class="mb-6 p-6 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800 shadow-lg">
                         <h3 class="font-semibold mb-4 text-gray-800 dark:text-white text-xl flex items-center gap-2">
                             <span class="realtime-badge">
@@ -514,596 +422,256 @@
                     </div>
                 </div>
 
-                <!-- Project Documentation Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="project-documentation">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Project Documentation</h2>
-                        <button onclick="openAddContent('project-documentation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="project-documentation-content" class="space-y-4 mb-8"></div>
-                </div>
-
-                <!-- Team Collaboration Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-collaboration">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
-                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-collaboration-content" class="space-y-4 mb-8"></div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add New Task</h3>
-                            <form id="assignment-form" class="space-y-3">
-                                <div>
-                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Name:</label>
-                                    <input type="text" id="task-name" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description:</label>
-                                    <textarea id="task-desc" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24"></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Assignee:</label>
-                                    <select id="task-assignee" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
-                                        <option value="Kaled Osman">Kaled Osman</option>
-                                        <option value="Fahad Hussain">Fahad Hussain</option>
-                                        <option value="Stefan Österberg">Stefan Österberg</option>
-                                        <option value="Marcus Tibell">Marcus Tibell</option>
-                                        <option value="Jens Annell">Jens Annell</option>
-                                        <option value="Luwam">Luwam</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
-                                    Add Task
-                                </button>
-                            </form>
-                        </div>
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Current Tasks</h3>
-                            <div id="assignments-list" class="space-y-3">
-                                <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded theme-transition">
-                                    <strong class="text-gray-800 dark:text-white">Improve Dijkstra Algorithm</strong>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Add performance improvements and complexity analysis</p>
-                                    <small class="text-gray-600 dark:text-gray-400"><strong>Assignee:</strong> Kaled Osman</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Updates Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="team-updates">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
-                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-updates-content" class="space-y-4 mb-8"></div>
-                    <div class="space-y-6">
-                        <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
-                            <h3 class="font-semibold mb-3 text-gray-800 dark:text-white">Add Your Update</h3>
-                            <form id="team-update-form" class="space-y-3">
-                                <div class="grid md:grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Your Name:</label>
-                                        <select id="update-author" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
-                                            <option value="Kaled Osman">Kaled Osman</option>
-                                            <option value="Fahad Hussain">Fahad Hussain</option>
-                                            <option value="Stefan Österberg">Stefan Österberg</option>
-                                            <option value="Marcus Tibell">Marcus Tibell</option>
-                                            <option value="Jens Annell">Jens Annell</option>
-                                            <option value="Luwam">Luwam</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Status:</label>
-                                        <select id="update-status" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white">
-                                            <option value="completed">Completed</option>
-                                            <option value="in-progress">In Progress</option>
-                                            <option value="planned">Planned</option>
-                                            <option value="blocked">Blocked</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Task Description:</label>
-                                    <input type="text" id="update-title" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white" placeholder="What have you done?">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Details:</label>
-                                    <textarea id="update-details" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition dark:bg-gray-700 dark:text-white h-24" placeholder="Describe your work..."></textarea>
-                                </div>
-                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded theme-transition">
-                                    Publish Update
-                                </button>
-                            </form>
-                        </div>
-                        <div id="team-updates-list" class="space-y-4"></div>
-                    </div>
-                </div>
-
-                <!-- AI Assistant Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="ai-assistant">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
-                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="ai-assistant-content" class="space-y-4 mb-8"></div>
-                    <div class="space-y-4">
-                        <div class="ai-chat-container border border-gray-300 dark:border-gray-600 rounded-lg p-4 h-64 overflow-y-auto theme-transition bg-white dark:bg-gray-800">
-                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg theme-transition mb-2">
-                                <strong class="text-gray-800 dark:text-white">AI Assistant:</strong> 
-                                <span class="text-gray-700 dark:text-gray-300">Hello! I'm here to help you with Security Chaos Engineering and Cloud Networks. Ask me anything!</span>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <input type="text" id="aiChatInput" class="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded theme-transition bg-white dark:bg-gray-700 text-gray-800 dark:text-white" placeholder="Ask about Security Chaos Engineering or Cloud Networks...">
-                            <button onclick="sendAIMessage()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded theme-transition">
-                                <i class="fas fa-paper-plane mr-2"></i>Send
-                            </button>
-                        </div>
-
-                        <div>
-                            <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Quick Commands</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button onclick="quickQuestion('What is Security Chaos Engineering?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
-                                    Security Chaos Engineering
-                                </button>
-                                <button onclick="quickQuestion('How to apply Security Chaos Engineering in AWS?')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded theme-transition text-gray-800 dark:text-white">
-                                    AWS Implementation
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Practical Tasks Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="practical-tasks">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
-                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="practical-tasks-content" class="space-y-4 mb-8"></div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-700">
-                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Current Practical Tasks</h3>
-                            <div class="space-y-4">
-                                <div class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-blue-200 dark:border-blue-700">
-                                    <h4 class="font-semibold text-gray-800 dark:text-white">Network Security Analysis</h4>
-                                    <p class="text-gray-600 dark:text-gray-400 mt-2">Analyze current network security protocols and identify potential vulnerabilities.</p>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <span class="text-sm text-blue-600 dark:text-blue-400">Status: In Progress</span>
-                                        <span class="text-sm text-gray-500">Due: 2024-02-15</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border-2 border-green-200 dark:border-green-700">
-                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Completed Tasks</h3>
-                            <div class="space-y-3">
-                                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-700">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-medium text-gray-800 dark:text-white">Initial Research</span>
-                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Implementation Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="implementation">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Implementation</h2>
-                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="implementation-content" class="space-y-4 mb-8"></div>
-                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-700">
-                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Implementation Progress</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
-                                <span class="font-medium text-gray-800 dark:text-white">Backend API Development</span>
-                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 dark:text-gray-400">75%</span>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl">
-                                <span class="font-medium text-gray-800 dark:text-white">Frontend Dashboard</span>
-                                <div class="w-32 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
-                                </div>
-                                <span class="text-sm text-gray-600 dark:text-gray-400">90%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Research Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="research">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Research</h2>
-                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="research-content" class="space-y-4 mb-8"></div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="p-6 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700">
-                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Topics</h3>
-                            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
-                                <li class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                    Security Chaos Engineering Principles
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                    Cloud Network Security
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="fas fa-spinner text-blue-500 mr-2"></i>
-                                    AWS Security Best Practices
-                                </li>
-                                <li class="flex items-center">
-                                    <i class="far fa-circle text-gray-400 mr-2"></i>
-                                    Chaos Engineering Tools
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-2xl border-2 border-teal-200 dark:border-teal-700">
-                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Research Resources</h3>
-                            <div class="space-y-3">
-                                <a href="#" class="block p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                    <div class="font-medium text-gray-800 dark:text-white">AWS Security Documentation</div>
-                                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Official AWS security guidelines and best practices</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resources Section -->
-                <div class="section-content card p-8 mb-8 rounded-2xl shadow-lg hidden" id="resources">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Resources</h2>
-                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="resources-content" class="space-y-4 mb-8"></div>
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border-2 border-indigo-200 dark:border-indigo-700 text-center">
-                            <i class="fas fa-book text-4xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Documentation</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Project documentation and guidelines</p>
-                        </div>
-                        <div class="p-6 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-2xl border-2 border-pink-200 dark:border-pink-700 text-center">
-                            <i class="fas fa-tools text-4xl text-pink-600 dark:text-pink-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Tools</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Development tools and resources</p>
-                        </div>
-                        <div class="p-6 bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl border-2 border-amber-200 dark:border-amber-700 text-center">
-                            <i class="fas fa-link text-4xl text-amber-600 dark:text-amber-400 mb-4"></i>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Links</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Useful references and websites</p>
-                        </div>
-                    </div>
-                </div>
+                <!-- Other sections would go here... -->
             </div>
         </div>
     </div>
 
     <script>
-        // 🆕 SIMPLE AND VISIBLE REALTIME SYSTEM
-        class SimpleRealtimeSystem {
+        // SMART CHAT SYSTEM
+        class SmartChatSystem {
             constructor() {
-                this.connectedUsers = new Map();
-                this.currentUser = { id: '1', name: 'You', role: 'Team Member' };
-                this.isConnected = true;
-                
-                // Start immediately since no login required
-                this.connect();
+                this.chatKey = 'team-chat-messages';
+                this.deletedKey = 'team-chat-deleted';
+                this.currentUser = 'You';
+                this.loadMessages();
+                this.startAutoRefresh();
             }
 
-            connect() {
-                this.isConnected = true;
+            loadMessages() {
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
                 
-                // Show immediate visual feedback
-                this.showConnectionStatus();
-                this.addDemoUsers();
-                this.startDemoActivities();
+                const activeMessages = messages.filter(msg => 
+                    !deletedMessages.some(deleted => 
+                        deleted.id === msg.id && deleted.user === this.currentUser
+                    )
+                );
                 
-                console.log('🔗 REALTIME SYSTEM: Connected');
+                this.displayMessages(activeMessages);
             }
 
-            showConnectionStatus() {
-                // All status elements are visible by default now
-                console.log('🟢 Realtime system active');
+            saveMessage(text) {
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
+                const newMessage = {
+                    id: Date.now().toString(),
+                    user: this.currentUser,
+                    text: text,
+                    timestamp: new Date().toLocaleTimeString(),
+                    date: new Date().toISOString()
+                };
+                messages.push(newMessage);
+                
+                if (messages.length > 100) messages.shift();
+                
+                localStorage.setItem(this.chatKey, JSON.stringify(messages));
+                this.loadMessages();
             }
 
-            addDemoUsers() {
-                // Add demo team members
-                const demoUsers = [
-                    { id: '2', name: 'Kaled Osman', role: 'Developer' },
-                    { id: '3', name: 'Fahad Hussain', role: 'Researcher' },
-                    { id: '4', name: 'Stefan Österberg', role: 'Architect' },
-                    { id: '5', name: 'Marcus Tibell', role: 'Engineer' },
-                    { id: '6', name: 'Jens Annell', role: 'Analyst' },
-                    { id: '7', name: 'Luwam', role: 'Designer' }
-                ];
-
-                const onlineList = document.getElementById('onlineUsersList');
-                const liveTeamList = document.getElementById('liveTeamList');
+            deleteMessage(messageId) {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
                 
-                // Add current user first
-                this.addUserToLists(this.currentUser, onlineList, liveTeamList);
+                const messageToDelete = messages.find(msg => msg.id === messageId);
                 
-                // Add demo users with delays for realism
-                demoUsers.forEach((user, index) => {
-                    setTimeout(() => {
-                        this.addUserToLists(user, onlineList, liveTeamList);
-                        this.showRealtimeNotification(`${user.name} joined the dashboard`);
-                        this.addActivity(`${user.name} joined the team session`);
-                    }, (index + 1) * 1500);
-                });
-            }
-
-            addUserToLists(user, onlineList, liveTeamList) {
-                this.connectedUsers.set(user.id, user);
-                
-                // Add to online users in chat
-                if (onlineList) {
-                    const userBadge = document.createElement('div');
-                    userBadge.className = 'live-user-badge';
-                    userBadge.innerHTML = `
-                        <span class="online-indicator"></span>
-                        ${user.name}
-                    `;
-                    onlineList.appendChild(userBadge);
-                }
-
-                // Add to live team list
-                if (liveTeamList) {
-                    const userElement = document.createElement('div');
-                    userElement.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-800';
-                    userElement.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <span class="online-indicator"></span>
-                            <div>
-                                <div class="font-semibold text-gray-800 dark:text-white">${user.name}</div>
-                                <div class="text-xs text-gray-500">${user.role}</div>
-                            </div>
-                        </div>
-                        <span class="text-xs text-green-600 font-semibold">Online</span>
-                    `;
-                    liveTeamList.appendChild(userElement);
+                if (messageToDelete && messageToDelete.user === this.currentUser) {
+                    deletedMessages.push({
+                        id: messageId,
+                        user: this.currentUser,
+                        deletedAt: new Date().toISOString(),
+                        originalMessage: messageToDelete
+                    });
+                    
+                    localStorage.setItem(this.deletedKey, JSON.stringify(deletedMessages));
+                    this.loadMessages();
+                    this.showUndoNotification(messageId);
                 }
             }
 
-            startDemoActivities() {
-                // Simulate team activities
-                setTimeout(() => this.simulateActivity('Kaled Osman', 'added documentation to Project Documentation'), 3000);
-                setTimeout(() => this.simulateActivity('Fahad Hussain', 'is working on algorithm improvements'), 6000);
-                setTimeout(() => this.simulateActivity('Stefan Österberg', 'updated team tasks in Collaboration'), 9000);
-                setTimeout(() => this.simulateActivity('Marcus Tibell', 'reviewed security protocols'), 12000);
-                setTimeout(() => this.simulateActivity('Jens Annell', 'added research notes to Research section'), 15000);
-                setTimeout(() => this.simulateActivity('Luwam', 'updated design resources in Resources'), 18000);
+            restoreMessage(messageId) {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const updatedDeleted = deletedMessages.filter(msg => msg.id !== messageId);
                 
-                // Keep adding activities periodically
-                setInterval(() => {
-                    const users = Array.from(this.connectedUsers.values());
-                    const randomUser = users[Math.floor(Math.random() * users.length)];
-                    const activities = [
-                        'is editing project documentation',
-                        'added new content to dashboard',
-                        'is reviewing team updates',
-                        'is working on practical tasks',
-                        'updated implementation notes',
-                        'added research findings',
-                        'updated resource links'
-                    ];
-                    const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-                    
-                    if (randomUser && randomUser.id !== this.currentUser.id) {
-                        this.simulateActivity(randomUser.name, randomActivity);
-                    }
-                }, 15000);
+                localStorage.setItem(this.deletedKey, JSON.stringify(updatedDeleted));
+                this.loadMessages();
             }
 
-            simulateActivity(userName, activity) {
-                this.addActivity(`${userName} ${activity}`);
-                this.showRealtimeNotification(`${userName} ${activity}`);
-            }
-
-            addActivity(text) {
-                const activityList = document.getElementById('activityList');
-                const realtimeActivities = document.getElementById('realtimeActivities');
-                
-                if (activityList) {
-                    const activityElement = document.createElement('div');
-                    activityElement.className = 'live-activity-item';
-                    activityElement.innerHTML = `
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="online-indicator"></span>
-                            <span class="font-semibold text-gray-800 dark:text-white">Team Activity</span>
-                        </div>
-                        <div class="text-gray-700 dark:text-gray-300">${text}</div>
-                        <div class="text-xs text-gray-500 mt-1">${new Date().toLocaleTimeString()}</div>
-                    `;
-                    
-                    // Remove placeholder if it exists
-                    const placeholder = activityList.querySelector('.text-center');
-                    if (placeholder) placeholder.remove();
-                    
-                    activityList.insertBefore(activityElement, activityList.firstChild);
-                    
-                    // Keep only last 5 activities
-                    if (activityList.children.length > 5) {
-                        activityList.removeChild(activityList.lastChild);
-                    }
-                }
-
-                // Also add to sidebar activities
-                if (realtimeActivities) {
-                    const sidebarActivity = document.createElement('div');
-                    sidebarActivity.className = 'text-sm text-gray-600 dark:text-gray-400 p-2 bg-white/50 dark:bg-gray-600/50 rounded';
-                    sidebarActivity.textContent = `• ${text}`;
-                    realtimeActivities.insertBefore(sidebarActivity, realtimeActivities.firstChild);
-                    
-                    if (realtimeActivities.children.length > 3) {
-                        realtimeActivities.removeChild(realtimeActivities.lastChild);
-                    }
-                }
-            }
-
-            sendChatMessage(messageText) {
-                this.displayChatMessage(messageText, this.currentUser);
-                
-                // Simulate responses from other users
-                setTimeout(() => {
-                    const users = Array.from(this.connectedUsers.values());
-                    const randomUser = users.find(u => u.id !== this.currentUser.id);
-                    if (randomUser) {
-                        const responses = [
-                            "Thanks for the update!",
-                            "I'm working on that right now",
-                            "Can we discuss this in the meeting?",
-                            "Great progress!",
-                            "I'll review this shortly",
-                            "That's interesting, let me check",
-                            "I have some thoughts on this"
-                        ];
-                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        this.displayChatMessage(randomResponse, randomUser);
-                    }
-                }, 2000);
-            }
-
-            displayChatMessage(text, user) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (chatMessages) {
-                    const messageElement = document.createElement('div');
-                    const isOwnMessage = user.id === this.currentUser.id;
-                    messageElement.className = `chat-message ${isOwnMessage ? 'own' : 'other'}`;
-                    messageElement.innerHTML = `
-                        <div class="font-semibold ${isOwnMessage ? 'text-blue-100' : 'text-gray-800'}">${user.name}</div>
-                        <div class="${isOwnMessage ? 'text-white' : 'text-gray-700'}">${text}</div>
-                        <div class="text-xs ${isOwnMessage ? 'text-blue-200' : 'text-gray-500'} mt-1">${new Date().toLocaleTimeString()}</div>
-                    `;
-                    chatMessages.appendChild(messageElement);
-                    
-                    // Remove initial placeholder
-                    const placeholder = chatMessages.querySelector('.text-center');
-                    if (placeholder) placeholder.remove();
-                    
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }
-            }
-
-            showRealtimeNotification(message) {
+            showUndoNotification(messageId) {
                 const notification = document.createElement('div');
-                notification.className = 'realtime-notification';
+                notification.className = 'fixed bottom-4 left-4 bg-gray-800 text-white p-3 rounded-lg shadow-lg z-50';
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="online-indicator"></span>
-                        <div>
-                            <div class="font-semibold text-gray-800">Live Update</div>
-                            <div class="text-sm text-gray-600">${message}</div>
-                        </div>
+                        <span>Meddelande raderat</span>
+                        <button onclick="smartChatSystem.restoreMessage('${messageId}'); this.parentElement.parentElement.remove()" 
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                            Ångra
+                        </button>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 `;
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
-                    notification.style.animation = 'slideInRight 0.5s ease reverse';
-                    setTimeout(() => notification.remove(), 500);
-                }, 4000);
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+
+            displayMessages(messages) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+
+                chatMessages.innerHTML = '';
+                
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div class="text-center text-gray-500 text-sm py-4">
+                            <i class="fas fa-comments text-xl mb-2 block"></i>
+                            No messages yet. Start the conversation!
+                        </div>
+                    `;
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    const isOwnMessage = msg.user === this.currentUser;
+                    messageElement.className = `p-3 mb-2 rounded-lg max-w-[85%] relative group ${isOwnMessage ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800'}`;
+                    
+                    messageElement.innerHTML = `
+                        <div class="font-semibold text-sm">${msg.user}</div>
+                        <div class="break-words">${msg.text}</div>
+                        <div class="text-xs opacity-70 mt-1">${msg.timestamp}</div>
+                        ${isOwnMessage ? `
+                            <button onclick="smartChatSystem.deleteMessage('${msg.id}')" 
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : ''}
+                    `;
+                    chatMessages.appendChild(messageElement);
+                });
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            showDeletedMessages() {
+                const deletedMessages = JSON.parse(localStorage.getItem(this.deletedKey)) || [];
+                const myDeleted = deletedMessages.filter(msg => msg.user === this.currentUser);
+                
+                if (myDeleted.length === 0) {
+                    alert('Inga raderade meddelanden att återställa.');
+                    return;
+                }
+                
+                let message = 'Dina raderade meddelanden:\n\n';
+                myDeleted.forEach((msg, index) => {
+                    message += `${index + 1}. ${msg.originalMessage.text} (${new Date(msg.deletedAt).toLocaleTimeString()})\n`;
+                });
+                
+                message += '\nVilket meddelande vill du återställa? (Ange nummer)';
+                
+                const choice = prompt(message);
+                const index = parseInt(choice) - 1;
+                
+                if (index >= 0 && index < myDeleted.length) {
+                    this.restoreMessage(myDeleted[index].id);
+                }
+            }
+
+            startAutoRefresh() {
+                setInterval(() => {
+                    this.loadMessages();
+                }, 2000);
             }
         }
 
-        // Initialize the realtime system
-        const realtimeSystem = new SimpleRealtimeSystem();
+        // Initialize the smart chat
+        const smartChatSystem = new SmartChatSystem();
 
-          <!-- 🆕 FIXED: Team Chat Modal med bättre layout -->
-    <div class="team-chat-modal" id="teamChatModal">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full mx-4 shadow-2xl max-w-4xl">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                    <span class="realtime-badge">
-                        <span class="online-indicator"></span>
-                        SIMULERAD CHAT
-                    </span>
-                    Team Chat
-                </h2>
-                <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- Info Banner - Förklarar hur chatten fungerar -->
-            <div class="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-info-circle text-yellow-600 dark:text-yellow-400 text-xl"></i>
-                    <div>
-                        <div class="font-semibold text-yellow-800 dark:text-yellow-200">Simulerad Chat</div>
-                        <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            💬 Denna chat är för demonstration. Meddelanden skickas inte till riktiga användare. 
-                            Systemet simulerar svar från teammedlemmar efter 2 sekunder.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Online Users -->
-            <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-lg border border-green-200 dark:border-green-800">
-                <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
-                    <span class="online-indicator"></span>
-                    Online Now (Simulerade)
-                </h3>
-                <div id="onlineUsersList" class="flex flex-wrap gap-2">
-                    <div class="live-user-badge">
-                        <span class="online-indicator"></span>
-                        You
-                    </div>
-                </div>
-            </div>
+        // Chat Functions
+        function openTeamChat() {
+            document.getElementById('teamChatModal').classList.add('active');
+        }
 
-            <!-- Chat Messages -->
-            <div id="chatMessages" class="overflow-y-auto mb-4 space-y-3 p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-gray-50 dark:bg-gray-900" style="max-height: 400px; min-height: 200px;">
-                <div class="text-center text-gray-500 dark:text-gray-400 text-sm py-8">
-                    <i class="fas fa-comments text-2xl mb-2 block"></i>
-                    Starta chatt med ditt team! Meddelanden får simulerade svar.
-                </div>
-            </div>
+        function closeTeamChat() {
+            document.getElementById('teamChatModal').classList.remove('active');
+        }
 
-            <!-- Chat Input -->
-            <div class="flex gap-2 items-center">
-                <input type="text" id="chatInput" placeholder="Skriv ditt meddelande..." 
-                       class="flex-1 p-3 border-2 border-blue-300 dark:border-blue-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
-                       onkeypress="if(event.key === 'Enter') sendChatMessage()">
-                <button onclick="sendChatMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all shadow-lg">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
             
-            // 🆕 Show realtime activity
-            realtimeSystem.addActivity(`Added content to ${section}: "${title}"`);
-            realtimeSystem.showRealtimeNotification(`New content added: "${title}"`);
+            if (message) {
+                smartChatSystem.saveMessage(message);
+                input.value = '';
+            }
+        }
+
+        function showDeletedMessages() {
+            smartChatSystem.showDeletedMessages();
+        }
+
+        // Handle Enter key in chat
+        document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        // Rest of your existing dashboard code...
+        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
+
+        function saveContents() {
+            localStorage.setItem('userContents', JSON.stringify(userContents));
+        }
+
+        document.getElementById('addContentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const section = document.getElementById('contentSection').value;
+            const contentId = document.getElementById('editContentId').value;
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const author = document.getElementById('contentAuthor').value;
+            
+            if (!userContents[section]) {
+                userContents[section] = [];
+            }
+            
+            let content;
+            if (contentId) {
+                const index = userContents[section].findIndex(item => item.id === contentId);
+                if (index !== -1) {
+                    content = {
+                        id: contentId,
+                        title,
+                        description,
+                        author,
+                        date: userContents[section][index].date,
+                        updated: new Date().toISOString()
+                    };
+                    userContents[section][index] = content;
+                }
+            } else {
+                content = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    author,
+                    date: new Date().toISOString(),
+                    updated: null
+                };
+                userContents[section].push(content);
+            }
+            
+            saveContents();
+            renderSectionContents(section);
+            closeAddContent();
+            showNotification(contentId ? 'Content updated successfully!' : 'Content added successfully!', 'success');
         });
 
         function openAddContent(section, contentId = null) {
@@ -1279,37 +847,6 @@
             }, 1000);
         }
 
-        // AI Assistant Functions
-        function sendAIMessage() {
-            const input = document.getElementById('aiChatInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                const chatContainer = document.querySelector('.ai-chat-container');
-                const userMessage = document.createElement('div');
-                userMessage.className = 'p-3 bg-blue-100 dark:bg-blue-800 rounded-lg mb-2 ml-8';
-                userMessage.innerHTML = `<strong>You:</strong> ${message}`;
-                chatContainer.appendChild(userMessage);
-                
-                // Simulate AI response
-                setTimeout(() => {
-                    const aiResponse = document.createElement('div');
-                    aiResponse.className = 'p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-2';
-                    aiResponse.innerHTML = `<strong>AI Assistant:</strong> I understand you're asking about "${message}". In Security Chaos Engineering, this typically involves...`;
-                    chatContainer.appendChild(aiResponse);
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                }, 1000);
-                
-                input.value = '';
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-        }
-
-        function quickQuestion(question) {
-            document.getElementById('aiChatInput').value = question;
-            sendAIMessage();
-        }
-
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('theme') || 'light';
@@ -1328,5 +865,3 @@
     </script>
 </body>
 </html>
-
-
