@@ -597,7 +597,7 @@ print("Kortaste avstånd:", resultat)</pre>
             initializeAllContents();
         });
 
-        function initializeNavigation() {
+        function initializeNavigation() {        function initializeNavigation() {
             const navTabs = document.querySelectorAll('.nav-tab');
             const sections = document.querySelectorAll('.section');
             
@@ -620,7 +620,67 @@ print("Kortaste avstånd:", resultat)</pre>
             });
         }
 
+        // === LÄGG TILL DENNA KOD HÄR === //
         function showTeamMembers() {
+            const liveTeamList = document.getElementById('liveTeamList');
+            if (!liveTeamList) return;
+
+            liveTeamList.innerHTML = '';
+            
+            teamMembers.forEach(member => {
+                const memberElement = document.createElement('div');
+                memberElement.className = 'team-member-card';
+                memberElement.innerHTML = `
+                    <div class="member-avatar">${member.name.charAt(0)}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${member.name}</div>
+                        <div style="font-size: 0.8rem; color: #666;">${member.role}</div>
+                    </div>
+                    <span class="online-indicator"></span>
+                `;
+                liveTeamList.appendChild(memberElement);
+            });
+        }
+        // === SLUT PÅ NY KOD === //
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const sections = document.querySelectorAll('.section');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // Update active tab
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        function showTeamMembers() {        // Add these missing functions
+        function openAddContent(section) {
+            document.getElementById('contentSection').value = section;
+            document.getElementById('addContentModal').style.display = 'flex';
+        }
+
+        function closeAddContent() {
+            document.getElementById('addContentModal').style.display = 'none';
+        }
+
+        function showAddContentModal() {
+            document.getElementById('addContentModal').style.display = 'flex';
+        }
+
+        function showTeamChat() {
+            alert('Team Chat feature coming soon!');
+        }
             const liveTeamList = document.getElementById('liveTeamList');
             if (!liveTeamList) return;
 
@@ -746,3 +806,4 @@ print("Kortaste avstånd:", resultat)</pre>
     </script>
 </body>
 </html>
+
