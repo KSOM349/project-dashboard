@@ -13,10 +13,7 @@
             color: white; 
         }
         .online-indicator { 
-            width: 8px; 
-            height: 8px; 
-            background: #10B981; 
-            border-radius: 50%; 
+            width: 8px; height: 8px; background: #10B981; border-radius: 50%; 
             animation: pulse 2s infinite; 
         }
         @keyframes pulse { 
@@ -25,16 +22,8 @@
             100% { transform: scale(1); opacity: 1; }
         }
         .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.5); 
-            z-index: 1000; 
-            align-items: center; 
-            justify-content: center; 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; 
         }
         .modal.active { display: flex; }
         .section-content { display: none; }
@@ -88,17 +77,14 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-
             <div id="chatMessages" class="overflow-y-auto mb-4 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900" style="height: 300px;">
                 <div class="text-center text-gray-500 text-sm py-4">
                     <i class="fas fa-comments text-xl mb-2 block"></i>
                     Start chatting with your team!
                 </div>
             </div>
-
             <div class="flex gap-2">
-                <input type="text" id="chatInput" placeholder="Type message..." 
-                       class="flex-1 p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white">
+                <input type="text" id="chatInput" placeholder="Type message..." class="flex-1 p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white">
                 <button onclick="sendChatMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -113,8 +99,6 @@
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
-                
-                <!-- Live Status -->
                 <div class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -146,12 +130,12 @@
                 </div>
             </div>
 
-            <!-- Live Team Activity -->
+            <!-- Live Team Members -->
             <div class="mb-6">
                 <div class="bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
                     <h3 class="font-semibold mb-3 text-gray-800 dark:text-white flex items-center gap-2">
                         <span class="online-indicator"></span>
-                        Live Team Activity
+                        Team Members
                     </h3>
                     <div id="liveTeamList" class="space-y-2 max-h-40 overflow-y-auto">
                         <!-- Team members will appear here -->
@@ -211,7 +195,7 @@
                 <p class="text-gray-600 dark:text-gray-400">Group 1 - Real-time Team Collaboration</p>
             </header>
 
-            <!-- Section Contents -->
+            <!-- ALL 11 SECTIONS WITH ADD CONTENT BUTTONS -->
             <div class="section-content active" id="overview">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -223,8 +207,7 @@
                     <div id="overview-content" class="space-y-4 mb-8">
                         <!-- Content will be loaded here -->
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div class="text-center p-6 bg-blue-500 text-white rounded-2xl shadow-lg">
                             <div class="text-3xl font-bold mb-2">6</div>
                             <div>Team Members</div>
@@ -245,7 +228,7 @@
                 </div>
             </div>
 
-            <!-- Other Sections with Add Content buttons -->
+            <!-- Project Documentation -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -254,13 +237,11 @@
                             <i class="fas fa-plus mr-2"></i>Add Content
                         </button>
                     </div>
-                    <div id="project-documentation-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
+                    <div id="project-documentation-content" class="space-y-4"></div>
                 </div>
             </div>
 
-            <!-- Repeat for all other sections with the same structure -->
+            <!-- Team Collaboration -->
             <div class="section-content" id="team-collaboration">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -273,6 +254,7 @@
                 </div>
             </div>
 
+            <!-- Team Updates -->
             <div class="section-content" id="team-updates">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -285,7 +267,7 @@
                 </div>
             </div>
 
-            <!-- Add remaining sections with the same pattern -->
+            <!-- AI Assistant -->
             <div class="section-content" id="ai-assistant">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -298,6 +280,7 @@
                 </div>
             </div>
 
+            <!-- Practical Tasks -->
             <div class="section-content" id="practical-tasks">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -310,6 +293,7 @@
                 </div>
             </div>
 
+            <!-- Implementation -->
             <div class="section-content" id="implementation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -322,6 +306,7 @@
                 </div>
             </div>
 
+            <!-- Research -->
             <div class="section-content" id="research">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -334,6 +319,7 @@
                 </div>
             </div>
 
+            <!-- Resources -->
             <div class="section-content" id="resources">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -346,6 +332,7 @@
                 </div>
             </div>
 
+            <!-- Security Testing -->
             <div class="section-content" id="security-testing">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -358,6 +345,7 @@
                 </div>
             </div>
 
+            <!-- Monitoring & Analytics -->
             <div class="section-content" id="monitoring-analytics">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -471,7 +459,6 @@
                 ]
             };
 
-            // Add default content only if sections are empty
             Object.keys(defaultContent).forEach(section => {
                 if (!userContents[section] || userContents[section].length === 0) {
                     userContents[section] = defaultContent[section];
