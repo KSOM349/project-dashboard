@@ -93,7 +93,7 @@
     </div>
 
     <!-- Login Modal -->
-    <div class="modal" id="loginModal" style="display: flex;">
+    <div class="modal" id="loginModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
                 <i class="fas fa-user-lock mr-2"></i>Login to Dashboard
@@ -304,7 +304,142 @@
                 </div>
             </div>
 
-            <!-- Other Sections with same structure -->
+            <!-- Team Collaboration Section -->
+            <div class="section-content" id="team-collaboration">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
+                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-collaboration-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Updates Section -->
+            <div class="section-content" id="team-updates">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
+                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-updates-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Section -->
+            <div class="section-content" id="ai-assistant">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practical Tasks Section -->
+            <div class="section-content" id="practical-tasks">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Section -->
+            <div class="section-content" id="implementation">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Implementation</h2>
+                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="implementation-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Section -->
+            <div class="section-content" id="research">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Research</h2>
+                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="research-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="section-content" id="resources">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Resources</h2>
+                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="resources-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Testing Section -->
+            <div class="section-content" id="security-testing">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Security Testing</h2>
+                        <button onclick="openAddContent('security-testing')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="security-testing-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring & Analytics Section -->
+            <div class="section-content" id="monitoring-analytics">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Monitoring & Analytics</h2>
+                        <button onclick="openAddContent('monitoring-analytics')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="monitoring-analytics-content" class="space-y-4">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Documentation Section -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -316,9 +451,6 @@
                     <div id="project-documentation-content" class="space-y-4"></div>
                 </div>
             </div>
-
-            <!-- Repeat for all other 9 sections with same pattern -->
-            <!-- team-collaboration, team-updates, ai-assistant, practical-tasks, implementation, research, resources, security-testing, monitoring-analytics -->
 
         </div>
     </div>
@@ -424,6 +556,8 @@
                 if (this.currentUser) {
                     this.hideLoginModal();
                     this.updateUIForLoggedInUser();
+                } else {
+                    this.showLoginModal();
                 }
 
                 this.setupEventListeners();
@@ -613,6 +747,87 @@
                         title: '🚀 Welcome to Security Chaos Engineering Dashboard',
                         description: 'This is your team collaboration platform. All 11 sections are now fully functional with real-time chat and content management.',
                         author: 'System',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'team-collaboration': [
+                    {
+                        id: '2',
+                        title: 'Team Collaboration Guidelines',
+                        description: 'This section is for coordinating team efforts. Share meeting notes, assign tasks, and track progress on our security chaos engineering project.',
+                        author: 'Kaled Osman',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'team-updates': [
+                    {
+                        id: '3',
+                        title: 'Weekly Status Update',
+                        description: 'Team meeting scheduled for Friday at 2 PM. Please come prepared with updates on your assigned tasks.',
+                        author: 'Fahad Hussain',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'ai-assistant': [
+                    {
+                        id: '4',
+                        title: 'AI Assistant Integration',
+                        description: 'We are exploring AI tools to help with security analysis and automated testing. Share your findings here.',
+                        author: 'Stefan Österberg',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'practical-tasks': [
+                    {
+                        id: '5',
+                        title: 'Current Task List',
+                        description: '1. Implement chaos testing framework\n2. Document security protocols\n3. Create automated testing scripts\n4. Review system vulnerabilities',
+                        author: 'Marcus Tibell',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'implementation': [
+                    {
+                        id: '6',
+                        title: 'Implementation Roadmap',
+                        description: 'Phase 1: Environment setup\nPhase 2: Tool integration\nPhase 3: Testing framework\nPhase 4: Documentation',
+                        author: 'Jens Annell',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'research': [
+                    {
+                        id: '7',
+                        title: 'Research Findings',
+                        description: 'Initial research shows that chaos engineering principles can significantly improve security resilience when properly implemented.',
+                        author: 'Luwam',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'resources': [
+                    {
+                        id: '8',
+                        title: 'Useful Resources',
+                        description: '- Chaos Engineering Book\n- Security Testing Tools\n- Industry Best Practices\n- Academic Papers',
+                        author: 'Kaled Osman',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'security-testing': [
+                    {
+                        id: '9',
+                        title: 'Security Testing Approach',
+                        description: 'We will implement both automated and manual security testing, focusing on identifying vulnerabilities through controlled chaos experiments.',
+                        author: 'Fahad Hussain',
+                        date: new Date().toISOString()
+                    }
+                ],
+                'monitoring-analytics': [
+                    {
+                        id: '10',
+                        title: 'Monitoring Strategy',
+                        description: 'Real-time monitoring of system behavior during chaos experiments will help us understand security weaknesses and improve resilience.',
+                        author: 'Stefan Österberg',
                         date: new Date().toISOString()
                     }
                 ]
