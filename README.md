@@ -6,6 +6,11 @@
     <title>Security Chaos Engineering Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- إضافة Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
     <style>
         .theme-transition { transition: all 0.3s ease; }
         .active-section { 
@@ -28,6 +33,11 @@
         .modal.active { display: flex; }
         .section-content { display: none; }
         .section-content.active { display: block; }
+        .new-message { animation: highlight 2s ease; }
+        @keyframes highlight {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition">
@@ -70,8 +80,8 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl mx-4 shadow-2xl" style="width: 500px; max-width: 90vw;">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                    <span class="online-indicator"></span>
-                    Team Chat
+                    <span id="chatStatus" class="online-indicator"></span>
+                    Team Chat <span id="messageCount" class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">0</span>
                 </h2>
                 <button onclick="closeTeamChat()" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times"></i>
@@ -80,7 +90,7 @@
             <div id="chatMessages" class="overflow-y-auto mb-4 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900" style="height: 300px;">
                 <div class="text-center text-gray-500 text-sm py-4">
                     <i class="fas fa-comments text-xl mb-2 block"></i>
-                    Start chatting with your team!
+                    Loading chat messages...
                 </div>
             </div>
             <div class="flex gap-2">
@@ -196,8 +206,9 @@
                             <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
                         </div>
                     </div>
-                    <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all">
+                    <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all flex items-center justify-center">
                         <i class="fas fa-comments mr-2"></i>Team Chat
+                        <span id="unreadCount" class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
                     </button>
                 </div>
             </div>
@@ -456,6 +467,162 @@
     </div>
 
     <script>
+        // 🔥 إعدادات Firebase - استخدم معلوماتك هنا!
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
+            authDomain: "fir-console-df3e9.firebaseapp.com",
+            projectId: "fir-console-df3e9",
+            storageBucket: "fir-console-df3e9.firebasestorage.app",
+            messagingSenderId: "750795336412",
+            appId: "1:750795336412:web:abfd0c06941a9418abe219"
+        };
+
+        // 🔄 نظام الدردشة الحقيقي مع Firebase
+        class RealTimeChat {
+            constructor() {
+                this.currentUser = 'You';
+                this.isConnected = false;
+                this.messageCount = 0;
+                this.unreadCount = 0;
+                this.lastReadTime = Date.now();
+                this.initFirebase();
+            }
+
+            initFirebase() {
+                try {
+                    firebase.initializeApp(firebaseConfig);
+                    this.database = firebase.database();
+                    this.isConnected = true;
+                    console.log('✅ Firebase connected successfully!');
+                    this.updateChatStatus(true);
+                    this.setupChatListener();
+                } catch (error) {
+                    console.log('❌ Firebase connection failed, using local storage');
+                    this.isConnected = false;
+                    this.updateChatStatus(false);
+                    this.setupLocalChat();
+                }
+            }
+
+            updateChatStatus(connected) {
+                const statusElement = document.getElementById('chatStatus');
+                if (statusElement) {
+                    statusElement.style.background = connected ? '#10B981' : '#EF4444';
+                    statusElement.title = connected ? 'Connected to Firebase' : 'Using Local Storage';
+                }
+            }
+
+            setupChatListener() {
+                if (!this.isConnected) return;
+                
+                const chatRef = this.database.ref('team-chat');
+                chatRef.on('child_added', (snapshot) => {
+                    const message = snapshot.val();
+                    this.displayMessage(message);
+                    this.messageCount++;
+                    this.updateMessageCount();
+                    
+                    // إشعار بالرسائل الجديدة
+                    if (message.timestamp > this.lastReadTime && !this.isChatOpen()) {
+                        this.unreadCount++;
+                        this.updateUnreadCount();
+                    }
+                });
+            }
+
+            setupLocalChat() {
+                const messages = JSON.parse(localStorage.getItem('team-chat-messages')) || [];
+                messages.forEach(msg => this.displayMessage(msg));
+                this.messageCount = messages.length;
+                this.updateMessageCount();
+            }
+
+            async saveMessage(text) {
+                const message = {
+                    user: this.currentUser,
+                    text: text,
+                    timestamp: Date.now(),
+                    id: Date.now().toString()
+                };
+
+                if (this.isConnected) {
+                    // حفظ في Firebase
+                    try {
+                        await this.database.ref('team-chat').push(message);
+                        return true;
+                    } catch (error) {
+                        console.error('Firebase error:', error);
+                        return false;
+                    }
+                } else {
+                    // حفظ في localStorage إذا فشل الاتصال
+                    this.saveToLocalStorage(message);
+                    return true;
+                }
+            }
+
+            saveToLocalStorage(message) {
+                const messages = JSON.parse(localStorage.getItem('team-chat-messages')) || [];
+                messages.push(message);
+                if (messages.length > 100) messages.shift();
+                localStorage.setItem('team-chat-messages', JSON.stringify(messages));
+                this.displayMessage(message);
+                this.messageCount++;
+                this.updateMessageCount();
+            }
+
+            displayMessage(message) {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+
+                // إزالة رسالة التحميل إذا كانت موجودة
+                if (chatMessages.querySelector('.text-center')) {
+                    chatMessages.innerHTML = '';
+                }
+
+                const messageElement = document.createElement('div');
+                const isOwnMessage = message.user === this.currentUser;
+                messageElement.className = `p-3 mb-2 rounded-lg max-w-[85%] ${isOwnMessage ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'} new-message`;
+                messageElement.innerHTML = `
+                    <div class="font-semibold text-sm">${message.user}</div>
+                    <div class="break-words">${message.text}</div>
+                    <div class="text-xs opacity-70 mt-1">${new Date(message.timestamp).toLocaleTimeString()}</div>
+                `;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            updateMessageCount() {
+                const countElement = document.getElementById('messageCount');
+                if (countElement) {
+                    countElement.textContent = this.messageCount;
+                }
+            }
+
+            updateUnreadCount() {
+                const unreadElement = document.getElementById('unreadCount');
+                if (unreadElement) {
+                    if (this.unreadCount > 0) {
+                        unreadElement.textContent = this.unreadCount;
+                        unreadElement.classList.remove('hidden');
+                    } else {
+                        unreadElement.classList.add('hidden');
+                    }
+                }
+            }
+
+            isChatOpen() {
+                const modal = document.getElementById('teamChatModal');
+                return modal && modal.classList.contains('active');
+            }
+
+            markAsRead() {
+                this.unreadCount = 0;
+                this.lastReadTime = Date.now();
+                this.updateUnreadCount();
+            }
+        }
+
         // TEAM MEMBERS DATA
         const teamMembers = [
             { id: '1', name: 'You', role: 'Team Member' },
@@ -466,67 +633,6 @@
             { id: '6', name: 'Jens Annell', role: 'Analyst' },
             { id: '7', name: 'Luwam', role: 'Designer' }
         ];
-
-        // SIMPLE WORKING CHAT SYSTEM
-        class SimpleChat {
-            constructor() {
-                this.chatKey = 'team-chat-messages';
-                this.currentUser = 'You';
-                this.loadMessages();
-            }
-
-            loadMessages() {
-                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
-                this.displayMessages(messages);
-            }
-
-            saveMessage(text) {
-                const messages = JSON.parse(localStorage.getItem(this.chatKey)) || [];
-                const newMessage = {
-                    user: this.currentUser,
-                    text: text,
-                    timestamp: new Date().toLocaleTimeString(),
-                    id: Date.now().toString()
-                };
-                messages.push(newMessage);
-                
-                if (messages.length > 100) messages.shift();
-                
-                localStorage.setItem(this.chatKey, JSON.stringify(messages));
-                this.displayMessages(messages);
-            }
-
-            displayMessages(messages) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (!chatMessages) return;
-
-                chatMessages.innerHTML = '';
-                
-                if (messages.length === 0) {
-                    chatMessages.innerHTML = `
-                        <div class="text-center text-gray-500 text-sm py-4">
-                            <i class="fas fa-comments text-xl mb-2 block"></i>
-                            No messages yet. Start the conversation!
-                        </div>
-                    `;
-                    return;
-                }
-
-                messages.forEach(msg => {
-                    const messageElement = document.createElement('div');
-                    const isOwnMessage = msg.user === this.currentUser;
-                    messageElement.className = `p-3 mb-2 rounded-lg max-w-[85%] ${isOwnMessage ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800'}`;
-                    messageElement.innerHTML = `
-                        <div class="font-semibold text-sm">${msg.user}</div>
-                        <div class="break-words">${msg.text}</div>
-                        <div class="text-xs opacity-70 mt-1">${msg.timestamp}</div>
-                    `;
-                    chatMessages.appendChild(messageElement);
-                });
-
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }
 
         // CONTENT MANAGEMENT SYSTEM
         let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
@@ -588,6 +694,9 @@
                     this.updateUIForLoggedInUser();
                     this.showNotification(`Welcome ${user.name}! Login successful`, 'success');
                     
+                    // تحديث اسم المستخدم في الدردشة
+                    chatSystem.currentUser = user.name;
+                    
                     // Initialize admin system if user is admin
                     if (user.email === 'kaled@team.com') {
                         adminSystem.init();
@@ -603,6 +712,7 @@
                 this.showLoginModal();
                 this.updateUIForLoggedOutUser();
                 this.showNotification('Logged out successfully', 'info');
+                chatSystem.currentUser = 'You';
             }
 
             recoverPassword() {
@@ -642,8 +752,9 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all">
+                            <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all flex items-center justify-center">
                                 <i class="fas fa-comments mr-2"></i>Team Chat
+                                <span id="unreadCount" class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
                             </button>
                             <button onclick="loginSystem.logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Logout
@@ -667,8 +778,9 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
                             </div>
                         </div>
-                        <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all">
+                        <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all flex items-center justify-center">
                             <i class="fas fa-comments mr-2"></i>Team Chat
+                            <span id="unreadCount" class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
                         </button>
                     `;
                 }
@@ -713,6 +825,9 @@
                                 <button onclick="adminSystem.deleteAllContent()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all text-sm">
                                     <i class="fas fa-trash mr-2"></i>Delete All Content
                                 </button>
+                                <button onclick="adminSystem.clearChat()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg transition-all text-sm">
+                                    <i class="fas fa-comments mr-2"></i>Clear Chat
+                                </button>
                             </div>
                         </div>
                     `;
@@ -731,10 +846,28 @@
                     alert('All content has been deleted by admin');
                 }
             }
+
+            clearChat() {
+                if (confirm('Clear all chat messages?')) {
+                    if (chatSystem.isConnected) {
+                        chatSystem.database.ref('team-chat').remove();
+                    } else {
+                        localStorage.removeItem('team-chat-messages');
+                    }
+                    document.getElementById('chatMessages').innerHTML = `
+                        <div class="text-center text-gray-500 text-sm py-4">
+                            <i class="fas fa-comments text-xl mb-2 block"></i>
+                            Chat cleared by admin
+                        </div>
+                    `;
+                    chatSystem.messageCount = 0;
+                    chatSystem.updateMessageCount();
+                }
+            }
         }
 
         // Initialize systems
-        const chatSystem = new SimpleChat();
+        const chatSystem = new RealTimeChat();
         const loginSystem = new LoginSystem();
         const adminSystem = new AdminSystem();
 
@@ -877,19 +1010,24 @@
         // Chat Functions
         function openTeamChat() {
             document.getElementById('teamChatModal').classList.add('active');
+            chatSystem.markAsRead();
         }
 
         function closeTeamChat() {
             document.getElementById('teamChatModal').classList.remove('active');
         }
 
-        function sendChatMessage() {
+        async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
             if (message) {
-                chatSystem.saveMessage(message);
-                input.value = '';
+                const success = await chatSystem.saveMessage(message);
+                if (success) {
+                    input.value = '';
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
             }
         }
 
