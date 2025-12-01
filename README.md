@@ -38,6 +38,10 @@
             0% { background-color: rgba(59, 130, 246, 0.3); }
             100% { background-color: transparent; }
         }
+        .chat-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition">
@@ -87,7 +91,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div id="chatMessages" class="overflow-y-auto mb-4 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900" style="height: 300px;">
+            <div id="chatMessages" class="chat-container mb-4 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900">
                 <div class="text-center text-gray-500 text-sm py-4">
                     <i class="fas fa-comments text-xl mb-2 block"></i>
                     Loading chat messages...
@@ -175,7 +179,7 @@
     <!-- Main Layout -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-80 bg-gray-50 dark:bg-gray-800 flex-shrink-0 p-6">
+        <div class="w-80 bg-gray-50 dark:bg-gray-800 flex-shrink-0 p-6 border-r border-gray-200 dark:border-gray-700">
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
@@ -202,8 +206,8 @@
                             <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-800 dark:text-white truncate">You</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
+                            <p class="font-semibold text-gray-800 dark:text-white truncate" id="userName">You</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" id="userRole">Active User</p>
                         </div>
                     </div>
                     <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all flex items-center justify-center">
@@ -226,10 +230,10 @@
                 </div>
             </div>
 
-            <!-- Admin Panel (Will be added by JavaScript) -->
+            <!-- Admin Panel -->
             <div id="adminPanel"></div>
 
-            <!-- Navigation - 11 SECTIONS -->
+            <!-- Navigation -->
             <nav class="space-y-2 mb-8">
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview">
                     <i class="fas fa-home mr-3"></i>Overview
@@ -275,15 +279,15 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-8">
+        <div class="flex-1 p-8 overflow-auto">
             <header class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Security Chaos Engineering Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-400">Group 1 - Real-time Team Collaboration</p>
             </header>
 
-            <!-- Section Contents -->
+            <!-- Overview Section -->
             <div class="section-content active" id="overview">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg mb-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Overview</h2>
                         <button onclick="openAddContent('overview')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
@@ -315,142 +319,7 @@
                 </div>
             </div>
 
-            <!-- Team Collaboration Section -->
-            <div class="section-content" id="team-collaboration">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
-                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-collaboration-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Team Updates Section -->
-            <div class="section-content" id="team-updates">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
-                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-updates-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Assistant Section -->
-            <div class="section-content" id="ai-assistant">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
-                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="ai-assistant-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Practical Tasks Section -->
-            <div class="section-content" id="practical-tasks">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
-                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="practical-tasks-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Implementation Section -->
-            <div class="section-content" id="implementation">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Implementation</h2>
-                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="implementation-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Research Section -->
-            <div class="section-content" id="research">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Research</h2>
-                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="research-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Resources Section -->
-            <div class="section-content" id="resources">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Resources</h2>
-                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="resources-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Security Testing Section -->
-            <div class="section-content" id="security-testing">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Security Testing</h2>
-                        <button onclick="openAddContent('security-testing')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="security-testing-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Monitoring & Analytics Section -->
-            <div class="section-content" id="monitoring-analytics">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Monitoring & Analytics</h2>
-                        <button onclick="openAddContent('monitoring-analytics')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="monitoring-analytics-content" class="space-y-4">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project Documentation Section -->
+            <!-- Other Sections -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -463,11 +332,118 @@
                 </div>
             </div>
 
+            <div class="section-content" id="team-collaboration">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
+                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-collaboration-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="team-updates">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
+                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="team-updates-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="ai-assistant">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
+                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="ai-assistant-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="practical-tasks">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
+                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="practical-tasks-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="implementation">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Implementation</h2>
+                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="implementation-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="research">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Research</h2>
+                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="research-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="resources">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Resources</h2>
+                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="resources-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="security-testing">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Security Testing</h2>
+                        <button onclick="openAddContent('security-testing')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="security-testing-content" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <div class="section-content" id="monitoring-analytics">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Monitoring & Analytics</h2>
+                        <button onclick="openAddContent('monitoring-analytics')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                            <i class="fas fa-plus mr-2"></i>Add Content
+                        </button>
+                    </div>
+                    <div id="monitoring-analytics-content" class="space-y-4"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // 🔥 إعدادات Firebase - استخدم معلوماتك هنا!
+        // 🔥 إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
             authDomain: "fir-console-df3e9.firebaseapp.com",
@@ -736,7 +712,13 @@
             }
 
             updateUIForLoggedInUser() {
+                const userName = document.getElementById('userName');
+                const userRole = document.getElementById('userRole');
                 const userInfo = document.querySelector('.bg-white.dark\\:bg-gray-700.p-4.rounded-xl');
+                
+                if (userName) userName.textContent = this.currentUser.name;
+                if (userRole) userRole.textContent = this.currentUser.role;
+                
                 if (userInfo) {
                     userInfo.innerHTML = `
                         <div class="flex items-center space-x-3 mb-3">
@@ -765,7 +747,13 @@
             }
 
             updateUIForLoggedOutUser() {
+                const userName = document.getElementById('userName');
+                const userRole = document.getElementById('userRole');
                 const userInfo = document.querySelector('.bg-white.dark\\:bg-gray-700.p-4.rounded-xl');
+                
+                if (userName) userName.textContent = 'You';
+                if (userRole) userRole.textContent = 'Active User';
+                
                 if (userInfo) {
                     userInfo.innerHTML = `
                         <div class="flex items-center space-x-3 mb-3">
@@ -787,8 +775,7 @@
             }
 
             showNotification(message, type = 'info') {
-                // Notification code here
-                alert(message); // Simple alert for now
+                alert(message);
             }
         }
 
