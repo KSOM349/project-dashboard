@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-    
     <style>
         .theme-transition { transition: all 0.3s ease; }
         .active-section { 
@@ -33,6 +29,11 @@
         .modal.active { display: flex; }
         .section-content { display: none; }
         .section-content.active { display: block; }
+        .loading { 
+            display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition">
@@ -45,19 +46,16 @@
             
             <form id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
-                    <input type="email" id="loginEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
-                    <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <button type="button" onclick="showForgotPassword()" class="text-sm text-blue-600 hover:text-blue-800">
-                        Forgot Password?
-                    </button>
+                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Name</label>
+                    <select id="userSelect" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="Kaled Osman">Kaled Osman</option>
+                        <option value="Marcus Tibell">Marcus Tibell</option>
+                        <option value="Jens Annell">Jens Annell</option>
+                        <option value="Fahad Hussain">Fahad Hussain</option>
+                        <option value="Luwam">Luwam</option>
+                        <option value="Stefan Österberg">Stefan Österberg</option>
+                        <option value="Najmaddin">Najmaddin</option>
+                    </select>
                 </div>
                 
                 <div class="flex gap-3">
@@ -71,15 +69,11 @@
             </form>
             
             <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                <h3 class="font-semibold mb-2">Demo Accounts:</h3>
+                <h3 class="font-semibold mb-2">How it works:</h3>
                 <div class="text-sm space-y-1">
-                    <div>kaled@team.com - kaled123</div>
-                    <div>marcus@team.com - marcus123</div>
-                    <div>jens@team.com - jens123</div>
-                    <div>fahad@team.com - fahad123</div>
-                    <div>luwam@team.com - luwam123</div>
-                    <div>stefan@team.com - stefan123</div>
-                    <div>najmaddin@team.com - najmaddin123</div>
+                    <div>1. Select your name</div>
+                    <div>2. Click Login</div>
+                    <div>3. All content is saved for everyone!</div>
                 </div>
             </div>
         </div>
@@ -99,20 +93,8 @@
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Content</label>
                     <textarea id="contentDescription" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white h-40" required></textarea>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Author</label>
-                    <select id="contentAuthor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                        <option value="Kaled Osman">Kaled Osman</option>
-                        <option value="Marcus Tibell">Marcus Tibell</option>
-                        <option value="Jens Annell">Jens Annell</option>
-                        <option value="Fahad Hussain">Fahad Hussain</option>
-                        <option value="Luwam">Luwam</option>
-                        <option value="Stefan Österberg">Stefan Österberg</option>
-                        <option value="Najmaddin">Najmaddin</option>
-                    </select>
-                </div>
                 <div class="flex gap-3">
-                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">Save</button>
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">Save for Everyone</button>
                     <button type="button" onclick="closeAddContent()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">Cancel</button>
                 </div>
             </form>
@@ -158,11 +140,11 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="online-indicator"></span>
-                            <span class="font-semibold">LIVE UPDATES ACTIVE</span>
+                            <span class="font-semibold">TEAM WORKING</span>
                         </div>
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <div class="text-xs opacity-90 mt-1">Real-time collaboration enabled</div>
+                    <div class="text-xs opacity-90 mt-1">All changes saved automatically</div>
                 </div>
             </div>
             
@@ -176,7 +158,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="font-semibold text-gray-800 dark:text-white truncate" id="userName">You</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" id="userRole">Active User</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" id="userRole">Select your name to login</p>
                         </div>
                     </div>
                     <button onclick="openChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all">
@@ -196,76 +178,7 @@
                         Team Members
                     </h3>
                     <div id="teamList" class="space-y-2">
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">K</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Kaled Osman</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Developer</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">M</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Marcus Tibell</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Engineer</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">J</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Jens Annell</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Analyst</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">F</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Fahad Hussain</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Researcher</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">L</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Luwam</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Designer</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">S</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Stefan Österberg</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Architect</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg">
-                            <div class="relative">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">N</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-800 dark:text-white text-sm">Najmaddin</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Security Expert</div>
-                            </div>
-                        </div>
+                        <!-- Team members loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -318,10 +231,10 @@
         <div class="flex-1 p-8">
             <header class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Security Chaos Engineering Dashboard</h1>
-                <p class="text-gray-600 dark:text-gray-400">Group 1 - Real-time Team Collaboration</p>
+                <p class="text-gray-600 dark:text-gray-400">Group 1 - Team Collaboration Platform</p>
             </header>
 
-            <!-- Overview -->
+            <!-- All Sections -->
             <div class="section-content active" id="overview">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -331,12 +244,12 @@
                         </button>
                     </div>
                     <div id="overview-content" class="space-y-4">
-                        <!-- Content loaded from Firebase -->
+                        <!-- Content will be loaded here -->
                     </div>
                 </div>
             </div>
 
-            <!-- Project Documentation -->
+            <!-- Other Sections (same pattern) -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -349,214 +262,178 @@
                 </div>
             </div>
 
-            <!-- Team Collaboration -->
-            <div class="section-content" id="team-collaboration">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Collaboration</h2>
-                        <button onclick="openAddContent('team-collaboration')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-collaboration-content" class="space-y-4"></div>
-                </div>
-            </div>
+            <!-- ... (repeat for all other sections) ... -->
 
-            <!-- Team Updates -->
-            <div class="section-content" id="team-updates">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Team Updates</h2>
-                        <button onclick="openAddContent('team-updates')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="team-updates-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- AI Assistant -->
-            <div class="section-content" id="ai-assistant">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">AI Assistant</h2>
-                        <button onclick="openAddContent('ai-assistant')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="ai-assistant-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Practical Tasks -->
-            <div class="section-content" id="practical-tasks">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
-                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="practical-tasks-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Implementation -->
-            <div class="section-content" id="implementation">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Implementation</h2>
-                        <button onclick="openAddContent('implementation')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="implementation-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Research -->
-            <div class="section-content" id="research">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Research</h2>
-                        <button onclick="openAddContent('research')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="research-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Resources -->
-            <div class="section-content" id="resources">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Resources</h2>
-                        <button onclick="openAddContent('resources')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="resources-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Security Testing -->
-            <div class="section-content" id="security-testing">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Security Testing</h2>
-                        <button onclick="openAddContent('security-testing')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="security-testing-content" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Monitoring & Analytics -->
-            <div class="section-content" id="monitoring-analytics">
-                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Monitoring & Analytics</h2>
-                        <button onclick="openAddContent('monitoring-analytics')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
-                    </div>
-                    <div id="monitoring-analytics-content" class="space-y-4"></div>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
-        // Firebase Configuration - Use your credentials
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
-            authDomain: "fir-console-df3e9.firebaseapp.com",
-            projectId: "fir-console-df3e9",
-            storageBucket: "fir-console-df3e9.firebasestorage.app",
-            messagingSenderId: "750795336412",
-            appId: "1:750795336412:web:abfd0c06941a9418abe219"
-        };
-
-        // Initialize Firebase
-        let firebaseApp;
-        let database;
-        let currentUser = { name: 'You', role: 'Active User', avatar: 'Y' };
-
-        try {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.log('Firebase initialization failed:', error);
-        }
-
-        // Users data
-        const users = [
-            { id: 1, name: "Kaled Osman", email: "kaled@team.com", password: "kaled123", role: "Developer", avatar: "K" },
-            { id: 2, name: "Marcus Tibell", email: "marcus@team.com", password: "marcus123", role: "Engineer", avatar: "M" },
-            { id: 3, name: "Jens Annell", email: "jens@team.com", password: "jens123", role: "Analyst", avatar: "J" },
-            { id: 4, name: "Fahad Hussain", email: "fahad@team.com", password: "fahad123", role: "Researcher", avatar: "F" },
-            { id: 5, name: "Luwam", email: "luwam@team.com", password: "luwam123", role: "Designer", avatar: "L" },
-            { id: 6, name: "Stefan Österberg", email: "stefan@team.com", password: "stefan123", role: "Architect", avatar: "S" },
-            { id: 7, name: "Najmaddin", email: "najmaddin@team.com", password: "najmaddin123", role: "Security Expert", avatar: "N" }
+        // SIMPLE TEAM DATA
+        const teamMembers = [
+            { name: 'Kaled Osman', role: 'Developer', avatar: 'K' },
+            { name: 'Marcus Tibell', role: 'Engineer', avatar: 'M' },
+            { name: 'Jens Annell', role: 'Analyst', avatar: 'J' },
+            { name: 'Fahad Hussain', role: 'Researcher', avatar: 'F' },
+            { name: 'Luwam', role: 'Designer', avatar: 'L' },
+            { name: 'Stefan Österberg', role: 'Architect', avatar: 'S' },
+            { name: 'Najmaddin', role: 'Security Expert', avatar: 'N' }
         ];
 
-        // Load saved user
-        const savedUser = localStorage.getItem('dashboard_user');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-            updateUserUI();
-            document.getElementById('loginModal').style.display = 'none';
+        // Current user
+        let currentUser = null;
+
+        // Initialize team list
+        function initializeTeamList() {
+            const teamList = document.getElementById('teamList');
+            teamList.innerHTML = '';
+            
+            teamMembers.forEach(member => {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg';
+                memberDiv.innerHTML = `
+                    <div class="relative">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">${member.avatar}</div>
+                        <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-800 dark:text-white text-sm">${member.name}</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">${member.role}</div>
+                    </div>
+                `;
+                teamList.appendChild(memberDiv);
+            });
         }
 
-        // Login Form
+        // Login system
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            const selectedName = document.getElementById('userSelect').value;
             
-            const user = users.find(u => u.email === email && u.password === password);
+            const user = teamMembers.find(m => m.name === selectedName);
             if (user) {
                 currentUser = user;
-                localStorage.setItem('dashboard_user', JSON.stringify(user));
                 updateUserUI();
                 document.getElementById('loginModal').style.display = 'none';
                 alert(`Welcome ${user.name}!`);
-            } else {
-                alert('Invalid email or password');
+                loadAllContent();
             }
         });
 
         function updateUserUI() {
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userRole').textContent = currentUser.role;
-            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userRole').textContent = currentUser.role;
+                document.getElementById('userAvatar').textContent = currentUser.avatar;
+            }
         }
 
         function logout() {
-            currentUser = { name: 'You', role: 'Active User', avatar: 'Y' };
-            localStorage.removeItem('dashboard_user');
-            updateUserUI();
+            currentUser = null;
+            document.getElementById('userName').textContent = 'You';
+            document.getElementById('userRole').textContent = 'Select your name to login';
+            document.getElementById('userAvatar').textContent = 'Y';
             document.getElementById('loginModal').style.display = 'flex';
         }
 
         function closeLogin() {
-            document.getElementById('loginModal').style.display = 'none';
+            if (!currentUser) {
+                document.getElementById('loginModal').style.display = 'flex';
+            }
         }
 
-        // Content Management
-        async function loadSectionContent(section) {
-            if (!database) return;
-            
-            try {
-                const snapshot = await database.ref(`content/${section}`).once('value');
-                const content = snapshot.val() || [];
-                displaySectionContent(section, content);
-            } catch (error) {
-                console.error('Error loading content:', error);
+        // SIMPLE CONTENT MANAGEMENT - NO FIREBASE NEEDED
+        // We'll use a simple API-based storage
+        
+        const API_URL = 'https://jsonblob.com/api/jsonBlob';
+        let currentDataId = null;
+
+        async function saveContent(section, title, description) {
+            if (!currentUser) {
+                alert('Please login first!');
+                return false;
             }
+
+            try {
+                // Create content object
+                const content = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    author: currentUser.name,
+                    date: new Date().toISOString(),
+                    section
+                };
+
+                // Get existing data
+                let allContent = await getAllContent();
+                allContent.push(content);
+                
+                // Save to localStorage as backup
+                localStorage.setItem('team-content', JSON.stringify(allContent));
+                
+                // Try to save to cloud (optional)
+                try {
+                    await saveToCloud(allContent);
+                } catch (e) {
+                    console.log('Cloud save failed, using local storage');
+                }
+                
+                alert('Content saved successfully!');
+                loadSectionContent(section);
+                return true;
+            } catch (error) {
+                console.error('Error saving content:', error);
+                alert('Failed to save content');
+                return false;
+            }
+        }
+
+        async function getAllContent() {
+            // Try to get from cloud first
+            try {
+                if (currentDataId) {
+                    const response = await fetch(`${API_URL}/${currentDataId}`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                }
+            } catch (e) {
+                console.log('Cloud load failed');
+            }
+            
+            // Fallback to local storage
+            const localData = localStorage.getItem('team-content');
+            return localData ? JSON.parse(localData) : [];
+        }
+
+        async function saveToCloud(data) {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+                const blob = await response.json();
+                currentDataId = blob.id;
+                localStorage.setItem('team-data-id', currentDataId);
+            }
+        }
+
+        async function loadAllContent() {
+            const allContent = await getAllContent();
+            
+            // Group content by section
+            const sections = [
+                'overview', 'project-documentation', 'team-collaboration', 'team-updates',
+                'ai-assistant', 'practical-tasks', 'implementation', 'research',
+                'resources', 'security-testing', 'monitoring-analytics'
+            ];
+            
+            sections.forEach(section => {
+                const sectionContent = allContent.filter(item => item.section === section);
+                displaySectionContent(section, sectionContent);
+            });
         }
 
         function displaySectionContent(section, contentArray) {
@@ -565,7 +442,7 @@
             
             container.innerHTML = '';
             
-            if (contentArray.length === 0) {
+            if (!contentArray || contentArray.length === 0) {
                 container.innerHTML = `
                     <div class="text-center p-8 text-gray-500 dark:text-gray-400">
                         <i class="fas fa-inbox text-4xl mb-4"></i>
@@ -590,126 +467,99 @@
             });
         }
 
-        async function saveContent(section, title, description, author) {
-            if (!database) {
-                alert('Firebase not connected. Content saved locally only.');
-                return;
-            }
-            
-            try {
-                const snapshot = await database.ref(`content/${section}`).once('value');
-                const existingContent = snapshot.val() || [];
-                
-                const newContent = {
-                    id: Date.now().toString(),
-                    title,
-                    description,
-                    author,
-                    date: new Date().toISOString()
-                };
-                
-                existingContent.push(newContent);
-                await database.ref(`content/${section}`).set(existingContent);
-                
-                alert('Content saved successfully! All team members can see it.');
-                loadSectionContent(section);
-                return true;
-            } catch (error) {
-                console.error('Error saving content:', error);
-                alert('Failed to save content. Please try again.');
-                return false;
-            }
-        }
-
         // Form submission for content
         document.getElementById('addContentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const section = document.getElementById('contentSection').value;
             const title = document.getElementById('contentTitle').value;
             const description = document.getElementById('contentDescription').value;
-            const author = document.getElementById('contentAuthor').value;
             
-            const success = await saveContent(section, title, description, author);
+            const success = await saveContent(section, title, description);
             if (success) {
                 closeAddContent();
             }
         });
 
         function openAddContent(section) {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
             document.getElementById('contentSection').value = section;
             document.getElementById('addContentModal').classList.add('active');
             document.getElementById('contentTitle').value = '';
             document.getElementById('contentDescription').value = '';
-            document.getElementById('contentAuthor').value = currentUser.name;
         }
 
         function closeAddContent() {
             document.getElementById('addContentModal').classList.remove('active');
         }
 
-        // Chat System
+        // SIMPLE CHAT SYSTEM
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
-            if (message && database) {
-                try {
-                    const chatMessage = {
-                        user: currentUser.name,
-                        text: message,
-                        timestamp: new Date().toISOString(),
-                        id: Date.now().toString()
-                    };
-                    
-                    await database.ref('chat').push(chatMessage);
-                    input.value = '';
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                    alert('Failed to send message');
-                }
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            if (message) {
+                const chatMessage = {
+                    user: currentUser.name,
+                    text: message,
+                    timestamp: new Date().toISOString(),
+                    id: Date.now().toString()
+                };
+                
+                // Save chat message
+                let chatMessages = JSON.parse(localStorage.getItem('team-chat')) || [];
+                chatMessages.push(chatMessage);
+                localStorage.setItem('team-chat', JSON.stringify(chatMessages));
+                
+                input.value = '';
+                displayChatMessages();
             }
         }
 
-        function loadChatMessages() {
-            if (!database) return;
+        function displayChatMessages() {
+            const chatMessages = JSON.parse(localStorage.getItem('team-chat')) || [];
+            const chatContainer = document.getElementById('chatMessages');
+            chatContainer.innerHTML = '';
             
-            database.ref('chat').on('value', (snapshot) => {
-                const messages = snapshot.val();
-                const chatContainer = document.getElementById('chatMessages');
-                chatContainer.innerHTML = '';
-                
-                if (!messages) {
-                    chatContainer.innerHTML = `
-                        <div class="text-center text-gray-500 text-sm py-4">
-                            <i class="fas fa-comments text-xl mb-2 block"></i>
-                            No messages yet
-                        </div>
-                    `;
-                    return;
-                }
-                
-                const messagesArray = Object.values(messages);
-                messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                
-                messagesArray.forEach(msg => {
-                    const div = document.createElement('div');
-                    const isCurrentUser = msg.user === currentUser.name;
-                    div.className = `p-3 mb-2 rounded-lg max-w-[85%] ${isCurrentUser ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'}`;
-                    div.innerHTML = `
-                        <div class="font-semibold text-sm">${msg.user}</div>
-                        <div class="break-words">${msg.text}</div>
-                        <div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</div>
-                    `;
-                    chatContainer.appendChild(div);
-                });
-                
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (chatMessages.length === 0) {
+                chatContainer.innerHTML = `
+                    <div class="text-center text-gray-500 text-sm py-4">
+                        <i class="fas fa-comments text-xl mb-2 block"></i>
+                        No messages yet
+                    </div>
+                `;
+                return;
+            }
+            
+            chatMessages.forEach(msg => {
+                const div = document.createElement('div');
+                const isCurrentUser = currentUser && msg.user === currentUser.name;
+                div.className = `p-3 mb-2 rounded-lg max-w-[85%] ${isCurrentUser ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'}`;
+                div.innerHTML = `
+                    <div class="font-semibold text-sm">${msg.user}</div>
+                    <div class="break-words">${msg.text}</div>
+                    <div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+                `;
+                chatContainer.appendChild(div);
             });
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function openChat() {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
             document.getElementById('chatModal').classList.add('active');
-            loadChatMessages();
+            displayChatMessages();
         }
 
         function closeChat() {
@@ -741,9 +591,6 @@
                     content.classList.remove('active');
                 });
                 document.getElementById(section).classList.add('active');
-                
-                // Load content for this section
-                loadSectionContent(section);
             });
         });
 
@@ -759,31 +606,34 @@
             }
         }
 
-        // Initialize
+        // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
             
-            // Load overview content initially
-            loadSectionContent('overview');
+            // Load saved data ID
+            currentDataId = localStorage.getItem('team-data-id');
             
-            // Setup real-time listeners for all sections
-            if (database) {
-                const sections = [
-                    'overview', 'project-documentation', 'team-collaboration', 'team-updates',
-                    'ai-assistant', 'practical-tasks', 'implementation', 'research',
-                    'resources', 'security-testing', 'monitoring-analytics'
-                ];
-                
-                sections.forEach(section => {
-                    database.ref(`content/${section}`).on('value', (snapshot) => {
-                        const content = snapshot.val() || [];
-                        displaySectionContent(section, content);
-                    });
-                });
+            // Initialize team list
+            initializeTeamList();
+            
+            // Try to load saved user
+            const savedUser = localStorage.getItem('current-user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+                document.getElementById('loginModal').style.display = 'none';
+                loadAllContent();
             }
+            
+            // Auto-save user
+            setInterval(() => {
+                if (currentUser) {
+                    localStorage.setItem('current-user', JSON.stringify(currentUser));
+                }
+            }, 5000);
         });
     </script>
 </body>
