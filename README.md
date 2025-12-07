@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- إضافة Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <!-- Firebase SDK (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
     <style>
         .theme-transition { transition: all 0.3s ease; }
@@ -42,74 +42,27 @@
             max-height: 300px;
             overflow-y: auto;
         }
-    </style><style>
-    /* إضافة هذه الأنماط للجوال */
+    </style>
+    <style>
+    /* Mobile tweaks (same as before) */
     @media (max-width: 768px) {
-        .flex.min-h-screen {
-            flex-direction: column;
-        }
-        
-        .w-80 {
-            width: 100% !important;
-            border-right: none !important;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .flex-1.p-8 {
-            padding: 1rem !important;
-        }
-        
-        .grid-cols-1 {
-            grid-template-columns: 1fr !important;
-        }
-        
-        nav.space-y-2 {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .section-btn {
-            padding: 0.75rem !important;
-            font-size: 0.875rem;
-            flex: 1 0 auto;
-            text-align: center;
-        }
-        
-        .section-btn i {
-            margin-right: 0.25rem !important;
-        }
-        
-        .modal > div {
-            margin: 0.5rem !important;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .chat-container {
-            max-height: 200px !important;
-        }
+        .flex.min-h-screen { flex-direction: column; }
+        .w-80 { width: 100% !important; border-right: none !important; border-bottom: 1px solid #e5e7eb; }
+        .flex-1.p-8 { padding: 1rem !important; }
+        .grid-cols-1 { grid-template-columns: 1fr !important; }
+        nav.space-y-2 { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .section-btn { padding: 0.75rem !important; font-size: 0.875rem; flex: 1 0 auto; text-align: center; }
+        .section-btn i { margin-right: 0.25rem !important; }
+        .modal > div { margin: 0.5rem !important; max-height: 90vh; overflow-y: auto; }
+        .chat-container { max-height: 200px !important; }
     }
-    
     @media (max-width: 480px) {
-        .text-2xl, .text-3xl {
-            font-size: 1.5rem !important;
-        }
-        
-        .p-8 {
-            padding: 1rem !important;
-        }
-        
-        .section-btn {
-            font-size: 0.75rem;
-            padding: 0.5rem !important;
-        }
-        
-        .section-btn i {
-            display: none;
-        }
+        .text-2xl, .text-3xl { font-size: 1.5rem !important; }
+        .p-8 { padding: 1rem !important; }
+        .section-btn { font-size: 0.75rem; padding: 0.5rem !important; }
+        .section-btn i { display: none; }
     }
-</style>
+    </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition">
     <!-- Add Content Modal -->
@@ -167,7 +120,7 @@
             </div>
             <div class="flex gap-2">
                 <input type="text" id="chatInput" placeholder="Type message..." class="flex-1 p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white">
-                <button onclick="sendChatMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                <button id="sendChatButton" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -274,7 +227,7 @@
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
                     <div class="flex items-center space-x-3 mb-3">
                         <div class="relative">
-                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">Y</div>
+                            <div id="userAvatar" class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">Y</div>
                             <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -372,11 +325,11 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="text-center p-6 bg-blue-500 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2">7</div>
+                            <div class="text-3xl font-bold mb-2" id="stat-members">7</div>
                             <div>Team Members</div>
                         </div>
                         <div class="text-center p-6 bg-green-500 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2">11</div>
+                            <div class="text-3xl font-bold mb-2" id="stat-sections">11</div>
                             <div>Sections</div>
                         </div>
                         <div class="text-center p-6 bg-purple-500 text-white rounded-2xl shadow-lg">
@@ -391,7 +344,7 @@
                 </div>
             </div>
 
-            <!-- Other Sections -->
+            <!-- (other sections same as before — each contains a container with id "<section>-content") -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -514,787 +467,517 @@
         </div>
     </div>
 
+    <!-- ---------- SCRIPT: Firebase + Real-time logic ---------- -->
     <script>
-        // 🔥 إعدادات Firebase
+    (function(){
+        // ---------- Configuration ----------
+        const DATABASE_URL = 'https://fir-console-df3e9-default-rtdb.europe-west1.firebasedatabase.app';
         const firebaseConfig = {
             apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
             authDomain: "fir-console-df3e9.firebaseapp.com",
+            databaseURL: DATABASE_URL,
             projectId: "fir-console-df3e9",
             storageBucket: "fir-console-df3e9.firebasestorage.app",
             messagingSenderId: "750795336412",
             appId: "1:750795336412:web:abfd0c06941a9418abe219"
         };
 
-        // TEAM MEMBERS DATA - بالترتيب المطلوب مع إضافة Najmaddin
-        const teamMembers = [
-            { id: '1', name: 'You', role: 'Team Member' },
-            { id: '2', name: 'Kaled Osman', role: 'Developer' },
-            { id: '3', name: 'Marcus Tibell', role: 'Engineer' },
-            { id: '4', name: 'Jens Annell', role: 'Analyst' },
-            { id: '5', name: 'Fahad Hussain', role: 'Researcher' },
-            { id: '6', name: 'Luwam', role: 'Designer' },
-            { id: '7', name: 'Stefan Österberg', role: 'Architect' },
-            { id: '8', name: 'Najmaddin', role: 'Security Expert' }
+        // Initialize Firebase app (safe to call multiple times)
+        try {
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        } catch (e) {
+            console.warn('Firebase init warning:', e);
+        }
+        const db = firebase.database();
+
+        // ---------- Helpers ----------
+        const sections = [
+            'overview','project-documentation','team-collaboration','team-updates',
+            'ai-assistant','practical-tasks','implementation','research',
+            'resources','security-testing','monitoring-analytics'
         ];
+        const $ = id => document.getElementById(id);
 
-        // 🔄 نظام الدردشة الحقيقي مع Firebase
-        class RealTimeChat {
-            constructor() {
-                this.currentUser = 'You';
-                this.isConnected = false;
-                this.messageCount = 0;
-                this.unreadCount = 0;
-                this.lastReadTime = Date.now();
-                this.initFirebase();
-            }
-
-            initFirebase() {
-                try {
-                    firebase.initializeApp(firebaseConfig);
-                    this.database = firebase.database();
-                    this.isConnected = true;
-                    console.log('✅ Firebase connected successfully!');
-                    this.updateChatStatus(true);
-                    this.setupChatListener();
-                } catch (error) {
-                    console.log('❌ Firebase connection failed, using local storage');
-                    this.isConnected = false;
-                    this.updateChatStatus(false);
-                    this.setupLocalChat();
-                }
-            }
-
-            updateChatStatus(connected) {
-                const statusElement = document.getElementById('chatStatus');
-                if (statusElement) {
-                    statusElement.style.background = connected ? '#10B981' : '#EF4444';
-                    statusElement.title = connected ? 'Connected to Firebase' : 'Using Local Storage';
-                }
-            }
-
-            setupChatListener() {
-                if (!this.isConnected) return;
-                
-                const chatRef = this.database.ref('team-chat');
-                chatRef.on('child_added', (snapshot) => {
-                    const message = snapshot.val();
-                    this.displayMessage(message);
-                    this.messageCount++;
-                    this.updateMessageCount();
-                    
-                    // إشعار بالرسائل الجديدة
-                    if (message.timestamp > this.lastReadTime && !this.isChatOpen()) {
-                        this.unreadCount++;
-                        this.updateUnreadCount();
-                    }
-                });
-            }
-
-            setupLocalChat() {
-                const messages = JSON.parse(localStorage.getItem('team-chat-messages')) || [];
-                messages.forEach(msg => this.displayMessage(msg));
-                this.messageCount = messages.length;
-                this.updateMessageCount();
-            }
-
-            async saveMessage(text) {
-                const message = {
-                    user: this.currentUser,
-                    text: text,
-                    timestamp: Date.now(),
-                    id: Date.now().toString()
-                };
-
-                if (this.isConnected) {
-                    // حفظ في Firebase
-                    try {
-                        await this.database.ref('team-chat').push(message);
-                        return true;
-                    } catch (error) {
-                        console.error('Firebase error:', error);
-                        return false;
-                    }
-                } else {
-                    // حفظ في localStorage إذا فشل الاتصال
-                    this.saveToLocalStorage(message);
-                    return true;
-                }
-            }
-
-            saveToLocalStorage(message) {
-                const messages = JSON.parse(localStorage.getItem('team-chat-messages')) || [];
-                messages.push(message);
-                if (messages.length > 100) messages.shift();
-                localStorage.setItem('team-chat-messages', JSON.stringify(messages));
-                this.displayMessage(message);
-                this.messageCount++;
-                this.updateMessageCount();
-            }
-
-            displayMessage(message) {
-                const chatMessages = document.getElementById('chatMessages');
-                if (!chatMessages) return;
-
-                // إزالة رسالة التحميل إذا كانت موجودة
-                if (chatMessages.querySelector('.text-center')) {
-                    chatMessages.innerHTML = '';
-                }
-
-                const messageElement = document.createElement('div');
-                const isOwnMessage = message.user === this.currentUser;
-                messageElement.className = `p-3 mb-2 rounded-lg max-w-[85%] ${isOwnMessage ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'} new-message`;
-                messageElement.innerHTML = `
-                    <div class="font-semibold text-sm">${message.user}</div>
-                    <div class="break-words">${message.text}</div>
-                    <div class="text-xs opacity-70 mt-1">${new Date(message.timestamp).toLocaleTimeString()}</div>
-                `;
-                chatMessages.appendChild(messageElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            updateMessageCount() {
-                const countElement = document.getElementById('messageCount');
-                if (countElement) {
-                    countElement.textContent = this.messageCount;
-                }
-            }
-
-            updateUnreadCount() {
-                const unreadElement = document.getElementById('unreadCount');
-                if (unreadElement) {
-                    if (this.unreadCount > 0) {
-                        unreadElement.textContent = this.unreadCount;
-                        unreadElement.classList.remove('hidden');
-                    } else {
-                        unreadElement.classList.add('hidden');
-                    }
-                }
-            }
-
-            isChatOpen() {
-                const modal = document.getElementById('teamChatModal');
-                return modal && modal.classList.contains('active');
-            }
-
-            markAsRead() {
-                this.unreadCount = 0;
-                this.lastReadTime = Date.now();
-                this.updateUnreadCount();
-            }
+        // Basic escape for text rendering
+        function escapeHtml(s = '') {
+            return String(s)
+                .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+                .replaceAll('"','&quot;').replaceAll("'",'&#039;');
         }
 
-        // CONTENT MANAGEMENT SYSTEM
-        let userContents = JSON.parse(localStorage.getItem('userContents')) || {};
-
-        // LOGIN SYSTEM
-        class LoginSystem {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('teamUsers')) || this.createDefaultUsers();
-                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-                this.init();
-            }
-
-            createDefaultUsers() {
-                const defaultUsers = [
-                    { id: 1, name: "Kaled Osman", email: "kaled@team.com", password: "kaled123", role: "Developer", avatar: "K" },
-                    { id: 2, name: "Marcus Tibell", email: "marcus@team.com", password: "marcus123", role: "Engineer", avatar: "M" },
-                    { id: 3, name: "Jens Annell", email: "jens@team.com", password: "jens123", role: "Analyst", avatar: "J" },
-                    { id: 4, name: "Fahad Hussain", email: "fahad@team.com", password: "fahad123", role: "Researcher", avatar: "F" },
-                    { id: 5, name: "Luwam", email: "luwam@team.com", password: "luwam123", role: "Designer", avatar: "L" },
-                    { id: 6, name: "Stefan Österberg", email: "stefan@team.com", password: "stefan123", role: "Architect", avatar: "S" },
-                    { id: 7, name: "Najmaddin", email: "najmaddin@team.com", password: "najmaddin123", role: "Security Expert", avatar: "N" }
-                ];
-                localStorage.setItem('teamUsers', JSON.stringify(defaultUsers));
-                return defaultUsers;
-            }
-
+        // ---------- Chat system ----------
+        const chat = {
+            currentUser: 'You',
+            connected: false,
+            messageCount: 0,
+            unread: 0,
+            lastRead: Date.now(),
             init() {
-                if (this.currentUser) {
-                    this.hideLoginModal();
-                    this.updateUIForLoggedInUser();
+                // set currentUser from login if available
+                const saved = JSON.parse(localStorage.getItem('currentUser'));
+                if (saved && saved.name) this.currentUser = saved.name;
+
+                // check connection (basic)
+                this.connected = true;
+                if ($('chatStatus')) $('chatStatus').style.background = '#10B981';
+
+                // set listeners
+                this.listenMessages();
+                // send button
+                const sendBtn = $('sendChatButton');
+                if (sendBtn) sendBtn.addEventListener('click', () => this.send());
+            },
+            listenMessages() {
+                const ref = db.ref('team-chat').limitToLast(200);
+                ref.off();
+                ref.on('child_added', snap => {
+                    const msg = snap.val();
+                    this.display(msg);
+                    this.messageCount++;
+                    if (msg.timestamp > this.lastRead && !this.isOpen()) {
+                        this.unread++;
+                        this.updateUnread();
+                    }
+                });
+            },
+            async send() {
+                const input = $('chatInput');
+                if (!input) return;
+                const text = input.value.trim();
+                if (!text) return;
+                const payload = {
+                    user: this.currentUser || 'You',
+                    text,
+                    timestamp: Date.now()
+                };
+                try {
+                    await db.ref('team-chat').push(payload);
+                    input.value = '';
+                    this.lastRead = Date.now();
+                    this.unread = 0;
+                    this.updateUnread();
+                } catch (e) {
+                    console.error('Failed writing chat to Firebase', e);
+                    alert('Failed to send message to server');
                 }
-
-                this.setupEventListeners();
+            },
+            display(msg) {
+                const list = $('chatMessages');
+                if (!list) return;
+                // Remove "loading" placeholder if exists
+                const placeholder = list.querySelector('.text-center');
+                if (placeholder) list.innerHTML = '';
+                const el = document.createElement('div');
+                const mine = msg.user === this.currentUser;
+                el.className = `p-3 mb-2 rounded-lg max-w-[85%] ${mine ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'}`;
+                el.innerHTML = `<div class="font-semibold text-sm">${escapeHtml(msg.user)}</div><div class="break-words">${escapeHtml(msg.text)}</div><div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
+                list.appendChild(el);
+                list.scrollTop = list.scrollHeight;
+                // update message counter
+                const cnt = $('messageCount');
+                if (cnt) cnt.textContent = (parseInt(cnt.textContent || '0') + 1).toString();
+            },
+            open() {
+                $('teamChatModal').classList.add('active');
+                this.lastRead = Date.now();
+                this.unread = 0;
+                this.updateUnread();
+            },
+            close() {
+                $('teamChatModal').classList.remove('active');
+            },
+            isOpen() {
+                return $('teamChatModal').classList.contains('active');
+            },
+            updateUnread() {
+                const u = $('unreadCount');
+                if (!u) return;
+                if (this.unread > 0) {
+                    u.textContent = this.unread;
+                    u.classList.remove('hidden');
+                } else {
+                    u.classList.add('hidden');
+                }
             }
+        };
 
-            setupEventListeners() {
+        // ---------- Content system (Realtime) ----------
+        const contentSystem = {
+            // Render one section's snapshot
+            renderSection(section, snapshot) {
+                const container = $(`${section}-content`);
+                if (!container) return;
+                container.innerHTML = '';
+                if (!snapshot || !snapshot.exists()) {
+                    container.innerHTML = `
+                        <div class="text-center p-8 text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <p>No content added yet. Be the first to share something!</p>
+                        </div>`;
+                    return;
+                }
+                snapshot.forEach(child => {
+                    const item = child.val();
+                    const id = child.key;
+                    const el = document.createElement('div');
+                    el.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 mb-4';
+                    el.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${escapeHtml(item.title)}</h3>
+                            <div class="flex space-x-2">
+                                <button data-id="${id}" data-section="${section}" class="edit-btn text-blue-600 hover:text-blue-800 dark:text-blue-400"><i class="fas fa-edit"></i></button>
+                                <button data-id="${id}" data-section="${section}" class="del-btn text-red-600 hover:text-red-800 dark:text-red-400"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${escapeHtml(item.description)}</p>
+                        <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+                            <span><i class="fas fa-user mr-1"></i> ${escapeHtml(item.author)}</span>
+                            <span><i class="fas fa-clock mr-1"></i> ${new Date(item.date).toLocaleDateString()}</span>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+
+                // attach handlers (edit/delete)
+                container.querySelectorAll('.edit-btn').forEach(b => {
+                    b.addEventListener('click', (e) => {
+                        const id = b.getAttribute('data-id');
+                        const sec = b.getAttribute('data-section');
+                        openEditModalFor(sec, id);
+                    });
+                });
+                container.querySelectorAll('.del-btn').forEach(b => {
+                    b.addEventListener('click', (e) => {
+                        const id = b.getAttribute('data-id');
+                        const sec = b.getAttribute('data-section');
+                        deleteContent(sec, id);
+                    });
+                });
+            },
+            listenAll() {
+                sections.forEach(sec => {
+                    const ref = db.ref(`content/${sec}`);
+                    ref.off();
+                    ref.on('value', snap => this.renderSection(sec, snap));
+                });
+            },
+            pushContent(section, payload) {
+                return db.ref(`content/${section}`).push(payload);
+            },
+            updateContent(section, id, payload) {
+                return db.ref(`content/${section}/${id}`).update(payload);
+            },
+            removeContent(section, id) {
+                return db.ref(`content/${section}/${id}`).remove();
+            }
+        };
+
+        // ---------- UI: open add / edit ----------
+        function openAddContent(section) {
+            $('contentSection').value = section;
+            $('editContentId').value = '';
+            $('contentTitle').value = '';
+            $('contentDescription').value = '';
+            // default author to current user if logged
+            const saved = JSON.parse(localStorage.getItem('currentUser'));
+            if (saved && saved.name) $('contentAuthor').value = saved.name;
+            $('addContentModal').classList.add('active');
+        }
+        function closeAddContent() { $('addContentModal').classList.remove('active'); }
+
+        // open edit modal and prefill with Firebase data
+        function openEditModalFor(section, id) {
+            db.ref(`content/${section}/${id}`).once('value').then(snap => {
+                const item = snap.val();
+                if (!item) return alert('Item not found');
+                $('contentSection').value = section;
+                $('editContentId').value = id;
+                $('contentTitle').value = item.title || '';
+                $('contentDescription').value = item.description || '';
+                $('contentAuthor').value = item.author || (JSON.parse(localStorage.getItem('currentUser')) || {}).name || 'Unknown';
+                $('addContentModal').classList.add('active');
+            }).catch(err => {
+                console.error(err);
+                alert('Failed to load item for edit');
+            });
+        }
+
+        // Add / Edit submit
+        document.getElementById('addContentForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const section = $('contentSection').value;
+            const editId = $('editContentId').value;
+            const title = $('contentTitle').value.trim();
+            const description = $('contentDescription').value.trim();
+            const author = $('contentAuthor').value;
+            if (!title || !description) return alert('Fill title and content');
+
+            const payload = { title, description, author, date: new Date().toISOString() };
+            if (editId) {
+                contentSystem.updateContent(section, editId, payload)
+                .then(()=> {
+                    closeAddContent();
+                }).catch(err=> { console.error(err); alert('Update failed'); });
+            } else {
+                contentSystem.pushContent(section, payload)
+                .then(()=> {
+                    closeAddContent();
+                }).catch(err=> { console.error(err); alert('Save failed'); });
+            }
+        });
+
+        // delete content
+        function deleteContent(section, id) {
+            if (!confirm('Are you sure you want to delete this content?')) return;
+            contentSystem.removeContent(section, id)
+            .catch(err => { console.error(err); alert('Delete failed'); });
+        }
+
+        // ---------- Admin utilities ----------
+        function clearAllContentAdmin() {
+            if (!confirm('Delete all content for all sections?')) return;
+            const updates = {};
+            sections.forEach(sec => updates[`content/${sec}`] = null);
+            db.ref().update(updates).then(()=> {
+                alert('All content cleared');
+            }).catch(err => { console.error(err); alert('Failed to clear content'); });
+        }
+        function clearChatAdmin() {
+            if (!confirm('Clear all chat messages?')) return;
+            db.ref('team-chat').remove().then(()=> {
+                const list = $('chatMessages');
+                if (list) list.innerHTML = '<div class="text-center text-gray-500 text-sm py-4"><i class="fas fa-comments text-xl mb-2 block"></i> Chat cleared</div>';
+            }).catch(err => { console.error(err); alert('Failed to clear chat'); });
+        }
+
+        // ---------- Login system (keeps your demo local logic) ----------
+        const loginSystem = {
+            users: JSON.parse(localStorage.getItem('teamUsers')) || null,
+            currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
+            init() {
+                if (!this.users) {
+                    const defaultUsers = [
+                        { id: 1, name: "Kaled Osman", email: "kaled@team.com", password: "kaled123", role: "Developer", avatar: "K" },
+                        { id: 2, name: "Marcus Tibell", email: "marcus@team.com", password: "marcus123", role: "Engineer", avatar: "M" },
+                        { id: 3, name: "Jens Annell", email: "jens@team.com", password: "jens123", role: "Analyst", avatar: "J" },
+                        { id: 4, name: "Fahad Hussain", email: "fahad@team.com", password: "fahad123", role: "Researcher", avatar: "F" },
+                        { id: 5, name: "Luwam", email: "luwam@team.com", password: "luwam123", role: "Designer", avatar: "L" },
+                        { id: 6, name: "Stefan Österberg", email: "stefan@team.com", password: "stefan123", role: "Architect", avatar: "S" },
+                        { id: 7, name: "Najmaddin", email: "najmaddin@team.com", password: "najmaddin123", role: "Security Expert", avatar: "N" }
+                    ];
+                    this.users = defaultUsers;
+                    localStorage.setItem('teamUsers', JSON.stringify(defaultUsers));
+                }
+                // fill login demo fields if user already logged
+                if (this.currentUser) {
+                    this.updateUIForLoggedIn();
+                    adminSystem.tryInit();
+                }
+                // attach login submit
                 document.getElementById('loginForm').addEventListener('submit', (e) => {
                     e.preventDefault();
-                    this.login();
+                    this.attemptLogin();
                 });
-
-                document.getElementById('forgotPasswordForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.recoverPassword();
-                });
-            }
-
-            login() {
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-
-                const user = this.users.find(u => u.email === email && u.password === password);
-                
-                if (user) {
-                    this.currentUser = user;
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.hideLoginModal();
-                    this.updateUIForLoggedInUser();
-                    this.showNotification(`Welcome ${user.name}! Login successful`, 'success');
-                    
-                    // تحديث اسم المستخدم في الدردشة
-                    chatSystem.currentUser = user.name;
-                    
-                    // Initialize admin system if user is admin
-                    if (user.email === 'kaled@team.com') {
-                        adminSystem.init();
-                    }
-                } else {
-                    this.showNotification('Invalid email or password', 'error');
+            },
+            attemptLogin() {
+                const email = $('loginEmail').value.trim();
+                const password = $('loginPassword').value.trim();
+                const found = this.users.find(u => u.email === email && u.password === password);
+                if (!found) {
+                    alert('Invalid credentials');
+                    return;
                 }
-            }
-
+                this.currentUser = found;
+                localStorage.setItem('currentUser', JSON.stringify(found));
+                // update UI
+                this.updateUIForLoggedIn();
+                // set chat user
+                chat.currentUser = found.name;
+                // close login modal
+                $('loginModal').style.display = 'none';
+                // show admin if admin
+                adminSystem.tryInit();
+            },
             logout() {
                 this.currentUser = null;
                 localStorage.removeItem('currentUser');
-                this.showLoginModal();
-                this.updateUIForLoggedOutUser();
-                this.showNotification('Logged out successfully', 'info');
-                chatSystem.currentUser = 'You';
+                $('loginModal').style.display = 'flex';
+                // reset UI
+                $('userName').textContent = 'You';
+                $('userRole').textContent = 'Active User';
+                $('userAvatar').textContent = 'Y';
+                chat.currentUser = 'You';
+            },
+            updateUIForLoggedIn() {
+                const u = this.currentUser;
+                if (!u) return;
+                $('userName').textContent = u.name;
+                $('userRole').textContent = u.role;
+                $('userAvatar').textContent = u.avatar || u.name.charAt(0);
+                // inject admin panel if admin (kaled)
+                adminSystem.tryInit();
             }
+        };
 
-            recoverPassword() {
-                const email = document.getElementById('recoveryEmail').value;
-                const user = this.users.find(u => u.email === email);
-                
-                if (user) {
-                    this.showNotification(`Password recovery link sent to ${email}`, 'success');
-                    this.closeForgotPassword();
-                } else {
-                    this.showNotification('Email not found in system', 'error');
+        // ---------- Admin system ----------
+        const adminSystem = {
+            tryInit() {
+                const cur = JSON.parse(localStorage.getItem('currentUser')) || null;
+                if (cur && cur.email === 'kaled@team.com') {
+                    this.renderAdmin();
                 }
-            }
-
-            showLoginModal() {
-                document.getElementById('loginModal').style.display = 'flex';
-            }
-
-            hideLoginModal() {
-                document.getElementById('loginModal').style.display = 'none';
-            }
-
-            updateUIForLoggedInUser() {
-                const userName = document.getElementById('userName');
-                const userRole = document.getElementById('userRole');
-                const userInfo = document.querySelector('.bg-white.dark\\:bg-gray-700.p-4.rounded-xl');
-                
-                if (userName) userName.textContent = this.currentUser.name;
-                if (userRole) userRole.textContent = this.currentUser.role;
-                
-                if (userInfo) {
-                    userInfo.innerHTML = `
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="relative">
-                                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-                                    ${this.currentUser.avatar}
-                                </div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-semibold text-gray-800 dark:text-white truncate">${this.currentUser.name}</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 truncate">${this.currentUser.role}</p>
-                            </div>
-                        </div>
+            },
+            renderAdmin() {
+                const panel = $('adminPanel');
+                if (!panel) return;
+                panel.innerHTML = `
+                    <div class="mt-6 p-4 bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 rounded-xl">
+                        <h3 class="font-semibold mb-2 text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
+                            <i class="fas fa-crown"></i> Admin Panel
+                        </h3>
                         <div class="space-y-2">
-                            <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all flex items-center justify-center">
-                                <i class="fas fa-comments mr-2"></i>Team Chat
-                                <span id="unreadCount" class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
-                            </button>
-                            <button onclick="loginSystem.logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                            </button>
+                            <button id="adminClearContent" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg">Delete All Content</button>
+                            <button id="adminClearChat" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg">Clear Chat</button>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
+                // attach handlers
+                document.getElementById('adminClearContent').addEventListener('click', clearAllContentAdmin);
+                document.getElementById('adminClearChat').addEventListener('click', clearChatAdmin);
             }
+        };
 
-            updateUIForLoggedOutUser() {
-                const userName = document.getElementById('userName');
-                const userRole = document.getElementById('userRole');
-                const userInfo = document.querySelector('.bg-white.dark\\:bg-gray-700.p-4.rounded-xl');
-                
-                if (userName) userName.textContent = 'You';
-                if (userRole) userRole.textContent = 'Active User';
-                
-                if (userInfo) {
-                    userInfo.innerHTML = `
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="relative">
-                                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">Y</div>
-                                <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-semibold text-gray-800 dark:text-white truncate">You</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Active User</p>
-                            </div>
-                        </div>
-                        <button onclick="openTeamChat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all flex items-center justify-center">
-                            <i class="fas fa-comments mr-2"></i>Team Chat
-                            <span id="unreadCount" class="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full hidden">0</span>
-                        </button>
-                    `;
-                }
-            }
-
-            showNotification(message, type = 'info') {
-                alert(message);
-            }
-        }
-
-        // ADMIN SYSTEM
-        class AdminSystem {
-            constructor() {
-                this.adminUser = 'kaled@team.com';
-                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-            }
-
-            init() {
-                if (this.isAdmin()) {
-                    this.addAdminControls();
-                }
-            }
-
-            isAdmin() {
-                return this.currentUser && this.currentUser.email === this.adminUser;
-            }
-
-            addAdminControls() {
-                const adminPanel = document.getElementById('adminPanel');
-                if (adminPanel) {
-                    adminPanel.innerHTML = `
-                        <div class="mt-6 p-4 bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 rounded-xl">
-                            <h3 class="font-semibold mb-2 text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
-                                <i class="fas fa-crown"></i>
-                                Admin Panel
-                            </h3>
-                            <div class="space-y-2">
-                                <button onclick="adminSystem.manageUsers()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition-all text-sm">
-                                    <i class="fas fa-users-cog mr-2"></i>Manage Users
-                                </button>
-                                <button onclick="adminSystem.deleteAllContent()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-all text-sm">
-                                    <i class="fas fa-trash mr-2"></i>Delete All Content
-                                </button>
-                                <button onclick="adminSystem.clearChat()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg transition-all text-sm">
-                                    <i class="fas fa-comments mr-2"></i>Clear Chat
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            manageUsers() {
-                alert('Admin Feature: User Management - Only Kaled can access this!');
-            }
-
-            deleteAllContent() {
-                if (confirm('🚨 ARE YOU SURE? This will delete ALL content from ALL sections!')) {
-                    localStorage.removeItem('userContents');
-                    userContents = {};
-                    initializeAllContents();
-                    alert('All content has been deleted by admin');
-                }
-            }
-
-            clearChat() {
-                if (confirm('Clear all chat messages?')) {
-                    if (chatSystem.isConnected) {
-                        chatSystem.database.ref('team-chat').remove();
-                    } else {
-                        localStorage.removeItem('team-chat-messages');
-                    }
-                    document.getElementById('chatMessages').innerHTML = `
-                        <div class="text-center text-gray-500 text-sm py-4">
-                            <i class="fas fa-comments text-xl mb-2 block"></i>
-                            Chat cleared by admin
-                        </div>
-                    `;
-                    chatSystem.messageCount = 0;
-                    chatSystem.updateMessageCount();
-                }
-            }
-        }
-
-        // Initialize systems
-        const chatSystem = new RealTimeChat();
-        const loginSystem = new LoginSystem();
-        const adminSystem = new AdminSystem();
-
-        // Initialize default content
-        function initializeDefaultContent() {
-            const defaultContent = {
-                'overview': [
-                    {
-                        id: '1',
-                        title: '🚀 Welcome to Security Chaos Engineering Dashboard',
-                        description: 'This is your team collaboration platform. All 11 sections are now fully functional with real-time chat and content management.',
-                        author: 'System',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'team-collaboration': [
-                    {
-                        id: '2',
-                        title: 'Team Collaboration Guidelines',
-                        description: 'This section is for coordinating team efforts. Share meeting notes, assign tasks, and track progress on our security chaos engineering project.',
-                        author: 'Kaled Osman',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'team-updates': [
-                    {
-                        id: '3',
-                        title: 'Weekly Status Update',
-                        description: 'Team meeting scheduled for Friday at 2 PM. Please come prepared with updates on your assigned tasks.',
-                        author: 'Fahad Hussain',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'ai-assistant': [
-                    {
-                        id: '4',
-                        title: 'AI Assistant Integration',
-                        description: 'We are exploring AI tools to help with security analysis and automated testing. Share your findings here.',
-                        author: 'Stefan Österberg',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'practical-tasks': [
-                    {
-                        id: '5',
-                        title: 'Current Task List',
-                        description: '1. Implement chaos testing framework\n2. Document security protocols\n3. Create automated testing scripts\n4. Review system vulnerabilities',
-                        author: 'Marcus Tibell',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'implementation': [
-                    {
-                        id: '6',
-                        title: 'Implementation Roadmap',
-                        description: 'Phase 1: Environment setup\nPhase 2: Tool integration\nPhase 3: Testing framework\nPhase 4: Documentation',
-                        author: 'Jens Annell',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'research': [
-                    {
-                        id: '7',
-                        title: 'Research Findings',
-                        description: 'Initial research shows that chaos engineering principles can significantly improve security resilience when properly implemented.',
-                        author: 'Luwam',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'resources': [
-                    {
-                        id: '8',
-                        title: 'Useful Resources',
-                        description: '- Chaos Engineering Book\n- Security Testing Tools\n- Industry Best Practices\n- Academic Papers',
-                        author: 'Kaled Osman',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'security-testing': [
-                    {
-                        id: '9',
-                        title: 'Security Testing Approach',
-                        description: 'We will implement both automated and manual security testing, focusing on identifying vulnerabilities through controlled chaos experiments.',
-                        author: 'Fahad Hussain',
-                        date: new Date().toISOString()
-                    }
-                ],
-                'monitoring-analytics': [
-                    {
-                        id: '10',
-                        title: 'Monitoring Strategy',
-                        description: 'Real-time monitoring of system behavior during chaos experiments will help us understand security weaknesses and improve resilience.',
-                        author: 'Stefan Österberg',
-                        date: new Date().toISOString()
-                    }
-                ]
-            };
-
-            Object.keys(defaultContent).forEach(section => {
-                if (!userContents[section] || userContents[section].length === 0) {
-                    userContents[section] = defaultContent[section];
-                }
-            });
-            
-            saveContents();
-        }
-
-        function saveContents() {
-            localStorage.setItem('userContents', JSON.stringify(userContents));
-        }
-
-        // SHOW TEAM MEMBERS
+        // ---------- Team members UI ----------
+        const teamMembers = [
+            { name: 'Kaled Osman', role: 'Developer', avatar: 'K' },
+            { name: 'Marcus Tibell', role: 'Engineer', avatar: 'M' },
+            { name: 'Jens Annell', role: 'Analyst', avatar: 'J' },
+            { name: 'Fahad Hussain', role: 'Researcher', avatar: 'F' },
+            { name: 'Luwam', role: 'Designer', avatar: 'L' },
+            { name: 'Stefan Österberg', role: 'Architect', avatar: 'S' },
+            { name: 'Najmaddin', role: 'Security Expert', avatar: 'N' }
+        ];
         function showTeamMembers() {
-            const liveTeamList = document.getElementById('liveTeamList');
+            const liveTeamList = $('liveTeamList');
             if (!liveTeamList) return;
-
             liveTeamList.innerHTML = '';
-            
             teamMembers.forEach(member => {
-                if (member.name !== 'You') {
-                    const memberElement = document.createElement('div');
-                    memberElement.className = 'flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg';
-                    memberElement.innerHTML = `
-                        <div class="relative">
-                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                                ${member.name.charAt(0)}
-                            </div>
-                            <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
+                const memberElement = document.createElement('div');
+                memberElement.className = 'flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg';
+                memberElement.innerHTML = `
+                    <div class="relative">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            ${member.name.charAt(0)}
                         </div>
-                        <div class="flex-1">
-                            <div class="font-medium text-gray-800 dark:text-white text-sm">${member.name}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-400">${member.role}</div>
-                        </div>
-                    `;
-                    liveTeamList.appendChild(memberElement);
-                }
+                        <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-800 dark:text-white text-sm">${member.name}</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">${member.role}</div>
+                    </div>
+                `;
+                liveTeamList.appendChild(memberElement);
             });
         }
 
-        // Chat Functions
-        function openTeamChat() {
-            document.getElementById('teamChatModal').classList.add('active');
-            chatSystem.markAsRead();
-        }
-
-        function closeTeamChat() {
-            document.getElementById('teamChatModal').classList.remove('active');
-        }
-
-        async function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                const success = await chatSystem.saveMessage(message);
-                if (success) {
-                    input.value = '';
-                } else {
-                    alert('Failed to send message. Please try again.');
-                }
-            }
-        }
-
-        // Handle Enter key in chat
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendChatMessage();
-            }
-        });
-
-        // Add Content System
-        document.getElementById('addContentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const section = document.getElementById('contentSection').value;
-            const contentId = document.getElementById('editContentId').value;
-            const title = document.getElementById('contentTitle').value;
-            const description = document.getElementById('contentDescription').value;
-            const author = document.getElementById('contentAuthor').value;
-            
-            if (!userContents[section]) {
-                userContents[section] = [];
-            }
-            
-            let content;
-            if (contentId) {
-                const index = userContents[section].findIndex(item => item.id === contentId);
-                if (index !== -1) {
-                    content = {
-                        id: contentId,
-                        title,
-                        description,
-                        author,
-                        date: userContents[section][index].date,
-                        updated: new Date().toISOString()
-                    };
-                    userContents[section][index] = content;
-                }
-            } else {
-                content = {
-                    id: Date.now().toString(),
-                    title,
-                    description,
-                    author,
-                    date: new Date().toISOString(),
-                    updated: null
+        // ---------- Initialize default content in Firebase if empty (only once) ----------
+        function seedDefaultContentIfEmpty() {
+            // Check one section; if empty, seed all default content
+            const ref = db.ref('content/overview');
+            ref.once('value').then(snap => {
+                if (snap.exists()) return; // already seeded
+                const defaults = {
+                    overview: {
+                        welcome: {
+                            title: '🚀 Welcome to Security Chaos Engineering Dashboard',
+                            description: 'This is your team collaboration platform. Use Add Content to share with your team.',
+                            author: 'System',
+                            date: new Date().toISOString()
+                        }
+                    },
+                    'team-collaboration': {
+                        'guidelines': {
+                            title: 'Team Collaboration Guidelines',
+                            description: 'Share meeting notes and tasks here.',
+                            author: 'Kaled Osman',
+                            date: new Date().toISOString()
+                        }
+                    }
                 };
-                userContents[section].push(content);
+                // write defaults to Firebase
+                Object.keys(defaults).forEach(sec => {
+                    const secRef = db.ref(`content/${sec}`);
+                    Object.keys(defaults[sec]).forEach(key => {
+                        secRef.push(defaults[sec][key]);
+                    });
+                });
+            }).catch(err => console.error('Seed check failed', err));
+        }
+
+        // ---------- initialize listeners and UI ----------
+        function initAll() {
+            // init login system
+            loginSystem.init();
+            // chat init
+            chat.init();
+            // content listeners
+            contentSystem.listenAll();
+            // show team members
+            showTeamMembers();
+            // seed default content if db empty
+            seedDefaultContentIfEmpty();
+
+            // attach chat open/close
+            document.querySelectorAll('.section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active-section'));
+                    this.classList.add('active-section');
+                    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+                    const id = this.getAttribute('data-section');
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('active');
+                });
+            });
+
+            // send on Enter key in chat input
+            const chatInput = $('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') chat.send();
+                });
             }
-            
-            saveContents();
-            renderSectionContents(section);
-            closeAddContent();
-            alert('Content added successfully!');
+
+            // attach send button
+            const sendBtn = $('sendChatButton');
+            if (sendBtn) sendBtn.addEventListener('click', () => chat.send());
+
+            // attach open chat button
+            const openChatBtns = document.querySelectorAll('[onclick="openTeamChat()"]');
+            openChatBtns.forEach(b => b.addEventListener('click', () => chat.open()));
+        }
+
+        // ---------- DOM ready ----------
+        document.addEventListener('DOMContentLoaded', () => {
+            initAll();
         });
 
-        function openAddContent(section, contentId = null) {
-            document.getElementById('contentSection').value = section;
-            document.getElementById('editContentId').value = contentId || '';
-            
-            if (contentId) {
-                const content = userContents[section].find(item => item.id === contentId);
-                if (content) {
-                    document.getElementById('contentTitle').value = content.title;
-                    document.getElementById('contentDescription').value = content.description;
-                    document.getElementById('contentAuthor').value = content.author;
-                }
-            } else {
-                document.getElementById('addContentForm').reset();
-            }
-            
-            document.getElementById('addContentModal').classList.add('active');
-        }
-
-        function closeAddContent() {
-            document.getElementById('addContentModal').classList.remove('active');
-        }
-
-        function renderSectionContents(section) {
-            const container = document.getElementById(`${section}-content`);
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            if (!userContents[section] || userContents[section].length === 0) {
-                container.innerHTML = `
-                    <div class="text-center p-8 text-gray-500 dark:text-gray-400">
-                        <i class="fas fa-inbox text-4xl mb-4"></i>
-                        <p>No content added yet. Be the first to share something!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            userContents[section].forEach(content => {
-                const contentElement = document.createElement('div');
-                contentElement.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 mb-4';
-                contentElement.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${content.title}</h3>
-                        <div class="flex space-x-2">
-                            <button onclick="editContent('${section}', '${content.id}')" class="text-blue-600 hover:text-blue-800 dark:text-blue-400">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteContent('${section}', '${content.id}')" class="text-red-600 hover:text-red-800 dark:text-red-400">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${content.description}</p>
-                    <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-                        <span><i class="fas fa-user mr-1"></i> ${content.author}</span>
-                        <span><i class="fas fa-clock mr-1"></i> ${new Date(content.date).toLocaleDateString()}</span>
-                    </div>
-                `;
-                container.appendChild(contentElement);
-            });
-        }
-
-        function editContent(section, contentId) {
-            openAddContent(section, contentId);
-        }
-
-        function deleteContent(section, contentId) {
-            if (confirm('Are you sure you want to delete this content?')) {
-                userContents[section] = userContents[section].filter(item => item.id !== contentId);
-                saveContents();
-                renderSectionContents(section);
-                alert('Content deleted successfully!');
-            }
-        }
-
-        function initializeAllContents() {
-            const sections = [
-                'overview', 'project-documentation', 'team-collaboration', 'team-updates',
-                'ai-assistant', 'practical-tasks', 'implementation', 'research',
-                'resources', 'security-testing', 'monitoring-analytics'
-            ];
-            sections.forEach(section => {
-                renderSectionContents(section);
-            });
-        }
-
-        // Section Navigation
-        document.querySelectorAll('.section-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.section-btn').forEach(b => {
-                    b.classList.remove('active-section');
-                    b.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-                });
-                
-                this.classList.add('active-section');
-                this.classList.remove('hover:bg-gray-100', 'dark:hover:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
-                
-                document.querySelectorAll('.section-content').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                const sectionId = this.getAttribute('data-section');
-                document.getElementById(sectionId).classList.add('active');
-            });
-        });
-
-        // Login helper functions
-        function showForgotPassword() {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('forgotPasswordModal').style.display = 'flex';
-        }
-
-        function closeForgotPassword() {
-            document.getElementById('forgotPasswordModal').style.display = 'none';
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-
-        function closeLogin() {
-            document.getElementById('loginModal').style.display = 'none';
-        }
-
-        // Dark mode toggle
-        function toggleTheme() {
+        // expose functions to global for existing onclick attributes
+        window.openAddContent = openAddContent;
+        window.openTeamChat = () => chat.open();
+        window.closeTeamChat = () => chat.close();
+        window.sendChatMessage = () => chat.send();
+        window.openEditModalFor = openEditModalFor;
+        window.deleteContent = deleteContent;
+        window.toggleTheme = function() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Load saved theme and initialize everything
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-
-            // Initialize all systems
-            initializeDefaultContent();
-            initializeAllContents();
-            showTeamMembers();
-            
-            // Initialize admin system if user is already logged in as admin
-            if (loginSystem.currentUser && loginSystem.currentUser.email === 'kaled@team.com') {
-                adminSystem.init();
-            }
-        });
+                html.classList.remove('dark'); localStorage.setItem('theme','light');
+            } else { html.classList.add('dark'); localStorage.setItem('theme','dark'); }
+        };
+        window.clearAllContentAdmin = clearAllContentAdmin;
+        window.clearChatAdmin = clearChatAdmin;
+        window.closeAddContent = closeAddContent;
+    })();
     </script>
 </body>
 </html>
-
