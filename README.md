@@ -1,609 +1,793 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Security Chaos Engineering Dashboard — Realtime</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Security Chaos Engineering Dashboard — Updated</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .theme-transition { transition: all 0.25s ease; }
-    .active-section { background: linear-gradient(135deg,#3b82f6,#1d4ed8); color: white; }
-    .online-indicator { width: 8px; height: 8px; background: #10B981; border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:0.7}100%{transform:scale(1);opacity:1}}
-    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
-    .modal.active { display:flex; }
-    .section-content { display:none; }
-    .section-content.active { display:block; }
-    .loading { display:inline-block; width:20px; height:20px; border:3px solid #f3f3f3; border-top:3px solid #3498db; border-radius:50%; animation:spin 1s linear infinite; }
-    @keyframes spin {0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    .theme-transition{transition:all .25s ease}
+    .active-section{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff}
+    .online-indicator{width:8px;height:8px;background:#10B981;border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.7}100%{transform:scale(1);opacity:1}}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+    .modal.active{display:flex}
+    .section-content{display:none}
+    .section-content.active{display:block}
+    .file-preview{max-width:100%;height:auto;border-radius:8px}
+    .typing-dot{width:6px;height:6px;background:#c7c7c7;border-radius:50%;display:inline-block;margin-right:4px}
+    .notif-badge{background:#ef4444;color:#fff;padding:2px 6px;border-radius:999px;font-size:12px}
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition text-gray-800">
 
-  <!-- Login Modal -->
-  <div id="loginModal" class="modal active">
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login to Dashboard</h2>
-      <form id="loginForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium mb-2">Name</label>
-          <select id="userSelect" class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white">
-            <option value="Kaled Osman">Kaled Osman</option>
-            <option value="Marcus Tibell">Marcus Tibell</option>
-            <option value="Jens Annell">Jens Annell</option>
-            <option value="Fahad Hussain">Fahad Hussain</option>
-            <option value="Luwam">Luwam</option>
-            <option value="Stefan Österberg">Stefan Österberg</option>
-            <option value="Najmaddin">Najmaddin</option>
-          </select>
-        </div>
-        <div class="flex gap-3">
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">Login</button>
-          <button type="button" id="loginCancel" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl">Cancel</button>
-        </div>
-        <p class="text-sm text-gray-500 mt-2">Select your name and press Login. Chat and content are shared with the team.</p>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Content Modal -->
-  <div id="addContentModal" class="modal">
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
-      <h2 class="text-2xl font-bold mb-4 text-center">Add Content</h2>
-      <form id="addContentForm" class="space-y-4">
-        <input type="hidden" id="contentSection" />
-        <div>
-          <label class="block text-sm font-medium mb-2">Title</label>
-          <input id="contentTitle" required class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2">Content</label>
-          <textarea id="contentDescription" required class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white h-40"></textarea>
-        </div>
-        <div class="flex gap-3">
-          <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">Save for Everyone</button>
-          <button type="button" id="cancelAddContent" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Chat Modal -->
-  <div id="chatModal" class="modal">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl mx-4 shadow-2xl w-[500px] max-w-[90vw]">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold flex items-center gap-2"><span class="online-indicator"></span> Team Chat</h2>
-        <button id="closeChatBtn" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal active">
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md mx-4 shadow-2xl">
+    <h2 class="text-2xl font-bold mb-4 text-center">Login to Dashboard</h2>
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-2">Name</label>
+        <select id="userSelect" class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white">
+          <!-- options injected by JS -->
+        </select>
       </div>
-      <div id="chatMessages" class="overflow-y-auto mb-4 p-3 border rounded-lg bg-gray-50 dark:bg-gray-900" style="height:300px;">
-        <div class="text-center text-gray-500">Start chatting with your team!</div>
+      <div class="flex gap-3">
+        <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl" type="submit">Login</button>
+        <button id="loginCancel" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl" type="button">Cancel</button>
       </div>
-      <div class="flex gap-2">
-        <input id="chatInput" placeholder="Type message..." class="flex-1 p-2 border rounded-lg dark:bg-gray-800 dark:text-white" />
-        <button id="sendChatBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"><i class="fas fa-paper-plane"></i></button>
+      <p class="text-sm text-gray-500">Select your name to login. Admins have extra controls.</p>
+    </form>
+  </div>
+</div>
+
+<!-- ADD CONTENT MODAL -->
+<div id="addContentModal" class="modal">
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-2xl mx-4 shadow-2xl">
+    <h3 id="addContentTitle" class="text-xl font-bold mb-3">Add Content</h3>
+    <form id="addContentForm" class="space-y-4">
+      <input id="contentSection" type="hidden" />
+      <input id="contentKey" type="hidden" />
+      <div>
+        <label class="block text-sm mb-1">Title</label>
+        <input id="contentTitle" required class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white" />
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Content</label>
+        <textarea id="contentDescription" required class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white h-32"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Attach file (optional)</label>
+        <input id="contentFile" type="file" class="w-full" />
+        <div id="filePreview" class="mt-2"></div>
+      </div>
+      <div class="flex gap-3">
+        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">Save</button>
+        <button id="cancelAdd" type="button" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CHAT MODAL -->
+<div id="chatModal" class="modal">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[720px] p-4 mx-4 shadow-2xl">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-bold">Team Chat <span id="unreadBadge" class="notif-badge ml-2 hidden">0</span></h3>
+      <div class="flex items-center gap-2">
+        <span id="typingIndicator" class="text-sm text-gray-500 hidden"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>Typing...</span>
+        <button id="closeChat" class="text-gray-500"><i class="fas fa-times"></i></button>
       </div>
     </div>
+    <div id="chatMessages" class="h-64 overflow-y-auto p-3 border rounded-lg bg-gray-50 dark:bg-gray-900"></div>
+    <div class="flex gap-2 mt-3">
+      <input id="chatInput" placeholder="Type a message" class="flex-1 p-2 border rounded-lg dark:bg-gray-800 dark:text-white" />
+      <button id="sendChat" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"><i class="fas fa-paper-plane"></i></button>
+    </div>
   </div>
+</div>
 
-  <!-- Main Layout -->
-  <div class="flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-80 bg-gray-50 dark:bg-gray-800 flex-shrink-0 p-6">
-      <div class="mb-8">
-        <h1 class="text-2xl font-bold text-blue-600">Security Chaos Engineering</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
-        <div class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="online-indicator"></span>
-              <span class="font-semibold">TEAM WORKING</span>
-            </div>
-            <i class="fas fa-bolt"></i>
-          </div>
-          <div class="text-xs opacity-90 mt-1">All changes are saved to Firebase</div>
+<!-- MAIN LAYOUT -->
+<div class="flex min-h-screen">
+  <aside class="w-80 bg-gray-50 dark:bg-gray-800 p-6 flex-shrink-0">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-blue-600">Security Chaos Engineering</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">Group 1 Dashboard</p>
+    </div>
+
+    <div class="mb-4 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2"><span class="online-indicator"></span><span class="font-semibold">TEAM WORKING</span></div>
+        <i class="fas fa-bolt"></i>
+      </div>
+      <div class="text-xs mt-1">All changes are saved to Firebase</div>
+    </div>
+
+    <div class="mb-4 bg-white dark:bg-gray-700 p-4 rounded-xl shadow border-2 border-blue-200 dark:border-blue-800">
+      <div class="flex items-center gap-3 mb-3">
+        <div id="userAvatar" class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center font-bold">Y</div>
+        <div>
+          <div id="userName" class="font-semibold">You</div>
+          <div id="userRole" class="text-xs text-gray-500">Select your name to login</div>
         </div>
       </div>
+      <button id="openChatBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg mb-2">Team Chat</button>
+      <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg">Logout</button>
+    </div>
 
-      <!-- User Card -->
-      <div class="w-full mb-6">
-        <div class="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
-          <div class="flex items-center space-x-3 mb-3">
-            <div class="relative">
-              <div id="userAvatar" class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">Y</div>
-              <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-800"></span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p id="userName" class="font-semibold text-gray-800 dark:text-white truncate">You</p>
-              <p id="userRole" class="text-sm text-gray-600 dark:text-gray-400 truncate">Select your name to login</p>
-            </div>
+    <div class="mb-4 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700 border-2 border-green-200 dark:border-green-800">
+      <h3 class="font-semibold mb-2">Team Members</h3>
+      <div id="teamList" class="space-y-2 text-sm"></div>
+    </div>
+
+    <div class="mb-4">
+      <input id="searchContent" placeholder="Search content..." class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white" />
+    </div>
+
+    <nav class="space-y-2 mb-6">
+      <button class="section-btn w-full text-left p-3 rounded-xl active-section" data-section="overview">Overview</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="project-documentation">Project Documentation</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="team-collaboration">Team Collaboration</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="team-updates">Team Updates</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="ai-assistant">AI Assistant</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="practical-tasks">Practical Tasks</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="implementation">Implementation</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="research">Research</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="resources">Resources</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="security-testing">Security Testing</button>
+      <button class="section-btn w-full text-left p-3 rounded-xl" data-section="monitoring-analytics">Monitoring & Analytics</button>
+    </nav>
+
+    <div class="mt-auto">
+      <button id="toggleTheme" class="w-full p-3 rounded-xl bg-gray-100 dark:bg-gray-700">Toggle Theme</button>
+      <div id="adminPanel" class="mt-3 hidden space-y-2">
+        <h4 class="font-semibold">Admin Panel</h4>
+        <button id="clearAllContent" class="w-full p-2 bg-red-600 text-white rounded-lg">Delete All Content</button>
+        <button id="clearChat" class="w-full p-2 bg-red-500 text-white rounded-lg">Clear Chat</button>
+        <div>
+          <label class="block text-xs mt-2">Block user</label>
+          <select id="blockUserSelect" class="w-full p-2 border rounded"></select>
+          <div class="flex gap-2 mt-2">
+            <button id="blockUserBtn" class="flex-1 p-2 bg-yellow-600 text-white rounded">Block</button>
+            <button id="unblockUserBtn" class="flex-1 p-2 bg-green-600 text-white rounded">Unblock</button>
           </div>
-          <button id="openChatBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg"><i class="fas fa-comments mr-2"></i>Team Chat</button>
-          <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg mt-2"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
         </div>
       </div>
+    </div>
+  </aside>
 
-      <!-- Team Members -->
-      <div class="mb-6">
-        <div class="p-4 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800 bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700">
-          <h3 class="font-semibold mb-3 flex items-center gap-2"><span class="online-indicator"></span> Team Members</h3>
-          <div id="teamList" class="space-y-2"></div>
+  <main class="flex-1 p-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold">Security Chaos Engineering Dashboard</h1>
+      <p class="text-sm text-gray-500">Group 1 — Team Collaboration</p>
+      <div id="activityLogPreview" class="mt-3 text-xs text-gray-500"></div>
+    </header>
+
+    <!-- Sections -->
+    <section id="overview" class="section-content active">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Overview</h2>
+          <div class="flex gap-2">
+            <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="overview">Add</button>
+            <button id="refreshBtn" class="bg-gray-200 px-3 py-2 rounded"><i class="fas fa-sync"></i></button>
+          </div>
+        </div>
+        <div id="overview-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- Create other sections similarly -->
+    <section id="project-documentation" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Project Documentation</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="project-documentation">Add</button>
+        </div>
+        <div id="project-documentation-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="team-collaboration" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Team Collaboration</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="team-collaboration">Add</button>
+        </div>
+        <div id="team-collaboration-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="team-updates" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Team Updates</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="team-updates">Add</button>
+        </div>
+        <div id="team-updates-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="ai-assistant" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">AI Assistant</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="ai-assistant">Add</button>
+        </div>
+        <div id="ai-assistant-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="practical-tasks" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Practical Tasks</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="practical-tasks">Add</button>
+        </div>
+        <div id="practical-tasks-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="implementation" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Implementation</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="implementation">Add</button>
+        </div>
+        <div id="implementation-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="research" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Research</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="research">Add</button>
+        </div>
+        <div id="research-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="resources" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Resources</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="resources">Add</button>
+        </div>
+        <div id="resources-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="security-testing" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Security Testing</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="security-testing">Add</button>
+        </div>
+        <div id="security-testing-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <section id="monitoring-analytics" class="section-content">
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="font-bold text-xl">Monitoring & Analytics</h2>
+          <button class="bg-green-600 text-white px-3 py-2 rounded add-content" data-section="monitoring-analytics">Add</button>
+        </div>
+        <div id="monitoring-analytics-content" class="space-y-3"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
+<script>
+/* ---------------------------
+   Firebase config (your project)
+   --------------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
+  authDomain: "fir-console-df3e9.firebaseapp.com",
+  databaseURL: "https://fir-console-df3e9-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fir-console-df3e9",
+  storageBucket: "fir-console-df3e9.firebasestorage.app",
+  messagingSenderId: "750795336412",
+  appId: "1:750795336412:web:abfd0c06941a9418abe219",
+  measurementId: "G-EVZ9F72HMD"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const storage = firebase.storage();
+
+/* ---------------------------
+   App state and users
+   --------------------------- */
+const teamMembers = [
+  { name: 'Kaled Osman', role: 'Developer', avatar: 'K', isAdmin:true },
+  { name: 'Marcus Tibell', role: 'Engineer', avatar: 'M', isAdmin:false },
+  { name: 'Jens Annell', role: 'Analyst', avatar: 'J', isAdmin:false },
+  { name: 'Fahad Hussain', role: 'Researcher', avatar: 'F', isAdmin:false },
+  { name: 'Luwam', role: 'Designer', avatar: 'L', isAdmin:false },
+  { name: 'Stefan Österberg', role: 'Architect', avatar: 'S', isAdmin:false },
+  { name: 'Najmaddin', role: 'Security Expert', avatar: 'N', isAdmin:false }
+];
+let currentUser = null;
+let listenersStarted = false;
+let unreadCount = 0;
+
+/* ---------------------------
+   DOM helpers
+   --------------------------- */
+const $ = id => document.getElementById(id);
+function escapeHtml(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+
+/* ---------------------------
+   Init UI
+   --------------------------- */
+function initUI(){
+  // populate userSelect & team list & block select
+  const userSelect = $('userSelect');
+  const teamList = $('teamList');
+  const blockSelect = $('blockUserSelect');
+  userSelect.innerHTML = '';
+  blockSelect.innerHTML = '';
+  teamList.innerHTML = '';
+
+  teamMembers.forEach(u=>{
+    const opt = document.createElement('option'); opt.value = u.name; opt.textContent = u.name; userSelect.appendChild(opt);
+    const opt2 = document.createElement('option'); opt2.value = u.name; opt2.textContent = u.name; blockSelect.appendChild(opt2);
+    const div = document.createElement('div'); div.className='flex items-center gap-2';
+    div.innerHTML = `<div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center font-bold">${escapeHtml(u.avatar)}</div>
+                     <div><div class="font-medium">${escapeHtml(u.name)}</div><div class="text-xs text-gray-500">${escapeHtml(u.role)}</div></div>
+                     <div id="presence-${u.name.replaceAll(' ','-')}" class="ml-auto text-xs text-gray-400">offline</div>`;
+    teamList.appendChild(div);
+  });
+
+  // section buttons
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.section-btn').forEach(x=>x.classList.remove('active-section'));
+      b.classList.add('active-section');
+      const sec = b.dataset.section;
+      document.querySelectorAll('.section-content').forEach(s=>s.classList.remove('active'));
+      const el = document.getElementById(sec);
+      if(el) el.classList.add('active');
+    });
+  });
+
+  // add-content buttons
+  document.querySelectorAll('.add-content').forEach(btn=>{
+    btn.addEventListener('click', ()=> openAddModal(btn.dataset.section));
+  });
+
+  document.querySelectorAll('.add-content-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> openAddModal(btn.dataset.section));
+  });
+
+  $('cancelAdd').addEventListener('click', closeAddModal);
+  $('loginForm').addEventListener('submit', handleLogin);
+  $('loginCancel').addEventListener('click', ()=>{ if(!currentUser) $('loginModal').classList.add('active'); else $('loginModal').classList.remove('active'); });
+  $('logoutBtn').addEventListener('click', logout);
+  $('openChatBtn').addEventListener('click', ()=>{ if(!currentUser){ alert('Please login'); return; } openChat(); });
+  $('closeChat').addEventListener('click', ()=>$('chatModal').classList.remove('active'));
+  $('sendChat').addEventListener('click', sendChat);
+  $('chatInput').addEventListener('keypress', e=>{ if(e.key==='Enter') sendChat(); else sendTypingSignal(); });
+  $('toggleTheme').addEventListener('click', toggleTheme);
+  $('addContentForm').addEventListener('submit', submitContentForm);
+  $('searchContent').addEventListener('input', e=> renderAllContent(e.target.value));
+  $('refreshBtn').addEventListener('click', ()=> renderAllContent($('searchContent').value));
+  $('clearAllContent').addEventListener('click', adminClearAllContent);
+  $('clearChat').addEventListener('click', adminClearChat);
+  $('blockUserBtn').addEventListener('click', ()=> adminBlockUser(true));
+  $('unblockUserBtn').addEventListener('click', ()=> adminBlockUser(false));
+}
+
+/* ---------------------------
+   Login / Presence / Blocking
+   --------------------------- */
+function handleLogin(e){
+  e.preventDefault();
+  const name = $('userSelect').value;
+  const user = teamMembers.find(t=>t.name===name);
+  if(!user){ alert('Unknown user'); return; }
+  currentUser = user;
+  localStorage.setItem('current-user', JSON.stringify(currentUser));
+  $('loginModal').classList.remove('active');
+  $('userName').textContent = currentUser.name;
+  $('userRole').textContent = currentUser.role;
+  $('userAvatar').textContent = currentUser.avatar;
+  if(currentUser.isAdmin) $('adminPanel').classList.remove('hidden'); else $('adminPanel').classList.add('hidden');
+  startRealtime();
+  setPresence(true);
+  window.addEventListener('beforeunload', ()=> setPresence(false));
+}
+
+// presence system
+const presenceRef = db.ref('presence');
+function setPresence(isOnline){
+  if(!currentUser) return;
+  const node = presenceRef.child(sanitizeKey(currentUser.name));
+  node.set({ online: isOnline, lastSeen: Date.now(), name: currentUser.name });
+  node.onDisconnect().set({ online:false, lastSeen: Date.now(), name: currentUser.name });
+}
+
+// blocklist helpers
+function adminBlockUser(shouldBlock){
+  const user = $('blockUserSelect').value;
+  if(!user) return alert('Choose user');
+  const blkRef = db.ref('meta/blockedUsers');
+  blkRef.once('value').then(snap=>{
+    const list = snap.val() || {};
+    if(shouldBlock) list[user] = true; else delete list[user];
+    blkRef.set(list);
+    alert(shouldBlock? 'User blocked':'User unblocked');
+  });
+}
+function isBlocked(userName, cb){
+  db.ref('meta/blockedUsers').once('value').then(snap=>{
+    const list = snap.val() || {};
+    cb(!!list[userName]);
+  });
+}
+
+/* ---------------------------
+   Start realtime listeners
+   --------------------------- */
+function startRealtime(){
+  if(listenersStarted) return;
+  listenersStarted = true;
+
+  // presence listener
+  presenceRef.on('value', snap=>{
+    const val = snap.val() || {};
+    teamMembers.forEach(u=>{
+      const key = sanitizeKey(u.name);
+      const info = val[key];
+      const el = $('presence-'+u.name.replaceAll(' ','-'));
+      if(el){
+        if(info && info.online) el.textContent = 'online'; else {
+          el.textContent = 'offline';
+        }
+      }
+    });
+  });
+
+  // typing listener
+  db.ref('typing').on('value', snap=>{
+    const val = snap.val() || {};
+    let someoneTyping = false;
+    Object.keys(val).forEach(k=>{
+      if(val[k] && k !== sanitizeKey(currentUser ? currentUser.name : '')) someoneTyping = true;
+    });
+    $('typingIndicator').style.display = someoneTyping ? 'inline-block' : 'none';
+  });
+
+  // chat listener
+  db.ref('chat').on('value', snapshot=>{
+    renderChat(snapshot);
+  });
+
+  // content listener (all sections)
+  const sections = ['overview','project-documentation','team-collaboration','team-updates','ai-assistant','practical-tasks','implementation','research','resources','security-testing','monitoring-analytics'];
+  sections.forEach(sec=>{
+    db.ref('content/'+sec).on('value', snap=>{
+      renderSectionContent(sec, snap);
+    });
+  });
+
+  // activity log preview (latest 5)
+  db.ref('activity').limitToLast(8).on('value', snap=>{
+    const arr = [];
+    snap.forEach(c=> arr.push(c.val()));
+    const el = $('activityLogPreview');
+    el.innerHTML = arr.reverse().slice(0,5).map(i=>`${escapeHtml(i.text)} — ${new Date(i.ts).toLocaleTimeString()}`).join(' · ');
+  });
+
+  // blocked users update
+  db.ref('meta/blockedUsers').on('value', snap=>{
+    // no-op here; checks are performed on write attempts
+  });
+
+  // unread badge logic: whenever chat updates and chat modal closed increase unreadCount if sender != me
+  db.ref('chat').on('child_added', snap=>{
+    const msg = snap.val();
+    if(!msg) return;
+    if(!document.querySelector('#chatModal').classList.contains('active')){
+      if(!currentUser || msg.user !== currentUser.name){
+        unreadCount++;
+        $('unreadBadge').textContent = unreadCount;
+        $('unreadBadge').classList.remove('hidden');
+        notifyBrowser('New chat', `${msg.user}: ${msg.text}`);
+      }
+    }
+  });
+}
+
+/* ---------------------------
+   Chat rendering & actions
+   --------------------------- */
+function renderChat(snapshot){
+  const box = $('chatMessages');
+  box.innerHTML = '';
+  if(!snapshot.exists()){ box.innerHTML = '<div class="text-gray-500">No messages</div>'; return; }
+  snapshot.forEach(child=>{
+    const k = child.key; const msg = child.val();
+    const mine = currentUser && msg.user === currentUser.name;
+    const blocked = msg.blocked;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mb-2 p-3 rounded-lg';
+    wrapper.style.maxWidth = '75%';
+    wrapper.style.marginLeft = mine ? 'auto' : '0';
+    wrapper.style.background = mine ? '#1f6feb' : '#e5e7eb';
+    wrapper.style.color = mine ? 'white' : (document.documentElement.classList.contains('dark') ? 'white' : 'black');
+    wrapper.innerHTML = `
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <div class="font-semibold text-sm">${escapeHtml(msg.user)} ${blocked?'<span class="text-xs text-red-600 ml-2">[blocked]</span>':''}</div>
+          <div class="break-words mt-1">${escapeHtml(msg.text)}</div>
+          ${msg.fileUrl? `<div class="mt-2"><a class="underline text-sm" href="${escapeHtml(msg.fileUrl)}" target="_blank">Attachment: ${escapeHtml(msg.fileName||'file')}</a></div>`: ''}
+          <div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleString()}</div>
+        </div>
+        <div class="flex flex-col items-end gap-2">
+          ${ (mine || (currentUser && currentUser.isAdmin)) ? `<button class="text-xs text-red-600" data-key="${k}" onclick="deleteChatMessage(this.dataset.key)">Delete</button>` : '' }
         </div>
       </div>
+    `;
+    box.appendChild(wrapper);
+  });
 
-      <!-- Navigation -->
-      <nav class="space-y-2 mb-8">
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition active-section" data-section="overview"><i class="fas fa-home mr-3"></i>Overview</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="project-documentation"><i class="fas fa-folder mr-3"></i>Project Documentation</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="team-collaboration"><i class="fas fa-users mr-3"></i>Team Collaboration</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="team-updates"><i class="fas fa-bullhorn mr-3"></i>Team Updates</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="ai-assistant"><i class="fas fa-robot mr-3"></i>AI Assistant</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="practical-tasks"><i class="fas fa-tasks mr-3"></i>Practical Tasks</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="implementation"><i class="fas fa-code mr-3"></i>Implementation</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="research"><i class="fas fa-search mr-3"></i>Research</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="resources"><i class="fas fa-book mr-3"></i>Resources</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="security-testing"><i class="fas fa-shield-alt mr-3"></i>Security Testing</button>
-        <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700" data-section="monitoring-analytics"><i class="fas fa-chart-line mr-3"></i>Monitoring & Analytics</button>
-      </nav>
+  box.scrollTop = box.scrollHeight;
+}
 
-      <div class="mt-auto">
-        <button id="toggleThemeBtn" class="w-full p-4 rounded-xl theme-transition bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center justify-center">
-          <i class="fas fa-moon mr-3"></i>Toggle Theme
-        </button>
+/* send chat */
+let typingTimeout = null;
+function sendTypingSignal(){
+  if(!currentUser) return;
+  const key = sanitizeKey(currentUser.name);
+  const tRef = db.ref('typing/'+key);
+  tRef.set(true);
+  if(typingTimeout) clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(()=> tRef.set(false), 2000);
+}
+
+/* send message with optional file */
+function sendChat(){
+  if(!currentUser){ alert('Please login'); return; }
+  const text = $('chatInput').value.trim();
+  if(!text && !$('chatInput').files) return;
+  isBlocked(currentUser.name, blocked=>{
+    if(blocked){ alert('You are blocked from posting'); return; }
+    const fileInput = null; // chat file not implemented; attachments via content
+    const payload = { user: currentUser.name, text, timestamp: Date.now() };
+    db.ref('chat').push(payload).then(()=>{
+      $('chatInput').value = '';
+      // activity log
+      pushActivity(`${currentUser.name} sent a chat message`);
+    }).catch(err=> console.error(err));
+  });
+}
+
+/* delete chat message */
+function deleteChatMessage(key){
+  if(!currentUser) return alert('Login required');
+  db.ref('chat/'+key).once('value').then(snap=>{
+    const m = snap.val();
+    if(!m) return;
+    if(m.user === currentUser.name || currentUser.isAdmin){
+      db.ref('chat/'+key).remove();
+      pushActivity(`${currentUser.name} deleted a chat message`);
+    } else alert('No permission');
+  });
+}
+
+/* ---------------------------
+   Content rendering & actions
+   --------------------------- */
+function renderSectionContent(section, snapshot){
+  const container = $(section+'-content');
+  if(!container) return;
+  container.innerHTML = '';
+  if(!snapshot.exists()){
+    container.innerHTML = `<div class="text-gray-500 p-6">No content yet</div>`; return;
+  }
+  const search = $('searchContent').value.trim().toLowerCase();
+  snapshot.forEach(child=>{
+    const key = child.key; const item = child.val();
+    const title = item.title||''; const desc = item.description||'';
+    if(search){
+      const hay = (title+' '+desc+' '+(item.author||'')).toLowerCase();
+      if(!hay.includes(search)) return;
+    }
+    const el = document.createElement('div');
+    el.className = 'p-4 border rounded-lg bg-white dark:bg-gray-800';
+    el.innerHTML = `
+      <div class="flex justify-between items-start gap-3">
+        <div style="max-width:80%">
+          <h3 class="font-semibold">${escapeHtml(title)}</h3>
+          <p class="text-sm mt-2 whitespace-pre-line">${escapeHtml(desc)}</p>
+          ${ item.fileUrl ? `<div class="mt-2"><a href="${escapeHtml(item.fileUrl)}" target="_blank" class="underline">Attachment: ${escapeHtml(item.fileName||'file')}</a></div>` : '' }
+          <div class="text-xs text-gray-500 mt-2">by ${escapeHtml(item.author)} — ${new Date(item.date).toLocaleString()}</div>
+        </div>
+        <div class="flex flex-col gap-2">
+          ${ ((currentUser && (currentUser.name===item.author)) || (currentUser && currentUser.isAdmin)) ? `<button class="text-sm text-blue-600" data-key="${key}" data-section="${section}" onclick="editContent(this.dataset.section,this.dataset.key)">Edit</button>` : '' }
+          ${ ((currentUser && (currentUser.name===item.author)) || (currentUser && currentUser.isAdmin)) ? `<button class="text-sm text-red-600" data-key="${key}" data-section="${section}" onclick="deleteContent(this.dataset.section,this.dataset.key)">Delete</button>` : '' }
+        </div>
       </div>
-    </aside>
+    `;
+    container.appendChild(el);
+  });
+}
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
-      <header class="mb-8">
-        <h1 class="text-3xl font-bold">Security Chaos Engineering Dashboard</h1>
-        <p class="text-gray-600 dark:text-gray-400">Group 1 - Team Collaboration Platform</p>
-      </header>
+/* open add modal */
+function openAddModal(section){
+  if(!currentUser){ alert('Please login'); return; }
+  isBlocked(currentUser.name, blocked => {
+    if(blocked){ alert('You are blocked from posting'); return; }
+    $('contentSection').value = section;
+    $('contentKey').value = '';
+    $('contentTitle').value = '';
+    $('contentDescription').value = '';
+    $('filePreview').innerHTML = '';
+    $('addContentTitle').textContent = 'Add Content to ' + section;
+    $('addContentModal').classList.add('active');
+  });
+}
 
-      <!-- Overview Section -->
-      <section id="overview" class="section-content active">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Overview</h2>
-            <button id="addOverviewBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="overview-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Project Documentation -->
-      <section id="project-documentation" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Project Documentation</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="project-documentation"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="project-documentation-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Team Collaboration -->
-      <section id="team-collaboration" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Team Collaboration</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="team-collaboration"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="team-collaboration-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Team Updates -->
-      <section id="team-updates" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Team Updates</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="team-updates"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="team-updates-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- AI Assistant -->
-      <section id="ai-assistant" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">AI Assistant</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="ai-assistant"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="ai-assistant-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Practical Tasks -->
-      <section id="practical-tasks" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Practical Tasks</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="practical-tasks"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="practical-tasks-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Implementation -->
-      <section id="implementation" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Implementation</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="implementation"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="implementation-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Research -->
-      <section id="research" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Research</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="research"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="research-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Resources -->
-      <section id="resources" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Resources</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="resources"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="resources-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Security Testing -->
-      <section id="security-testing" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Security Testing</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="security-testing"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="security-testing-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-      <!-- Monitoring & Analytics -->
-      <section id="monitoring-analytics" class="section-content">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Monitoring & Analytics</h2>
-            <button class="add-content-btn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl" data-section="monitoring-analytics"><i class="fas fa-plus mr-2"></i>Add Content</button>
-          </div>
-          <div id="monitoring-analytics-content" class="space-y-4"></div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- Firebase SDK (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-  <script>
-    /******************************************************************
-     * Firebase configuration (YOUR project values are already inserted)
-     * These values come from your Firebase console as you provided.
-     ******************************************************************/
-    const firebaseConfig = {
-      apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
-      authDomain: "fir-console-df3e9.firebaseapp.com",
-      databaseURL: "https://fir-console-df3e9-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "fir-console-df3e9",
-      storageBucket: "fir-console-df3e9.firebasestorage.app",
-      messagingSenderId: "750795336412",
-      appId: "1:750795336412:web:abfd0c06941a9418abe219",
-      measurementId: "G-EVZ9F72HMD"
+/* submit content form (create or edit) with optional file */
+function submitContentForm(e){
+  e.preventDefault();
+  if(!currentUser) return alert('Login required');
+  isBlocked(currentUser.name, blocked=>{
+    if(blocked) return alert('Blocked from posting');
+    const section = $('contentSection').value;
+    const key = $('contentKey').value;
+    const title = $('contentTitle').value.trim();
+    const desc = $('contentDescription').value.trim();
+    const fileInput = $('contentFile');
+    const pushContent = (fileMeta)=> {
+      const payload = {
+        title, description: desc, author: currentUser.name, date: Date.now(),
+        fileUrl: fileMeta ? fileMeta.url : null, fileName: fileMeta ? fileMeta.name : null
+      };
+      if(key){ // update
+        db.ref('content/'+section+'/'+key).set(payload).then(()=> {
+          pushActivity(`${currentUser.name} edited content in ${section}`);
+          $('addContentModal').classList.remove('active');
+        });
+      } else {
+        db.ref('content/'+section).push(payload).then(()=> {
+          pushActivity(`${currentUser.name} added content to ${section}`);
+          $('addContentModal').classList.remove('active');
+        });
+      }
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    /******************************************************************
-     * App state
-     ******************************************************************/
-    const teamMembers = [
-      { name: 'Kaled Osman', role: 'Developer', avatar: 'K' },
-      { name: 'Marcus Tibell', role: 'Engineer', avatar: 'M' },
-      { name: 'Jens Annell', role: 'Analyst', avatar: 'J' },
-      { name: 'Fahad Hussain', role: 'Researcher', avatar: 'F' },
-      { name: 'Luwam', role: 'Designer', avatar: 'L' },
-      { name: 'Stefan Österberg', role: 'Architect', avatar: 'S' },
-      { name: 'Najmaddin', role: 'Security Expert', avatar: 'N' }
-    ];
-    let currentUser = null;
-
-    /******************************************************************
-     * Helper: DOM shorteners
-     ******************************************************************/
-    const $ = (id) => document.getElementById(id);
-
-    /******************************************************************
-     * Initialize UI & event listeners
-     ******************************************************************/
-    function initializeTeamList() {
-      const teamList = $('teamList');
-      teamList.innerHTML = '';
-      teamMembers.forEach(member => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center space-x-3 p-2 bg-white dark:bg-gray-700 rounded-lg';
-        div.innerHTML = `
-          <div class="relative">
-            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">${member.avatar}</div>
-            <span class="online-indicator absolute -top-1 -right-1 border-2 border-white dark:border-gray-700"></span>
-          </div>
-          <div class="flex-1">
-            <div class="font-medium text-gray-800 dark:text-white text-sm">${member.name}</div>
-            <div class="text-xs text-gray-600 dark:text-gray-400">${member.role}</div>
-          </div>
-        `;
-        teamList.appendChild(div);
-      });
-    }
-
-    function updateUserUI() {
-      if (currentUser) {
-        $('userName').textContent = currentUser.name;
-        $('userRole').textContent = currentUser.role;
-        $('userAvatar').textContent = currentUser.avatar;
-      }
-    }
-
-    // Login form
-    $('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const selected = $('userSelect').value;
-      const user = teamMembers.find(m => m.name === selected);
-      if (user) {
-        currentUser = user;
-        localStorage.setItem('current-user', JSON.stringify(currentUser)); // optional persistence
-        $('loginModal').classList.remove('active');
-        updateUserUI();
-        // Load initial data
-        startRealtimeListeners();
-        alert(`Welcome ${user.name}!`);
-      }
-    });
-
-    // Cancel login - hide modal only if a current user exists
-    $('loginCancel').addEventListener('click', () => {
-      if (!currentUser) {
-        // keep modal open if no user
-        $('loginModal').classList.add('active');
-      } else {
-        $('loginModal').classList.remove('active');
-      }
-    });
-
-    // Logout
-    $('logoutBtn').addEventListener('click', () => {
-      currentUser = null;
-      localStorage.removeItem('current-user');
-      $('userName').textContent = 'You';
-      $('userRole').textContent = 'Select your name to login';
-      $('userAvatar').textContent = 'Y';
-      $('loginModal').classList.add('active');
-    });
-
-    // Chat open/close
-    $('openChatBtn').addEventListener('click', () => {
-      if (!currentUser) { alert('Please login first!'); return; }
-      $('chatModal').classList.add('active');
-      focusChatInput();
-    });
-    $('closeChatBtn').addEventListener('click', () => $('chatModal').classList.remove('active'));
-    $('sendChatBtn').addEventListener('click', sendChatMessage);
-    $('chatInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') sendChatMessage(); });
-
-    // Add content buttons
-    document.querySelectorAll('.add-content-btn, #addOverviewBtn').forEach(btn => {
-      btn.addEventListener('click', (ev) => {
-        const section = ev.currentTarget.getAttribute('data-section') || 'overview';
-        openAddContentModal(section);
-      });
-    });
-    $('cancelAddContent').addEventListener('click', closeAddContentModal);
-    $('addContentForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const section = $('contentSection').value;
-      const title = $('contentTitle').value.trim();
-      const description = $('contentDescription').value.trim();
-      if (!title || !description) return alert('Please fill title and content');
-      saveContentToFirebase(section, title, description);
-      closeAddContentModal();
-      $('contentTitle').value = '';
-      $('contentDescription').value = '';
-    });
-
-    // Theme toggle
-    $('toggleThemeBtn').addEventListener('click', toggleTheme);
-
-    // Section navigation
-    document.querySelectorAll('.section-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active-section'));
-        this.classList.add('active-section');
-        const section = this.getAttribute('data-section');
-        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-        const el = document.getElementById(section);
-        if (el) el.classList.add('active');
-      });
-    });
-
-    // Save theme & user if present
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeTeamList();
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') document.documentElement.classList.add('dark');
-      const savedUser = localStorage.getItem('current-user');
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        updateUserUI();
-        $('loginModal').classList.remove('active');
-        startRealtimeListeners();
-      }
-    });
-
-    /******************************************************************
-     * Realtime features: chat & content
-     ******************************************************************/
-    let listenersStarted = false;
-
-    function startRealtimeListeners() {
-      if (listenersStarted) return;
-      listenersStarted = true;
-
-      // CHAT: real-time listener
-      db.ref('chat').on('value', snapshot => {
-        const chatBox = $('chatMessages');
-        chatBox.innerHTML = '';
-        if (!snapshot.exists()) {
-          chatBox.innerHTML = `<div class="text-center text-gray-500">No messages yet.</div>`;
-          return;
-        }
-        snapshot.forEach(child => {
-          const msg = child.val();
-          const isMy = currentUser && msg.user === currentUser.name;
-          const wrapper = document.createElement('div');
-          wrapper.className = `p-3 mb-2 rounded-lg max-w-[80%] ${isMy ? 'bg-blue-600 text-white ml-auto' : 'bg-gray-200 dark:bg-gray-700 dark:text-white'}`;
-          wrapper.innerHTML = `
-            <div class="font-semibold text-sm">${escapeHtml(msg.user)}</div>
-            <div class="break-words">${escapeHtml(msg.text)}</div>
-            <div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleString()}</div>
-          `;
-          chatBox.appendChild(wrapper);
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;
-      });
-
-      // CONTENT: listen for all sections under /content
-      const sections = [
-        'overview', 'project-documentation', 'team-collaboration', 'team-updates',
-        'ai-assistant', 'practical-tasks', 'implementation', 'research',
-        'resources', 'security-testing', 'monitoring-analytics'
-      ];
-
-      sections.forEach(section => {
-        db.ref('content/' + section).on('value', snapshot => {
-          const container = $(section + '-content');
-          if (!container) return;
-          container.innerHTML = '';
-          if (!snapshot.exists()) {
-            container.innerHTML = `
-              <div class="text-center p-8 text-gray-500">
-                <i class="fas fa-inbox text-4xl mb-4"></i>
-                <p>No content yet. Add something to share with the team.</p>
-              </div>`;
-            return;
-          }
-          snapshot.forEach(child => {
-            const item = child.val();
-            const card = document.createElement('div');
-            card.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 mb-4';
-            card.innerHTML = `
-              <h3 class="text-xl font-semibold mb-2">${escapeHtml(item.title)}</h3>
-              <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${escapeHtml(item.description)}</p>
-              <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-                <span><i class="fas fa-user mr-1"></i> ${escapeHtml(item.author)}</span>
-                <span><i class="fas fa-clock mr-1"></i> ${new Date(item.date).toLocaleString()}</span>
-              </div>
-            `;
-            container.appendChild(card);
-          });
+    if(fileInput && fileInput.files && fileInput.files.length>0){
+      const f = fileInput.files[0];
+      const storageRef = storage.ref().child('uploads/'+Date.now()+'_'+f.name);
+      const uploadTask = storageRef.put(f);
+      uploadTask.on('state_changed', ()=>{}, err=>{ console.error(err); alert('Upload failed'); }, ()=>{
+        uploadTask.snapshot.ref.getDownloadURL().then(url=>{
+          pushContent({ url, name: f.name });
         });
       });
+    } else {
+      pushContent(null);
     }
+  });
+}
 
-    /******************************************************************
-     * Save content to Firebase
-     ******************************************************************/
-    function saveContentToFirebase(section, title, description) {
-      if (!currentUser) { alert('Please login first'); return; }
-      const item = {
-        section,
-        title,
-        description,
-        author: currentUser.name,
-        date: Date.now()
-      };
-      db.ref('content/' + section).push(item)
-      .then(() => {
-        // success
-      })
-      .catch(err => {
-        console.error('Failed to save content:', err);
-        alert('Failed to save content');
-      });
-    }
+/* edit content: prefill modal */
+function editContent(section,key){
+  db.ref('content/'+section+'/'+key).once('value').then(snap=>{
+    const item = snap.val();
+    if(!item) return alert('Item not found');
+    if(!(currentUser && (currentUser.name===item.author || currentUser.isAdmin))) return alert('No permission');
+    $('contentSection').value = section;
+    $('contentKey').value = key;
+    $('contentTitle').value = item.title||'';
+    $('contentDescription').value = item.description||'';
+    if(item.fileUrl) $('filePreview').innerHTML = `<a href="${escapeHtml(item.fileUrl)}" target="_blank" class="underline">${escapeHtml(item.fileName||'file')}</a>`;
+    else $('filePreview').innerHTML = '';
+    $('addContentTitle').textContent = 'Edit Content';
+    $('addContentModal').classList.add('active');
+  });
+}
 
-    /******************************************************************
-     * Chat: send message to Firebase
-     ******************************************************************/
-    function sendChatMessage() {
-      if (!currentUser) { alert('Please login first'); return; }
-      const input = $('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-      const message = {
-        user: currentUser.name,
-        text,
-        timestamp: Date.now()
-      };
-      db.ref('chat').push(message)
-      .then(() => {
-        input.value = '';
-      })
-      .catch(err => {
-        console.error('Chat send error:', err);
-        alert('Message send failed');
-      });
-    }
+/* delete content */
+function deleteContent(section,key){
+  if(!currentUser) return alert('Login required');
+  db.ref('content/'+section+'/'+key).once('value').then(snap=>{
+    const item = snap.val();
+    if(!item) return;
+    if(item.author === currentUser.name || currentUser.isAdmin){
+      db.ref('content/'+section+'/'+key).remove().then(()=>{ pushActivity(`${currentUser.name} deleted content in ${section}`); });
+    } else alert('No permission to delete');
+  });
+}
 
-    /******************************************************************
-     * Add content modal helpers
-     ******************************************************************/
-    function openAddContentModal(section) {
-      if (!currentUser) { alert('Please login first'); return; }
-      $('contentSection').value = section;
-      $('addContentModal').classList.add('active');
-      $('contentTitle').focus();
-    }
-    function closeAddContentModal() { $('addContentModal').classList.remove('active'); }
+/* ---------------------------
+   Activity log
+   --------------------------- */
+function pushActivity(text){
+  db.ref('activity').push({ text, ts: Date.now() });
+}
 
-    /******************************************************************
-     * Utilities
-     ******************************************************************/
-    function toggleTheme() {
-      const html = document.documentElement;
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    }
+/* ---------------------------
+   Admin actions
+   --------------------------- */
+function adminClearAllContent(){
+  if(!currentUser || !currentUser.isAdmin) return alert('Admin only');
+  if(!confirm('Delete all content?')) return;
+  db.ref('content').remove().then(()=> pushActivity(`${currentUser.name} cleared all content`));
+}
+function adminClearChat(){
+  if(!currentUser || !currentUser.isAdmin) return alert('Admin only');
+  if(!confirm('Delete all chat?')) return;
+  db.ref('chat').remove().then(()=> pushActivity(`${currentUser.name} cleared chat`));
+}
 
-    function focusChatInput() { setTimeout(()=> $('chatInput').focus(), 100); }
+/* ---------------------------
+   Misc helpers
+   --------------------------- */
+function sanitizeKey(s){ return String(s).replaceAll('.','_').replaceAll('$','_').replaceAll('#','_').replaceAll('/','_').replaceAll('[','_').replaceAll(']','_'); }
 
-    // Basic HTML escaping to avoid accidental injection (we trust team but keep safe)
-    function escapeHtml(unsafe) {
-      return String(unsafe)
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'",'&#039;');
-    }
-  </script>
+function openChat(){ $('chatModal').classList.add('active'); unreadCount = 0; $('unreadBadge').classList.add('hidden'); }
+
+function closeAddModal(){ $('addContentModal').classList.remove('active'); }
+
+function logout(){ if(currentUser) setPresence(false); currentUser=null; localStorage.removeItem('current-user'); $('userName').textContent='You'; $('userRole').textContent='Select your name to login'; $('userAvatar').textContent='Y'; $('loginModal').classList.add('active'); }
+
+function toggleTheme(){ const h=document.documentElement; if(h.classList.contains('dark')){ h.classList.remove('dark'); localStorage.setItem('theme','light'); } else { h.classList.add('dark'); localStorage.setItem('theme','dark'); } }
+
+/* Browser Notifications */
+function notifyBrowser(title, body){
+  if(!("Notification" in window)) return;
+  if(Notification.permission === "granted") new Notification(title, { body });
+  else if(Notification.permission !== "denied") Notification.requestPermission().then(p=>{ if(p==="granted") new Notification(title,{body}); });
+}
+
+/* render all content currently by fetching once (to support search) */
+function renderAllContent(search=''){
+  const sections = ['overview','project-documentation','team-collaboration','team-updates','ai-assistant','practical-tasks','implementation','research','resources','security-testing','monitoring-analytics'];
+  sections.forEach(sec=>{
+    db.ref('content/'+sec).once('value').then(snap=> renderSectionContent(sec, snap));
+  });
+}
+
+/* ---------------------------
+   Initial load: restore user & init
+   --------------------------- */
+document.addEventListener('DOMContentLoaded', ()=>{
+  initUI();
+  const saved = localStorage.getItem('current-user');
+  if(saved){ currentUser = JSON.parse(saved); $('userName').textContent = currentUser.name; $('userRole').textContent = currentUser.role; $('userAvatar').textContent = currentUser.avatar; if(currentUser.isAdmin) $('adminPanel').classList.remove('hidden'); $('loginModal').classList.remove('active'); startRealtime(); setPresence(true); }
+  const theme = localStorage.getItem('theme'); if(theme==='dark') document.documentElement.classList.add('dark');
+  // allow notifications
+  if(Notification.permission !== "granted") Notification.requestPermission();
+  // load initial content
+  renderAllContent();
+});
+
+/* ---------------------------
+   File input preview (simple)
+   --------------------------- */
+$('contentFile')?.addEventListener('change', function(){
+  const f = this.files[0];
+  if(!f) return $('filePreview').innerHTML='';
+  if(f.type.startsWith('image/')){
+    const url = URL.createObjectURL(f);
+    $('filePreview').innerHTML = `<img src="${url}" class="file-preview" />`;
+  } else {
+    $('filePreview').innerHTML = `<div class="text-sm">${escapeHtml(f.name)}</div>`;
+  }
+});
+</script>
 </body>
 </html>
