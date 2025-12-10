@@ -812,5 +812,24 @@
         });
     })();
     </script>
+    window.addEventListener("load", () => {
+    let accounts = localStorage.getItem("teamUsers");
+
+    if (!accounts) {
+        const defaultAccounts = [
+            { name: "Kaled Osman", email: "kaled@team.com", password: "kaled123", role: "Project Lead" },
+            { name: "Marcus Tibell", email: "marcus@team.com", password: "marcus123", role: "Engineer" },
+            { name: "Jens Annell", email: "jens@team.com", password: "jens123", role: "Analyst" },
+            { name: "Fahad Hussain", email: "fahad@team.com", password: "fahad123", role: "Researcher" },
+            { name: "Luwam", email: "luwam@team.com", password: "luwam123", role: "Designer" },
+            { name: "Stefan Österberg", email: "stefan@team.com", password: "stefan123", role: "Architect" },
+            { name: "Najmaddin", email: "najmaddin@team.com", password: "najmaddin123", role: "Security Expert" }
+        ];
+
+        localStorage.setItem("teamUsers", JSON.stringify(defaultAccounts));
+        console.log("Team accounts restored.");
+    }
+});
+
 </body>
 </html>
