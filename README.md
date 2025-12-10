@@ -1,55 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Security Chaos Engineering Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Firebase SDK (compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
     <style>
         .theme-transition { transition: all 0.3s ease; }
-        .active-section { 
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-            color: white; 
+        .active-section {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
         }
-        .online-indicator { 
-            width: 8px; height: 8px; background: #10B981; border-radius: 50%; 
-            animation: pulse 2s infinite; 
+        .online-indicator {
+            width: 8px; height: 8px; background: #10B981; border-radius: 50%;
+            animation: pulse 2s infinite;
         }
-        @keyframes pulse { 
+        @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.7; }
             100% { transform: scale(1); opacity: 1; }
         }
-        .modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; 
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;
         }
         .modal.active { display: flex; }
         .section-content { display: none; }
         .section-content.active { display: block; }
-        .new-message { animation: highlight 2s ease; }
-        @keyframes highlight {
-            0% { background-color: rgba(59, 130, 246, 0.3); }
-            100% { background-color: transparent; }
-        }
-        .chat-container {
-            max-height: 300px;
-            overflow-y: auto;
-        }
+        .chat-container { max-height: 300px; overflow-y: auto; }
+        .card-scroll { max-height: 60vh; overflow-y: auto; padding-right: 8px; }
     </style>
     <style>
-    /* Mobile tweaks (same as before) */
     @media (max-width: 768px) {
         .flex.min-h-screen { flex-direction: column; }
         .w-80 { width: 100% !important; border-right: none !important; border-bottom: 1px solid #e5e7eb; }
         .flex-1.p-8 { padding: 1rem !important; }
-        .grid-cols-1 { grid-template-columns: 1fr !important; }
         nav.space-y-2 { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .section-btn { padding: 0.75rem !important; font-size: 0.875rem; flex: 1 0 auto; text-align: center; }
         .section-btn i { margin-right: 0.25rem !important; }
@@ -65,7 +57,7 @@
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 theme-transition">
-    <!-- Add Content Modal -->
+    <!-- Add Content Modal (existing) -->
     <div class="modal" id="addContentModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Add New Content</h2>
@@ -100,7 +92,33 @@
         </div>
     </div>
 
-    <!-- Team Chat Modal -->
+    <!-- PDF Upload Modal -->
+    <div class="modal" id="pdfUploadModal">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl max-w-xl w-full mx-4 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Upload PDF</h2>
+            <form id="pdfUploadForm" class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Title</label>
+                    <input id="pdfTitle" type="text" class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea id="pdfDescription" class="w-full p-3 border rounded-xl dark:bg-gray-700 dark:text-white h-28" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Choose PDF</label>
+                    <input id="pdfFile" type="file" accept="application/pdf" class="w-full" required>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl">Upload</button>
+                    <button type="button" onclick="closePdfUpload()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-xl">Cancel</button>
+                </div>
+                <div id="pdfUploadProgress" class="text-sm text-gray-600 mt-2"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Team Chat Modal (existing) -->
     <div class="modal" id="teamChatModal">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl mx-4 shadow-2xl" style="width: 500px; max-width: 90vw;">
             <div class="flex justify-between items-center mb-4">
@@ -127,40 +145,29 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Login Modal (existing) -->
     <div class="modal" id="loginModal" style="display: flex;">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
                 <i class="fas fa-user-lock mr-2"></i>Login to Dashboard
             </h2>
-            
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
                     <input type="email" id="loginEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                 </div>
-                
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Password</label>
                     <input type="password" id="loginPassword" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                 </div>
-                
                 <div class="flex items-center justify-between">
-                    <button type="button" onclick="showForgotPassword()" class="text-sm text-blue-600 hover:text-blue-800">
-                        Forgot Password?
-                    </button>
+                    <button type="button" onclick="showForgotPassword()" class="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</button>
                 </div>
-                
                 <div class="flex gap-3">
-                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all font-medium">
-                        Login
-                    </button>
-                    <button type="button" onclick="closeLogin()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">
-                        Cancel
-                    </button>
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-all font-medium">Login</button>
+                    <button type="button" onclick="closeLogin()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">Cancel</button>
                 </div>
             </form>
-            
             <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
                 <h3 class="font-semibold mb-2">Demo Accounts:</h3>
                 <div class="text-sm space-y-1">
@@ -176,26 +183,20 @@
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- Forgot Password Modal (existing) -->
     <div class="modal" id="forgotPasswordModal">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full mx-4 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
                 <i class="fas fa-key mr-2"></i>Password Recovery
             </h2>
-            
             <form id="forgotPasswordForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email Address</label>
                     <input type="email" id="recoveryEmail" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" required>
                 </div>
-                
                 <div class="flex gap-3">
-                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">
-                        Send Recovery Link
-                    </button>
-                    <button type="button" onclick="closeForgotPassword()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">
-                        Back
-                    </button>
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition-all font-medium">Send Recovery Link</button>
+                    <button type="button" onclick="closeForgotPassword()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl transition-all font-medium">Back</button>
                 </div>
             </form>
         </div>
@@ -208,8 +209,6 @@
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Security Chaos Engineering</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Group 1 Dashboard</p>
-                
-                <!-- Live Status -->
                 <div class="mt-3 p-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -221,7 +220,7 @@
                     <div class="text-xs opacity-90 mt-1">Real-time collaboration enabled</div>
                 </div>
             </div>
-            
+
             <!-- User Info -->
             <div class="w-full mb-6">
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800">
@@ -250,7 +249,7 @@
                         Team Members
                     </h3>
                     <div id="liveTeamList" class="space-y-2 max-h-40 overflow-y-auto">
-                        <!-- Team members will appear here -->
+                        <!-- Team members -->
                     </div>
                 </div>
             </div>
@@ -277,6 +276,9 @@
                 </button>
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="practical-tasks">
                     <i class="fas fa-tasks mr-3"></i>Practical Tasks
+                </button>
+                <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="pdf-library">
+                    <i class="fas fa-file-pdf mr-3"></i>PDF Library
                 </button>
                 <button class="section-btn w-full text-left p-4 rounded-xl theme-transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300" data-section="implementation">
                     <i class="fas fa-code mr-3"></i>Implementation
@@ -310,7 +312,7 @@
                 <p class="text-gray-600 dark:text-gray-400">Group 1 - Real-time Team Collaboration</p>
             </header>
 
-            <!-- Overview Section -->
+            <!-- Overview -->
             <div class="section-content active" id="overview">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg mb-6">
                     <div class="flex justify-between items-center mb-6">
@@ -319,17 +321,14 @@
                             <i class="fas fa-plus mr-2"></i>Add Content
                         </button>
                     </div>
-                    <div id="overview-content" class="space-y-4 mb-8">
-                        <!-- Content will be loaded here -->
-                    </div>
-                    
+                    <div id="overview-content" class="space-y-4 mb-8"></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="text-center p-6 bg-blue-500 text-white rounded-2xl shadow-lg">
                             <div class="text-3xl font-bold mb-2" id="stat-members">7</div>
                             <div>Team Members</div>
                         </div>
                         <div class="text-center p-6 bg-green-500 text-white rounded-2xl shadow-lg">
-                            <div class="text-3xl font-bold mb-2" id="stat-sections">11</div>
+                            <div class="text-3xl font-bold mb-2" id="stat-sections">12</div>
                             <div>Sections</div>
                         </div>
                         <div class="text-center p-6 bg-purple-500 text-white rounded-2xl shadow-lg">
@@ -344,7 +343,7 @@
                 </div>
             </div>
 
-            <!-- (other sections same as before — each contains a container with id "<section>-content") -->
+            <!-- Project Documentation -->
             <div class="section-content" id="project-documentation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -357,6 +356,7 @@
                 </div>
             </div>
 
+            <!-- Team Collaboration -->
             <div class="section-content" id="team-collaboration">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -369,6 +369,7 @@
                 </div>
             </div>
 
+            <!-- Team Updates -->
             <div class="section-content" id="team-updates">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -381,6 +382,7 @@
                 </div>
             </div>
 
+            <!-- AI Assistant -->
             <div class="section-content" id="ai-assistant">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -393,18 +395,66 @@
                 </div>
             </div>
 
+            <!-- Practical Tasks -->
             <div class="section-content" id="practical-tasks">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Practical Tasks</h2>
-                        <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i>Add Content
-                        </button>
+                        <div class="flex gap-3">
+                            <button onclick="openAddContent('practical-tasks')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                                <i class="fas fa-plus mr-2"></i>Add Content
+                            </button>
+                            <button onclick="openPdfUpload()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-all">
+                                <i class="fas fa-file-pdf mr-2"></i>Upload PDF
+                            </button>
+                        </div>
                     </div>
-                    <div id="practical-tasks-content" class="space-y-4"></div>
+
+                    <!-- Swedish thank you block as requested (two stars before title) -->
+                    <div class="p-4 mb-6 rounded-xl bg-gray-50 dark:bg-gray-700 border">
+                        **  
+                        <div class="font-medium text-gray-800 dark:text-white mt-2">
+                            Daniel Najmaddin & Shahen
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                            Vi i Grupp 1 vill rikta ett stort tack till vår projektledare för tålamodet, stödet och de tydliga förklaringarna under hela projektet. Vi har lärt oss mycket av varje uppgift och utvecklats både tekniskt och som ett lag.
+                        </div>
+                        <div class="text-sm text-gray-700 dark:text-gray-300 mt-3 font-semibold">
+                            Tack även till hela teamet för ett fantastiskt samarbete: Marcus, Jens, Fahad, Stefan och Kaled.
+                        </div>
+                    </div>
+
+                    <div id="practical-tasks-content" class="space-y-4 card-scroll">
+                        <!-- seeded tasks will appear here -->
+                    </div>
                 </div>
             </div>
 
+            <!-- PDF Library Section -->
+            <div class="section-content" id="pdf-library">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">PDF Library</h2>
+                        <div class="flex gap-3">
+                            <button onclick="openPdfUpload()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition-all">
+                                <i class="fas fa-upload mr-2"></i>Upload PDF
+                            </button>
+                            <button onclick="openAddContent('pdf-library')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-all">
+                                <i class="fas fa-plus mr-2"></i>Add Metadata
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="pdf-library-content" class="space-y-4 card-scroll">
+                        <div class="text-center text-gray-500 dark:text-gray-400 p-6">
+                            <i class="fas fa-file-pdf text-4xl mb-3"></i>
+                            No PDFs yet. Use "Upload PDF" to add files.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation -->
             <div class="section-content" id="implementation">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -417,6 +467,7 @@
                 </div>
             </div>
 
+            <!-- Research -->
             <div class="section-content" id="research">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -429,6 +480,7 @@
                 </div>
             </div>
 
+            <!-- Resources -->
             <div class="section-content" id="resources">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -441,6 +493,7 @@
                 </div>
             </div>
 
+            <!-- Security Testing -->
             <div class="section-content" id="security-testing">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -453,6 +506,7 @@
                 </div>
             </div>
 
+            <!-- Monitoring & Analytics -->
             <div class="section-content" id="monitoring-analytics">
                 <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
                     <div class="flex justify-between items-center mb-6">
@@ -464,10 +518,11 @@
                     <div id="monitoring-analytics-content" class="space-y-4"></div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- ---------- SCRIPT: Firebase + Real-time logic ---------- -->
+    <!-- ---------- SCRIPT: Firebase + Real-time logic + PDF handling ---------- -->
     <script>
     (function(){
         // ---------- Configuration ----------
@@ -489,23 +544,23 @@
             console.warn('Firebase init warning:', e);
         }
         const db = firebase.database();
+        const storage = firebase.storage();
 
         // ---------- Helpers ----------
         const sections = [
             'overview','project-documentation','team-collaboration','team-updates',
             'ai-assistant','practical-tasks','implementation','research',
-            'resources','security-testing','monitoring-analytics'
+            'resources','security-testing','monitoring-analytics','pdf-library'
         ];
         const $ = id => document.getElementById(id);
 
-        // Basic escape for text rendering
         function escapeHtml(s = '') {
             return String(s)
                 .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
                 .replaceAll('"','&quot;').replaceAll("'",'&#039;');
         }
 
-        // ---------- Chat system ----------
+        // ---------- Chat system (existing) ----------
         const chat = {
             currentUser: 'You',
             connected: false,
@@ -513,17 +568,11 @@
             unread: 0,
             lastRead: Date.now(),
             init() {
-                // set currentUser from login if available
                 const saved = JSON.parse(localStorage.getItem('currentUser'));
                 if (saved && saved.name) this.currentUser = saved.name;
-
-                // check connection (basic)
                 this.connected = true;
                 if ($('chatStatus')) $('chatStatus').style.background = '#10B981';
-
-                // set listeners
                 this.listenMessages();
-                // send button
                 const sendBtn = $('sendChatButton');
                 if (sendBtn) sendBtn.addEventListener('click', () => this.send());
             },
@@ -545,11 +594,7 @@
                 if (!input) return;
                 const text = input.value.trim();
                 if (!text) return;
-                const payload = {
-                    user: this.currentUser || 'You',
-                    text,
-                    timestamp: Date.now()
-                };
+                const payload = { user: this.currentUser || 'You', text, timestamp: Date.now() };
                 try {
                     await db.ref('team-chat').push(payload);
                     input.value = '';
@@ -564,7 +609,6 @@
             display(msg) {
                 const list = $('chatMessages');
                 if (!list) return;
-                // Remove "loading" placeholder if exists
                 const placeholder = list.querySelector('.text-center');
                 if (placeholder) list.innerHTML = '';
                 const el = document.createElement('div');
@@ -573,52 +617,31 @@
                 el.innerHTML = `<div class="font-semibold text-sm">${escapeHtml(msg.user)}</div><div class="break-words">${escapeHtml(msg.text)}</div><div class="text-xs opacity-70 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
                 list.appendChild(el);
                 list.scrollTop = list.scrollHeight;
-                // update message counter
                 const cnt = $('messageCount');
                 if (cnt) cnt.textContent = (parseInt(cnt.textContent || '0') + 1).toString();
             },
-            open() {
-                $('teamChatModal').classList.add('active');
-                this.lastRead = Date.now();
-                this.unread = 0;
-                this.updateUnread();
-            },
-            close() {
-                $('teamChatModal').classList.remove('active');
-            },
-            isOpen() {
-                return $('teamChatModal').classList.contains('active');
-            },
+            open() { $('teamChatModal').classList.add('active'); this.lastRead = Date.now(); this.unread = 0; this.updateUnread(); },
+            close() { $('teamChatModal').classList.remove('active'); },
+            isOpen() { return $('teamChatModal').classList.contains('active'); },
             updateUnread() {
                 const u = $('unreadCount');
                 if (!u) return;
-                if (this.unread > 0) {
-                    u.textContent = this.unread;
-                    u.classList.remove('hidden');
-                } else {
-                    u.classList.add('hidden');
-                }
+                if (this.unread > 0) { u.textContent = this.unread; u.classList.remove('hidden'); } else { u.classList.add('hidden'); }
             }
         };
 
         // ---------- Content system (Realtime) ----------
         const contentSystem = {
-            // Render one section's snapshot
             renderSection(section, snapshot) {
                 const container = $(`${section}-content`);
                 if (!container) return;
                 container.innerHTML = '';
                 if (!snapshot || !snapshot.exists()) {
-                    container.innerHTML = `
-                        <div class="text-center p-8 text-gray-500 dark:text-gray-400">
-                            <i class="fas fa-inbox text-4xl mb-4"></i>
-                            <p>No content added yet. Be the first to share something!</p>
-                        </div>`;
+                    container.innerHTML = `<div class="text-center p-8 text-gray-500 dark:text-gray-400"><i class="fas fa-inbox text-4xl mb-4"></i><p>No content added yet. Be the first to share something!</p></div>`;
                     return;
                 }
                 snapshot.forEach(child => {
-                    const item = child.val();
-                    const id = child.key;
+                    const item = child.val(); const id = child.key;
                     const el = document.createElement('div');
                     el.className = 'p-6 border border-gray-200 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-800 mb-4';
                     el.innerHTML = `
@@ -631,28 +654,15 @@
                         </div>
                         <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">${escapeHtml(item.description)}</p>
                         <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-                            <span><i class="fas fa-user mr-1"></i> ${escapeHtml(item.author)}</span>
+                            <span><i class="fas fa-user mr-1"></i> ${escapeHtml(item.author || 'Group 1')}</span>
                             <span><i class="fas fa-clock mr-1"></i> ${new Date(item.date).toLocaleDateString()}</span>
                         </div>
                     `;
                     container.appendChild(el);
                 });
 
-                // attach handlers (edit/delete)
-                container.querySelectorAll('.edit-btn').forEach(b => {
-                    b.addEventListener('click', (e) => {
-                        const id = b.getAttribute('data-id');
-                        const sec = b.getAttribute('data-section');
-                        openEditModalFor(sec, id);
-                    });
-                });
-                container.querySelectorAll('.del-btn').forEach(b => {
-                    b.addEventListener('click', (e) => {
-                        const id = b.getAttribute('data-id');
-                        const sec = b.getAttribute('data-section');
-                        deleteContent(sec, id);
-                    });
-                });
+                container.querySelectorAll('.edit-btn').forEach(b => { b.addEventListener('click', (e) => { const id = b.getAttribute('data-id'); const sec = b.getAttribute('data-section'); openEditModalFor(sec, id); }); });
+                container.querySelectorAll('.del-btn').forEach(b => { b.addEventListener('click', (e) => { const id = b.getAttribute('data-id'); const sec = b.getAttribute('data-section'); deleteContent(sec, id); }); });
             },
             listenAll() {
                 sections.forEach(sec => {
@@ -661,15 +671,9 @@
                     ref.on('value', snap => this.renderSection(sec, snap));
                 });
             },
-            pushContent(section, payload) {
-                return db.ref(`content/${section}`).push(payload);
-            },
-            updateContent(section, id, payload) {
-                return db.ref(`content/${section}/${id}`).update(payload);
-            },
-            removeContent(section, id) {
-                return db.ref(`content/${section}/${id}`).remove();
-            }
+            pushContent(section, payload) { return db.ref(`content/${section}`).push(payload); },
+            updateContent(section, id, payload) { return db.ref(`content/${section}/${id}`).update(payload); },
+            removeContent(section, id) { return db.ref(`content/${section}/${id}`).remove(); }
         };
 
         // ---------- UI: open add / edit ----------
@@ -678,14 +682,12 @@
             $('editContentId').value = '';
             $('contentTitle').value = '';
             $('contentDescription').value = '';
-            // default author to current user if logged
             const saved = JSON.parse(localStorage.getItem('currentUser'));
             if (saved && saved.name) $('contentAuthor').value = saved.name;
             $('addContentModal').classList.add('active');
         }
         function closeAddContent() { $('addContentModal').classList.remove('active'); }
 
-        // open edit modal and prefill with Firebase data
         function openEditModalFor(section, id) {
             db.ref(`content/${section}/${id}`).once('value').then(snap => {
                 const item = snap.val();
@@ -696,13 +698,9 @@
                 $('contentDescription').value = item.description || '';
                 $('contentAuthor').value = item.author || (JSON.parse(localStorage.getItem('currentUser')) || {}).name || 'Unknown';
                 $('addContentModal').classList.add('active');
-            }).catch(err => {
-                console.error(err);
-                alert('Failed to load item for edit');
-            });
+            }).catch(err => { console.error(err); alert('Failed to load item for edit'); });
         }
 
-        // Add / Edit submit
         document.getElementById('addContentForm').addEventListener('submit', function(e){
             e.preventDefault();
             const section = $('contentSection').value;
@@ -711,26 +709,113 @@
             const description = $('contentDescription').value.trim();
             const author = $('contentAuthor').value;
             if (!title || !description) return alert('Fill title and content');
-
             const payload = { title, description, author, date: new Date().toISOString() };
             if (editId) {
-                contentSystem.updateContent(section, editId, payload)
-                .then(()=> {
-                    closeAddContent();
-                }).catch(err=> { console.error(err); alert('Update failed'); });
+                contentSystem.updateContent(section, editId, payload).then(()=> { closeAddContent(); }).catch(err=> { console.error(err); alert('Update failed'); });
             } else {
-                contentSystem.pushContent(section, payload)
-                .then(()=> {
-                    closeAddContent();
-                }).catch(err=> { console.error(err); alert('Save failed'); });
+                contentSystem.pushContent(section, payload).then(()=> { closeAddContent(); }).catch(err=> { console.error(err); alert('Save failed'); });
             }
         });
 
-        // delete content
         function deleteContent(section, id) {
             if (!confirm('Are you sure you want to delete this content?')) return;
-            contentSystem.removeContent(section, id)
-            .catch(err => { console.error(err); alert('Delete failed'); });
+            contentSystem.removeContent(section, id).catch(err => { console.error(err); alert('Delete failed'); });
+        }
+
+        // ---------- PDF Library: upload + list ----------
+        function openPdfUpload() {
+            $('pdfUploadForm').reset();
+            $('pdfUploadProgress').textContent = '';
+            $('pdfUploadModal').classList.add('active');
+        }
+        function closePdfUpload() { $('pdfUploadModal').classList.remove('active'); }
+
+        document.getElementById('pdfUploadForm').addEventListener('submit', async function(e){
+            e.preventDefault();
+            const title = $('pdfTitle').value.trim();
+            const desc = $('pdfDescription').value.trim();
+            const fileInput = $('pdfFile');
+            if (!title || !desc || !fileInput.files.length) return alert('Fill all fields and choose a PDF file');
+            const file = fileInput.files[0];
+            if (file.type !== 'application/pdf') return alert('Please upload a PDF file');
+
+            const timestamp = Date.now();
+            const storageRef = storage.ref().child(`pdfs/${timestamp}_${file.name}`);
+            const uploadTask = storageRef.put(file);
+
+            $('pdfUploadProgress').textContent = 'Uploading... 0%';
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const percent = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    $('pdfUploadProgress').textContent = `Uploading... ${percent}%`;
+                },
+                (error) => {
+                    console.error('Upload failed', error);
+                    alert('Upload failed');
+                },
+                async () => {
+                    const url = await uploadTask.snapshot.ref.getDownloadURL();
+                    const meta = { title, description: desc, url, storagePath: uploadTask.snapshot.ref.fullPath, date: new Date().toISOString(), author: (JSON.parse(localStorage.getItem('currentUser')) || {}).name || 'Group 1' };
+                    await db.ref('pdfs').push(meta);
+                    $('pdfUploadProgress').textContent = 'Upload complete';
+                    closePdfUpload();
+                }
+            );
+        });
+
+        function renderPdfLibrary(snapshot) {
+            const container = $('pdf-library-content');
+            if (!container) return;
+            container.innerHTML = '';
+            if (!snapshot || !snapshot.exists()) {
+                container.innerHTML = `<div class="text-center text-gray-500 dark:text-gray-400 p-6"><i class="fas fa-file-pdf text-4xl mb-3"></i>No PDFs yet. Use "Upload PDF" to add files.</div>`;
+                return;
+            }
+            snapshot.forEach(child => {
+                const item = child.val();
+                const id = child.key;
+                const el = document.createElement('div');
+                el.className = 'p-4 border rounded-xl bg-white dark:bg-gray-800 mb-3 flex justify-between items-start';
+                el.innerHTML = `
+                    <div>
+                        <div class="font-semibold text-gray-900 dark:text-white">${escapeHtml(item.title)}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">${escapeHtml(item.description)}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-2">${new Date(item.date).toLocaleDateString()} • ${escapeHtml(item.author || 'Group 1')}</div>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <a href="${item.url}" target="_blank" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm"><i class="fas fa-eye mr-2"></i>Open</a>
+                        <button data-id="${id}" class="delete-pdf-btn bg-red-600 text-white px-3 py-2 rounded-lg text-sm"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                container.appendChild(el);
+            });
+
+            container.querySelectorAll('.delete-pdf-btn').forEach(b => {
+                b.addEventListener('click', async (e) => {
+                    const id = b.getAttribute('data-id');
+                    if (!confirm('Delete this PDF?')) return;
+                    // only admin allowed — check current user email
+                    const cur = JSON.parse(localStorage.getItem('currentUser')) || {};
+                    if (cur.email !== 'kaled@team.com') { alert('Only admin (kaled) can delete PDFs'); return; }
+                    const snapshot = await db.ref(`pdfs/${id}`).once('value');
+                    const meta = snapshot.val();
+                    if (meta && meta.storagePath) {
+                        try {
+                            await storage.ref(meta.storagePath).delete();
+                        } catch (err) {
+                            console.warn('Storage delete failed', err);
+                        }
+                    }
+                    await db.ref(`pdfs/${id}`).remove();
+                });
+            });
+        }
+
+        // listen pdfs
+        function listenPdfs() {
+            const ref = db.ref('pdfs');
+            ref.off();
+            ref.on('value', snap => renderPdfLibrary(snap));
         }
 
         // ---------- Admin utilities ----------
@@ -738,9 +823,7 @@
             if (!confirm('Delete all content for all sections?')) return;
             const updates = {};
             sections.forEach(sec => updates[`content/${sec}`] = null);
-            db.ref().update(updates).then(()=> {
-                alert('All content cleared');
-            }).catch(err => { console.error(err); alert('Failed to clear content'); });
+            db.ref().update(updates).then(()=> { alert('All content cleared'); }).catch(err => { console.error(err); alert('Failed to clear content'); });
         }
         function clearChatAdmin() {
             if (!confirm('Clear all chat messages?')) return;
@@ -750,7 +833,7 @@
             }).catch(err => { console.error(err); alert('Failed to clear chat'); });
         }
 
-        // ---------- Login system (keeps your demo local logic) ----------
+        // ---------- Login system ----------
         const loginSystem = {
             users: JSON.parse(localStorage.getItem('teamUsers')) || null,
             currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
@@ -768,41 +851,25 @@
                     this.users = defaultUsers;
                     localStorage.setItem('teamUsers', JSON.stringify(defaultUsers));
                 }
-                // fill login demo fields if user already logged
-                if (this.currentUser) {
-                    this.updateUIForLoggedIn();
-                    adminSystem.tryInit();
-                }
-                // attach login submit
-                document.getElementById('loginForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.attemptLogin();
-                });
+                if (this.currentUser) { this.updateUIForLoggedIn(); adminSystem.tryInit(); }
+                document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); this.attemptLogin(); });
             },
             attemptLogin() {
                 const email = $('loginEmail').value.trim();
                 const password = $('loginPassword').value.trim();
                 const found = this.users.find(u => u.email === email && u.password === password);
-                if (!found) {
-                    alert('Invalid credentials');
-                    return;
-                }
+                if (!found) { alert('Invalid credentials'); return; }
                 this.currentUser = found;
                 localStorage.setItem('currentUser', JSON.stringify(found));
-                // update UI
                 this.updateUIForLoggedIn();
-                // set chat user
                 chat.currentUser = found.name;
-                // close login modal
                 $('loginModal').style.display = 'none';
-                // show admin if admin
                 adminSystem.tryInit();
             },
             logout() {
                 this.currentUser = null;
                 localStorage.removeItem('currentUser');
                 $('loginModal').style.display = 'flex';
-                // reset UI
                 $('userName').textContent = 'You';
                 $('userRole').textContent = 'Active User';
                 $('userAvatar').textContent = 'Y';
@@ -814,7 +881,6 @@
                 $('userName').textContent = u.name;
                 $('userRole').textContent = u.role;
                 $('userAvatar').textContent = u.avatar || u.name.charAt(0);
-                // inject admin panel if admin (kaled)
                 adminSystem.tryInit();
             }
         };
@@ -825,6 +891,8 @@
                 const cur = JSON.parse(localStorage.getItem('currentUser')) || null;
                 if (cur && cur.email === 'kaled@team.com') {
                     this.renderAdmin();
+                } else {
+                    const panel = $('adminPanel'); if (panel) panel.innerHTML = '';
                 }
             },
             renderAdmin() {
@@ -841,7 +909,6 @@
                         </div>
                     </div>
                 `;
-                // attach handlers
                 document.getElementById('adminClearContent').addEventListener('click', clearAllContentAdmin);
                 document.getElementById('adminClearChat').addEventListener('click', clearChatAdmin);
             }
@@ -880,54 +947,64 @@
             });
         }
 
-        // ---------- Initialize default content in Firebase if empty (only once) ----------
-        function seedDefaultContentIfEmpty() {
-            // Check one section; if empty, seed all default content
-            const ref = db.ref('content/overview');
-            ref.once('value').then(snap => {
-                if (snap.exists()) return; // already seeded
-                const defaults = {
-                    overview: {
-                        welcome: {
-                            title: '🚀 Welcome to Security Chaos Engineering Dashboard',
-                            description: 'This is your team collaboration platform. Use Add Content to share with your team.',
-                            author: 'System',
-                            date: new Date().toISOString()
-                        }
-                    },
-                    'team-collaboration': {
-                        'guidelines': {
-                            title: 'Team Collaboration Guidelines',
-                            description: 'Share meeting notes and tasks here.',
-                            author: 'Kaled Osman',
-                            date: new Date().toISOString()
-                        }
-                    }
-                };
-                // write defaults to Firebase
-                Object.keys(defaults).forEach(sec => {
-                    const secRef = db.ref(`content/${sec}`);
-                    Object.keys(defaults[sec]).forEach(key => {
-                        secRef.push(defaults[sec][key]);
-                    });
-                });
-            }).catch(err => console.error('Seed check failed', err));
+        // ---------- Seed practical tasks if empty ----------
+        async function seedPracticalTasksIfEmpty() {
+            const ref = db.ref('content/practical-tasks');
+            const snap = await ref.once('value');
+            if (snap.exists()) return;
+
+            const teamNames = 'Marcus, Jens, Fahad, Stefan, Kaled';
+            const tasks = [
+                {
+                    title: 'Task 01 - Debug a Broken Feature',
+                    description: 'Goal: find and fix a bug in a provided piece of code.\nWhat we did: Identified faulty percentage calculation and fixed by converting percent to decimal. We wrote test cases and validated results.\nWhat we learned: Systematic debugging, test-driven checks, attention to numeric types.',
+                    author: teamNames,
+                    date: new Date().toISOString()
+                },
+                {
+                    title: 'Task 02 - Build a Mini Tool (Weather App)',
+                    description: 'Goal: build a simple command-line weather tool that fetches data from an API.\nWhat we did: Implemented a WeatherApp class that requests OpenWeatherMap/Open-Meteo, parses response and displays temperature, humidity and conditions.\nWhat we learned: API integration, error handling, user input validation.',
+                    author: teamNames,
+                    date: new Date().toISOString()
+                },
+                {
+                    title: 'Task 03 - Explain a Concept Simply (Responsive Component)',
+                    description: 'Goal: explain a technical concept in plain language and provide a working example.\nWhat we did: Created a responsive two-column web component (custom element) with Shadow DOM and resize handling, and described core ideas.\nWhat we learned: Web Components, Shadow DOM encapsulation, responsive design basics.',
+                    author: teamNames,
+                    date: new Date().toISOString()
+                },
+                {
+                    title: 'Task 04 - Reverse Engineer a Result (Extracting Rules from ML Models)',
+                    description: 'Goal: given an output, infer the code and algorithm that produced it.\nWhat we did: Analysed model outputs and traced back rule extraction techniques, summarised approach for interpretable ML.\nWhat we learned: Model interpretability, feature importance extraction, reverse-engineering outputs.',
+                    author: teamNames,
+                    date: new Date().toISOString()
+                },
+                {
+                    title: 'Task 05 - Use GenAI as a Tool (XWiki LaTeX Math Rendering)',
+                    description: 'Goal: use GenAI to propose and document a fix for LaTeX rendering in XWiki Markdown.\nWhat we did: Analysed conflict between Markdown and MathJax and proposed preprocessor/postprocessor pipeline to protect math regions, with rendering pipeline diagram described.\nWhat we learned: Pipeline design, text preprocessing, safe integration with existing renderers.',
+                    author: teamNames,
+                    date: new Date().toISOString()
+                }
+            ];
+
+            // push tasks
+            for (const t of tasks) {
+                await db.ref('content/practical-tasks').push(t);
+            }
         }
+
+        // ---------- PDF listener (already above renderPdfLibrary) ----------
+        // listen pdfs defined in listenPdfs()
 
         // ---------- initialize listeners and UI ----------
         function initAll() {
-            // init login system
             loginSystem.init();
-            // chat init
             chat.init();
-            // content listeners
             contentSystem.listenAll();
-            // show team members
+            listenPdfs();
             showTeamMembers();
-            // seed default content if db empty
-            seedDefaultContentIfEmpty();
+            seedPracticalTasksIfEmpty().catch(console.error);
 
-            // attach chat open/close
             document.querySelectorAll('.section-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active-section'));
@@ -939,27 +1016,20 @@
                 });
             });
 
-            // send on Enter key in chat input
             const chatInput = $('chatInput');
             if (chatInput) {
-                chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') chat.send();
-                });
+                chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') chat.send(); });
             }
 
-            // attach send button
             const sendBtn = $('sendChatButton');
             if (sendBtn) sendBtn.addEventListener('click', () => chat.send());
 
-            // attach open chat button
             const openChatBtns = document.querySelectorAll('[onclick="openTeamChat()"]');
             openChatBtns.forEach(b => b.addEventListener('click', () => chat.open()));
         }
 
         // ---------- DOM ready ----------
-        document.addEventListener('DOMContentLoaded', () => {
-            initAll();
-        });
+        document.addEventListener('DOMContentLoaded', () => { initAll(); });
 
         // expose functions to global for existing onclick attributes
         window.openAddContent = openAddContent;
@@ -970,13 +1040,14 @@
         window.deleteContent = deleteContent;
         window.toggleTheme = function() {
             const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark'); localStorage.setItem('theme','light');
-            } else { html.classList.add('dark'); localStorage.setItem('theme','dark'); }
+            if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.setItem('theme','light'); }
+            else { html.classList.add('dark'); localStorage.setItem('theme','dark'); }
         };
         window.clearAllContentAdmin = clearAllContentAdmin;
         window.clearChatAdmin = clearChatAdmin;
         window.closeAddContent = closeAddContent;
+        window.openPdfUpload = openPdfUpload;
+        window.closePdfUpload = closePdfUpload;
     })();
     </script>
 </body>
