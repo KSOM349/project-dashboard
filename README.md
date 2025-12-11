@@ -30,7 +30,8 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            background-image: url("assets/bg.jpg");
+           background-image: url('bg.jpg');
+
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -1050,3 +1051,4 @@ The goal was to simulate a real debugging situation...
 
 })();
 </script>
+
