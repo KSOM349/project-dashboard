@@ -1,129 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Security Chaos Engineering Dashboard</title>
 
 <!-- Tailwind + Icons -->
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <style>
-html,body{margin:0;height:100%;font-family:Inter,Arial}
-.bg-hero{
-  position:fixed;inset:0;z-index:-10;
-  background:url('bg.jpg') center/cover no-repeat;
-  filter:brightness(.55);
+/* ===== BACKGROUND (100% WORKING) ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("bg.jpg") center/cover no-repeat;
+  filter: brightness(0.55);
+  z-index: -1;
 }
-.card{background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border-radius:16px}
-.active{background:#2563eb;color:white}
+
+/* ===== UI ===== */
+.card {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 24px;
+}
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+}
+.btn {
+  background: #2563eb;
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+.btn:hover { background:#1d4ed8; }
+.chat-me { background:#2563eb; color:white; margin-left:auto; }
+.chat-other { background:rgba(255,255,255,.2); }
+.chat-msg { padding:10px; border-radius:12px; margin-bottom:8px; max-width:70%; }
 </style>
 </head>
 
 <body class="text-white">
 
-<!-- BACKGROUND -->
-<div class="bg-hero"></div>
+<div class="max-w-7xl mx-auto p-10 space-y-10">
 
-<!-- LOGIN -->
-<div id="login" class="fixed inset-0 bg-black/60 flex items-center justify-center">
-  <form class="card p-8 w-96" onsubmit="loginUser(event)">
-    <h2 class="text-2xl mb-4 font-bold text-center">Login</h2>
-    <input id="email" class="w-full p-2 mb-3 rounded text-black" placeholder="Email" required>
-    <input id="password" type="password" class="w-full p-2 mb-4 rounded text-black" placeholder="Password" required>
-    <button class="w-full bg-blue-600 p-2 rounded">Login</button>
-    <p class="text-sm mt-3 text-center opacity-80">kaled@team.com / kaled123</p>
-  </form>
+<!-- HEADER -->
+<div>
+  <h1 class="text-4xl font-bold">Security Chaos Engineering Dashboard</h1>
+  <p class="text-gray-300">Group 1 – Real-time Collaboration Platform</p>
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden flex min-h-screen">
+<!-- TEAM INFO -->
+<div class="card grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+  <div><b>Group 1</b><br>Marcus • Jens • Fahad • Stefan • Kaled • Luwam</div>
+  <div><b>6</b><br>Team Members</div>
+  <div><b>100%</b><br>Progress</div>
+  <div><b>Chat</b><br>Realtime</div>
+</div>
 
-<!-- SIDEBAR -->
-<aside class="w-72 p-6 bg-black/50">
-  <h1 class="text-xl font-bold mb-6">Security Chaos</h1>
+<!-- PRACTICAL TASKS -->
+<div class="card">
+  <div class="section-title mb-4">Practical Tasks</div>
+  <button class="btn mb-4" onclick="addTask()">+ Add Task</button>
+  <div id="tasks"></div>
+</div>
 
-  <div id="userBox" class="card p-4 mb-6">
-    <div id="userName" class="font-bold"></div>
-    <div id="userRole" class="text-sm opacity-80"></div>
+<!-- TEAM UPDATES -->
+<div class="card">
+  <div class="section-title mb-4">Team Updates</div>
+  <div>Group 1 – Marcus • Jens • Fahad • Stefan • Kaled • Luwam</div>
+</div>
+
+<!-- DOCUMENTATION -->
+<div class="card">
+  <div class="section-title mb-4">Documentation</div>
+  <div>Project Docs – Algorithm Visualizer – Dijkstra</div>
+</div>
+
+<!-- CHAT -->
+<div class="card">
+  <div class="section-title mb-4">Team Chat</div>
+  <div id="chat" class="h-64 overflow-y-auto mb-4"></div>
+  <div class="flex gap-2">
+    <input id="msg" class="flex-1 p-2 rounded bg-gray-800" placeholder="Type message...">
+    <button class="btn" onclick="sendMsg()">Send</button>
   </div>
-
-  <nav class="space-y-2">
-    <button class="nav active w-full p-2 rounded" onclick="show('overview')">Overview</button>
-    <button class="nav w-full p-2 rounded" onclick="show('docs')">Documentation</button>
-    <button class="nav w-full p-2 rounded" onclick="show('tasks')">Practical Tasks</button>
-    <button class="nav w-full p-2 rounded" onclick="show('collab')">Collaboration</button>
-    <button class="nav w-full p-2 rounded" onclick="show('updates')">Updates</button>
-    <button class="nav w-full p-2 rounded" onclick="show('ai')">AI Assistant</button>
-    <button class="nav w-full p-2 rounded" onclick="show('impl')">Implementation</button>
-    <button class="nav w-full p-2 rounded" onclick="show('research')">Research</button>
-    <button class="nav w-full p-2 rounded" onclick="show('resources')">Resources</button>
-    <button class="nav w-full p-2 rounded" onclick="show('security')">Security Testing</button>
-    <button class="nav w-full p-2 rounded" onclick="show('monitor')">Monitoring</button>
-  </nav>
-</aside>
-
-<!-- MAIN -->
-<main class="flex-1 p-10">
-  <h1 class="text-3xl font-bold mb-6">Security Chaos Engineering Dashboard</h1>
-
-  <!-- 11 SECTIONS -->
-  <section id="overview" class="section card p-6">Overview Content</section>
-  <section id="docs" class="section card p-6 hidden">Documentation</section>
-  <section id="tasks" class="section card p-6 hidden">Practical Tasks</section>
-  <section id="collab" class="section card p-6 hidden">Team Collaboration</section>
-  <section id="updates" class="section card p-6 hidden">Team Updates</section>
-  <section id="ai" class="section card p-6 hidden">AI Assistant</section>
-  <section id="impl" class="section card p-6 hidden">Implementation</section>
-  <section id="research" class="section card p-6 hidden">Research</section>
-  <section id="resources" class="section card p-6 hidden">Resources</section>
-  <section id="security" class="section card p-6 hidden">Security Testing</section>
-  <section id="monitor" class="section card p-6 hidden">Monitoring & Analytics</section>
-</main>
+</div>
 
 </div>
 
 <script>
-/* USERS */
-const users=[
- {name:"Kaled Osman",email:"kaled@team.com",password:"kaled123",role:"Admin"},
- {name:"Marcus Tibell",email:"marcus@team.com",password:"marcus123",role:"Engineer"},
- {name:"Jens Annell",email:"jens@team.com",password:"jens123",role:"Analyst"}
-];
+/* ===== FIREBASE ===== */
+firebase.initializeApp({
+  apiKey: "AIzaSyDJsZ4LZVrBucavpTdhXbKxyE_BFeZFFKs",
+  authDomain: "fir-console-df3e9.firebaseapp.com",
+  databaseURL: "https://fir-console-df3e9-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fir-console-df3e9",
+});
+const db = firebase.database();
 
-/* LOGIN */
-function loginUser(e){
- e.preventDefault();
- const email=email.value,pass=password.value;
- const u=users.find(x=>x.email===email&&x.password===pass);
- if(!u)return alert("Wrong login");
- localStorage.user=JSON.stringify(u);
- init();
+/* ===== CHAT (FIXED) ===== */
+function sendMsg(){
+  const input = document.getElementById("msg");
+  if(!input.value) return;
+  db.ref("chat").push({
+    user:"Group 1",
+    text:input.value,
+    time:Date.now()
+  });
+  input.value="";
 }
 
-/* INIT */
-function init(){
- const u=JSON.parse(localStorage.user||"null");
- if(!u)return;
- login.classList.add("hidden");
- app.classList.remove("hidden");
- userName.textContent=u.name;
- userRole.textContent=u.role;
-}
-init();
+db.ref("chat").on("child_added",snap=>{
+  const m=snap.val();
+  const div=document.createElement("div");
+  div.className="chat-msg chat-other";
+  div.innerHTML=`<b>${m.user}:</b> ${m.text}`;
+  document.getElementById("chat").appendChild(div);
+});
 
-/* NAV */
-function show(id){
- document.querySelectorAll(".section").forEach(s=>s.classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
- document.querySelectorAll(".nav").forEach(b=>b.classList.remove("active"));
- event.target.classList.add("active");
+/* ===== TASKS ===== */
+function addTask(){
+  const t=prompt("Task name?");
+  if(!t) return;
+  db.ref("tasks").push({title:t,date:new Date().toLocaleString()});
 }
+
+db.ref("tasks").on("value",snap=>{
+  const box=document.getElementById("tasks");
+  box.innerHTML="";
+  snap.forEach(s=>{
+    const d=s.val();
+    box.innerHTML+=`<div class="p-3 bg-gray-800 rounded mb-2">${d.title}<br><small>${d.date}</small></div>`;
+  });
+});
 </script>
 
 </body>
