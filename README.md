@@ -19,7 +19,7 @@
         }
 
         html,body…
-[01:16, 2025-12-16] Kaled: <!-- ===============================
+ <!-- ===============================
         MAIN LAYOUT
 ================================= -->
 <div class="flex min-h-screen relative" style="z-index: 1;">
@@ -39,7 +39,7 @@
         <div class="mb-6">
             <div class="bg-gray-800/60 p-4 rounded-xl shadow-lg border border-gray-700">
                 <div class="f…
-[01:17, 2025-12-16] Kaled: <!-- ---------- SCRIPT: Firebase + Real-time logic + PDF handling (PART 3) ---------- -->
+ <!-- ---------- SCRIPT: Firebase + Real-time logic + PDF handling (PART 3) ---------- -->
 <script>
 (function(){
     // ---------- Configuration ----------
@@ -582,5 +582,6 @@ The goal was to simulate a real debugging situation...
 
 })();
 </script>
+
 
 
